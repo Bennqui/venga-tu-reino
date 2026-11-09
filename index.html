@@ -1,0 +1,1453 @@
+<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#F4F5F7"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+/* Diseño «Crepúsculo de Barquisimeto»: lo único llamativo es el cielo de la portada, que cambia con la hora
+   y lleva el color litúrgico del día. Todo lo demás es tranquilo: fondo de cal fría, tinta índigo, oro discreto.
+   Marcellus (letra de inscripción romana) para títulos; Literata (hecha para leer en pantalla) para el texto. */
+:root{--bg:#F4F5F7;--card:#FFFFFF;--ink:#1F2140;--mut:#5F627A;--line:#E1E3EA;--soft:#ECEEF3;--gold:#94680F;--gold-bg:#F7F0E1;--wine:#1F2140;--on-wine:#FFFFFF;--ok:#2E7A4F;--bad:#B3302F;--lit:#3F7D4E;--tint:#EEF0F5;
+--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13142A;--card:#1C1E38;--ink:#ECEAF6;--mut:#A9ABC6;--line:#2F3254;--soft:#24264A;--gold:#E2B75E;--gold-bg:#2A2638;--wine:#ECEAF6;--on-wine:#13142A;--ok:#6CC38A;--bad:#FF8F8A;--tint:#22244A;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.6;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:12px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+#app{max-width:620px;margin:0 auto}
+h1,h2,h3{font-family:var(--fd);font-weight:400;line-height:1.2;margin:0;text-wrap:balance;letter-spacing:.01em}
+h2{font-size:1.45rem;margin:26px 0 8px}
+h3{font-size:1.15rem;margin:16px 0 4px}
+p{margin:6px 0}
+a{color:var(--ink);text-decoration-color:var(--gold);text-underline-offset:3px}
+.mut{color:var(--mut)}
+.small{font-size:.88rem}
+/* Cabecera compacta (otras pestañas) */
+.hd.c{display:flex;gap:12px;align-items:center;padding:6px 2px 10px;border-bottom:1px solid var(--line);margin-bottom:6px;line-height:1.3}
+.hd.c b{font-family:var(--fd);font-weight:400;font-size:1.05rem}
+/* Portada */
+.hero{position:relative;border-radius:28px;overflow:hidden;color:#fff;margin:2px 0 14px;min-height:370px;isolation:isolate;text-shadow:0 1px 12px rgba(10,10,40,.35)}
+.hero.day{color:#1F2140;text-shadow:0 1px 10px rgba(255,255,255,.5)}
+.hero.day .pill{background:rgba(255,255,255,.55)}
+.hero svg.sky{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero .ht{padding:56px 22px 0}
+.hero .when{font-size:.92rem;opacity:.92}
+.hero .frase{font-family:var(--fd);font-size:1.6rem;line-height:1.25;margin:6px 0 6px;text-wrap:balance}
+.hero .cita{font-size:.92rem;opacity:.9}
+.hero .top{position:absolute;top:14px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.hero .brand{font-family:var(--fd);font-size:1.05rem;letter-spacing:.04em}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;padding:3px 11px;border-radius:999px;background:var(--soft);color:var(--ink)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--lit);display:inline-block;box-shadow:0 0 0 2px color-mix(in srgb,var(--lit) 25%,transparent)}
+/* Superficies: una sola tarjeta blanca sin sombra; lo secundario va sobre el fondo */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:12px 0}
+.card.tint{background:transparent;border:0;border-left:3px solid var(--lit);border-radius:0;padding:4px 0 4px 14px}
+.card h3:first-child{margin-top:0}
+.seg{display:flex;gap:4px;overflow-x:auto;padding:4px;margin:10px 0 8px;scrollbar-width:none;background:var(--soft);border-radius:999px}
+.seg::-webkit-scrollbar{display:none}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.seg button{flex:none;min-height:40px;padding:6px 15px;border-radius:999px;border:0;background:transparent;font-size:.92rem;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(20,22,50,.12)}
+.btn{min-height:48px;padding:10px 20px;border-radius:999px;border:1.5px solid var(--wine);background:var(--wine);color:var(--on-wine);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.big{width:100%;min-height:56px;font-size:1.05rem}
+.btn:disabled{opacity:.35;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+details{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:8px 0}
+summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:12px;min-height:52px;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.5px solid var(--mut);border-bottom:1.5px solid var(--mut);transform:rotate(45deg);transition:transform .2s;flex:none}
+details[open]>summary::after{transform:rotate(-135deg)}
+details .in{padding:0 16px 16px}
+.num{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-family:var(--fd)}
+.sec{font-family:var(--fd);font-weight:400;font-size:1.35rem;margin:30px 2px 6px;color:var(--ink)}
+.say{border-left:3px solid var(--gold);background:var(--gold-bg);padding:10px 14px;border-radius:0 14px 14px 0;margin:10px 0}
+.say b{font-size:.84rem;color:var(--gold);display:block;font-weight:600}
+.lbl{font-size:.88rem;font-weight:600;color:var(--gold);margin:14px 0 2px}
+.prayer{font-family:var(--fb);font-size:1.06rem;line-height:1.75;white-space:pre-line}
+.opt{display:block;width:100%;text-align:left;min-height:50px;margin:8px 0;padding:12px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card)}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.q{font-family:var(--fd);font-size:1.3rem;line-height:1.35;margin:6px 0 10px}
+.bar{height:6px;background:var(--soft);border-radius:4px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--lit)}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer;min-height:50px}
+.chk:last-child{border-bottom:0}
+.chk input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--lit)}
+.chk .t{font-size:.84rem;color:var(--mut)}
+textarea{width:100%;min-height:90px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg);color:var(--ink);font:inherit;margin-top:6px}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:5px 0}
+table.dates{width:100%;border-collapse:collapse;font-size:.96rem}
+table.dates td{padding:9px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+table.dates td:first-child{white-space:nowrap;padding-right:12px;color:var(--gold);font-weight:600}
+.sw{width:18px;height:18px;border-radius:50%;flex:none;margin-top:4px}
+.colrow{display:flex;gap:12px;align-items:flex-start;margin:8px 0}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:4px max(6px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));z-index:5}
+nav.tabs .in{max-width:620px;margin:0 auto;display:flex}
+nav.tabs button{flex:1;background:none;border:0;padding:7px 2px 5px;min-height:58px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.72rem;color:var(--mut);font-family:var(--fb)}
+nav.tabs button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button[aria-current="page"]{color:var(--ink);font-weight:600}
+nav.tabs button[aria-current="page"] svg{stroke:var(--lit);stroke-width:2}
+.note{font-size:.86rem;color:var(--mut);margin:12px 2px}
+/* Iconos de línea */
+.ic{width:44px;height:44px;stroke:var(--lit);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ic.sm{width:28px;height:28px}
+/* Atajos del día */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 10px;text-align:left;min-height:104px;display:flex;flex-direction:column;gap:6px;font-size:.86rem;line-height:1.3}
+.tile b{font-family:var(--fd);font-weight:400;font-size:1rem}
+/* Racha */
+.streak{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 2px 0}
+.streak .small{white-space:nowrap}
+.week{display:flex;gap:6px}
+.week span{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--mut)}
+.week span.on{background:var(--lit);border-color:var(--lit);color:#fff}
+.week span.today{border:1.5px solid var(--ink)}
+/* Modo oración paso a paso */
+.pager{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:22px 20px 18px;margin:10px 0;min-height:420px;display:flex;flex-direction:column}
+.pager .ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:var(--line);min-height:0}
+.dots button.on{background:var(--lit);width:26px;border-radius:6px}
+.dots button.done{background:color-mix(in srgb,var(--lit) 45%,var(--line))}
+.pager h2{margin:14px 0 6px;font-size:1.6rem}
+.pager .pb{flex:1}
+.pager .pn{display:flex;gap:8px;margin-top:16px}
+.pager .pn .btn{flex:1}
+.fin{text-align:center;padding:10px 0}
+.fin .ic{width:72px;height:72px}
+.reading p{font-size:1.05rem;line-height:1.75}
+.reading p:first-of-type::first-letter{font-family:var(--fd);font-size:3.1em;float:left;line-height:.9;padding:6px 8px 0 0;color:var(--lit)}
+@media (prefers-reduced-motion:no-preference){.pager .pb{animation:pin .35s ease-out}@keyframes pin{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}}
+@media (prefers-reduced-motion:reduce){summary::after{transition:none}}
+/* ===== Misa simple, Rosario guiado, Apóstol ===== */
+.cita{font-size:.88rem;color:var(--mut)}
+.say .prayer{display:block}
+.say.big .prayer{font-size:1.12rem}
+.cue{font-size:.92rem;color:var(--mut);margin:10px 0 2px;line-height:1.45}
+.cue span{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.hoyb{background:var(--tint);border-radius:14px;padding:10px 14px;margin:10px 0}
+.hoyb>b{display:block;font-size:.84rem;color:var(--gold);font-weight:600}
+.hoyb p{margin:4px 0 0}
+.hoyb.par{border-left:3px solid var(--lit)}
+.nota{border:1.5px solid var(--gold);background:var(--gold-bg);border-radius:14px;padding:10px 14px;margin:10px 0}
+.nota>b{display:block;font-size:.84rem;color:var(--gold)}
+ul.hoyl{list-style:none;padding:0;margin:10px 0 4px;display:flex;flex-wrap:wrap;gap:6px}
+ul.hoyl li{font-size:.84rem;padding:3px 11px;border-radius:999px;background:var(--soft)}
+ul.hoyl li i{font-style:normal;margin-right:5px;color:var(--ok)}
+ul.hoyl li.n{opacity:.6}
+ul.hoyl li.n i{color:var(--mut)}
+.gnav{display:flex;gap:8px;margin:10px 0 14px}
+.gnav .btn{flex:1}
+.gsel{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);color:var(--ink);font:inherit;margin:6px 0}
+details.mini{background:transparent;border:0;margin:6px 0 0}
+details.mini>summary{min-height:40px;padding:6px 0;font-weight:400;color:var(--mut);font-size:.92rem}
+details.mini .in{padding:0 0 8px}
+.resp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:8px 0}
+.resp .rh{display:flex;align-items:center;gap:10px;line-height:1.3}
+.resp .rh b{font-weight:600}
+.resp .pos{margin-left:auto;font-size:.76rem;color:var(--mut);text-align:right}
+.resp .say{margin:8px 0 0}
+.lk{background:none;border:0;color:var(--mut);font-size:.86rem;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+.card.imp h2{margin:4px 0 8px}
+/* Rosario */
+.rmap{display:block;width:190px;height:auto;margin:0 auto 4px}
+.rmap .ch{fill:none;stroke:var(--mut);stroke-width:1;opacity:.5}
+.rmap .b{fill:var(--soft);stroke:var(--mut);stroke-width:1.1}
+.rmap .b.d{fill:color-mix(in srgb,var(--lit) 55%,var(--card));stroke:var(--lit)}
+.rmap .b.a{fill:var(--gold);stroke:var(--gold)}
+.rmap .ring{fill:none;stroke:var(--gold);stroke-width:2;opacity:.7}
+.rmap .cx{stroke:var(--mut);stroke-width:3;stroke-linecap:round}
+.rmap .cx.d{stroke:var(--lit)}
+.rmap .cx.a{stroke:var(--gold)}
+.where{display:inline-flex;align-items:center;gap:6px;font-size:.86rem;padding:4px 12px;border-radius:999px;background:var(--gold-bg);color:var(--ink);margin:2px 0 6px}
+.beads{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 8px}
+.beads i{width:22px;height:22px;border-radius:50%;border:2px solid var(--lit);display:inline-block}
+.beads i.on{background:var(--lit)}
+.tap{width:100%;min-height:84px;border-radius:22px;border:2px dashed var(--lit);background:var(--tint);color:var(--ink);font-size:1.08rem;font-weight:600;margin:4px 0}
+.tap.ok{border-style:solid;background:color-mix(in srgb,var(--ok) 14%,var(--card))}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.pick button{min-height:54px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);text-align:left;padding:8px 12px;line-height:1.25}
+.pick button[aria-pressed="true"]{border-color:var(--lit);background:var(--tint)}
+.pick button small{display:block;color:var(--mut);font-size:.78rem}
+/* Apóstol */
+.qa{margin:6px 0 0;padding-left:20px}
+.qa li{margin:6px 0}
+.fi{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--bg);color:var(--ink);font:inherit;margin-top:6px}
+.ficha{border-top:1px solid var(--line);padding:10px 0}
+.ficha:first-child{border-top:0}
+nav.tabs button{font-size:.66rem;padding:7px 0 5px}
+</style>
+<div id="app"><div id="hd"></div><main id="main"></main></div>
+<nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
+<script src="hoy.js"></script>
+<script>
+(function(){
+'use strict';
+/* ===== CONTENIDO ===== */
+const DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+/* La Misa, parte por parte. "dice" = respuestas cortas del pueblo; los textos largos del Misal se resumen. */
+const MISA=[
+{id:'ini',n:'Ritos iniciales',lema:'Nos reunimos',res:'Dejamos de ser personas sueltas y nos hacemos comunidad. Estos ritos nos preparan para escuchar a Dios y celebrar la Eucaristía.',partes:[
+{n:'Canto y procesión de entrada',que:'El sacerdote y los ministros entran en procesión mientras el pueblo canta. Al llegar, el sacerdote besa el altar y, en días solemnes, lo inciensa.',dice:[],sig:'Somos un pueblo que se pone en camino hacia Dios. El altar representa a Cristo, por eso se besa y se venera.',pos:'De pie',tip:'Canta aunque desafines: no es un concierto, es oración en común.'},
+{n:'Saludo y Señal de la Cruz',que:'El sacerdote nos hace santiguar y nos saluda en nombre del Señor.',dice:[['Sacerdote','En el nombre del Padre, y del Hijo, y del Espíritu Santo.'],['Pueblo','Amén.'],['Sacerdote','El Señor esté con ustedes.'],['Pueblo','Y con tu espíritu.']],sig:'Empezamos como lo que somos: bautizados en el nombre de la Trinidad. «Y con tu espíritu» quiere decir «y contigo también»; alude al Espíritu que el sacerdote recibió al ser ordenado.',pos:'De pie',tip:'Santíguate despacio y con conciencia: es la primera oración de la Misa.'},
+{n:'Acto penitencial',que:'Reconocemos juntos que necesitamos misericordia antes de acercarnos a lo sagrado. Hay varias fórmulas; la más conocida es «Yo confieso».',dice:[['Pueblo','Yo confieso ante Dios todopoderoso y ante ustedes, hermanos… (texto completo en la pestaña Oraciones)']],sig:'Es un momento de humildad. Perdona los pecados leves, pero no reemplaza la confesión sacramental si hay un pecado grave. Al decir «por mi culpa» uno se golpea el pecho.',pos:'De pie',tip:'Aprovecha el breve silencio para nombrar en tu interior algo concreto.'},
+{n:'Señor, ten piedad (Kyrie)',que:'Una aclamación breve a Cristo, repetida en tres pares.',dice:[['Todos','Señor, ten piedad. · Cristo, ten piedad. · Señor, ten piedad.']],sig:'«Kyrie eleison» es griego: «Señor, ten piedad». «Señor» es el título que los primeros cristianos daban a Jesús resucitado, así que no es solo pedir perdón: también es alabanza.',pos:'De pie',tip:'Piensa en una persona o situación que necesite la misericordia de Dios.'},
+{n:'Gloria',que:'Himno antiguo de alabanza a la Trinidad. Se canta o reza los domingos (menos en Adviento y Cuaresma), en solemnidades y fiestas.',dice:[['Todos','Gloria a Dios en el cielo, y en la tierra paz a los hombres que ama el Señor… (sigue el himno completo)']],sig:'Empieza con las palabras de los ángeles en Belén (Lucas 2, 14). Es una explosión de alegría, por eso se omite cuando el tiempo litúrgico es de espera o penitencia.',pos:'De pie',tip:'Si no te sabes el Gloria, léelo de una hoja o del misal; aprenderlo entero es un buen objetivo.'},
+{n:'Oración colecta',que:'El sacerdote invita a orar («Oremos»), se hace un momento de silencio y luego dice la oración del día.',dice:[['Sacerdote','Oremos.'],['Pueblo','(silencio) … y al final de la oración: Amén.']],sig:'«Colecta» viene de «recoger»: el sacerdote recoge en una sola oración las intenciones de todos. El «Amén» significa «así es, hago mía esta oración».',pos:'De pie',tip:'El silencio que sigue a «Oremos» es para presentar tus intenciones personales.'}
+]},
+{id:'pal',n:'Liturgia de la Palabra',lema:'Dios nos habla',res:'Dios dialoga con su pueblo: nos habla en las lecturas y nosotros respondemos con el salmo, la fe y la oración por todos.',partes:[
+{n:'Primera lectura',que:'Un lector proclama un texto del Antiguo Testamento (en Pascua, de los Hechos de los Apóstoles).',dice:[['Lector','Palabra de Dios.'],['Pueblo','Te alabamos, Señor.']],sig:'Dios prepara su plan a lo largo de la historia de Israel; el Antiguo Testamento anuncia a Cristo.',pos:'Sentados',tip:'Escucha como si fuera una carta dirigida a ti. No hace falta leer mientras tanto: escuchar también es una forma de leer.'},
+{n:'Salmo responsorial',que:'Un salmista canta o lee el salmo y el pueblo repite una respuesta (antífona).',dice:[['Pueblo','Repite la respuesta que indica el salmista.']],sig:'Respondemos a Dios con sus propias palabras. Los salmos son la oración de Israel y también la que rezaba Jesús.',pos:'Sentados',tip:'Cantar o decir la respuesta es participar activamente: no la dejes solo para el coro.'},
+{n:'Segunda lectura',que:'Los domingos y solemnidades se lee una carta de un apóstol o el Apocalipsis.',dice:[['Lector','Palabra de Dios.'],['Pueblo','Te alabamos, Señor.']],sig:'Nos muestra cómo vivían y entendían la fe las primeras comunidades cristianas.',pos:'Sentados',tip:'Pregúntate: ¿qué me pide esta carta a mí hoy?'},
+{n:'Aleluya',que:'Aclamación cantada antes del Evangelio. En Cuaresma no se dice «Aleluya» y se usa otra aclamación a Cristo.',dice:[['Todos','Aleluya, aleluya, aleluya.']],sig:'«Aleluya» es hebreo: «alaben al Señor». Recibimos a Cristo que va a hablarnos en el Evangelio.',pos:'De pie',tip:'Nos ponemos de pie para recibir a Jesús como se recibe a una persona importante.'},
+{n:'Evangelio',que:'El sacerdote o diácono lee la vida y las palabras de Jesús. Es el momento más alto de la Liturgia de la Palabra.',dice:[['Sacerdote','El Señor esté con ustedes.'],['Pueblo','Y con tu espíritu.'],['Sacerdote','Lectura del santo Evangelio según san…'],['Pueblo','Gloria a ti, Señor.'],['Sacerdote','Palabra del Señor.'],['Pueblo','Gloria a ti, Señor Jesús.']],sig:'Con el pulgar hacemos tres cruces pequeñas: en la frente, en los labios y en el pecho. Pedimos que Cristo esté en mi mente, en mis palabras y en mi corazón. El libro se inciensa y se besa porque en él habla Cristo.',pos:'De pie',tip:'Estas respuestas pueden variar un poco según el país. Dilas en voz alta con la comunidad.'},
+{n:'Homilía',que:'El sacerdote o diácono explica las lecturas y las conecta con la vida de hoy.',dice:[],sig:'«Homilía» viene del griego y significa «conversación». No es un discurso cualquiera: es la Palabra aplicada a la vida concreta. En domingo es obligatoria.',pos:'Sentados',tip:'Anota una sola frase y trata de vivirla durante la semana.'},
+{n:'Credo',que:'Toda la asamblea proclama su fe. Se hace los domingos y solemnidades. Se usa el Credo Niceno-Constantinopolitano o, alternativamente, el Símbolo de los Apóstoles.',dice:[['Todos','Creo en un solo Dios, Padre todopoderoso, Creador del cielo y de la tierra… (texto completo en tu misal)']],sig:'Es la fe de la Iglesia desde los concilios de Nicea (año 325) y Constantinopla (año 381). Tiene tres partes: Padre, Hijo y Espíritu Santo; después menciona la Iglesia y la vida eterna. En la frase de la Encarnación se hace una inclinación profunda.',pos:'De pie',tip:'No es un trámite: cada frase afirma algo que creo. Intenta detenerte en una.'},
+{n:'Oración de los fieles',que:'Se piden intenciones por la Iglesia, los gobernantes, los necesitados, el mundo y la comunidad.',dice:[['Pueblo','Responde con la fórmula que indique el lector (por ejemplo, «Te rogamos, óyenos»).']],sig:'Todo bautizado ejerce su sacerdocio rezando por los demás. Es la oración del pueblo, no solo del sacerdote.',pos:'De pie',tip:'Añade en tu interior una intención por alguien que lo necesite.'}
+]},
+{id:'euc',n:'Liturgia Eucarística',lema:'Damos gracias y recibimos',res:'Repetimos lo que Jesús hizo en la Última Cena: tomó pan y vino, dio gracias, los partió y los repartió. Es el corazón de la Misa.',partes:[
+{n:'Presentación de los dones',que:'Se llevan al altar el pan, el vino (y la colecta). El sacerdote bendice a Dios por ellos y mezcla una gota de agua con el vino.',dice:[['Pueblo','Bendito seas por siempre, Señor.']],sig:'Ofrecemos pan y vino, «fruto de la tierra y del trabajo del hombre»: es decir, también nuestra vida y esfuerzos. La gota de agua representa nuestra unión con Cristo.',pos:'Sentados',tip:'Pon mentalmente en el altar algo tuyo: tu trabajo, una preocupación, una alegría.'},
+{n:'Oración sobre las ofrendas',que:'El sacerdote invita a todos a orar para que el sacrificio sea aceptado.',dice:[['Sacerdote','Oren, hermanos, para que este sacrificio mío y de ustedes sea agradable a Dios, Padre todopoderoso.'],['Pueblo','El Señor reciba de tus manos este sacrificio, para alabanza y gloria de su nombre, para nuestro bien y el de toda su santa Iglesia.']],sig:'Cuando dice «mío y de ustedes» recuerda que la Misa la celebramos todos: sacerdote y pueblo, cada uno según su papel.',pos:'De pie',tip:'Esta respuesta es larga; con la práctica de esta app la aprenderás.'},
+{n:'Prefacio',que:'Diálogo de apertura de la gran oración de acción de gracias. Cambia según el tiempo litúrgico.',dice:[['Sacerdote','El Señor esté con ustedes.'],['Pueblo','Y con tu espíritu.'],['Sacerdote','Levantemos el corazón.'],['Pueblo','Lo tenemos levantado hacia el Señor.'],['Sacerdote','Demos gracias al Señor, nuestro Dios.'],['Pueblo','Es justo y necesario.']],sig:'«Eucaristía» significa «acción de gracias». Aquí empieza la gran acción de gracias: elevamos el corazón y reconocemos que dar gracias a Dios es lo justo y necesario.',pos:'De pie',tip:'Cuando digas «lo tenemos levantado hacia el Señor», ponlo de verdad: deja a un lado las preocupaciones.'},
+{n:'Santo (Sanctus)',que:'Cantamos junto con los ángeles la santidad de Dios.',dice:[['Todos','Santo, Santo, Santo es el Señor, Dios del universo… (sigue el himno)']],sig:'Une las palabras de los serafines en Isaías 6, 3 con el grito de la multitud al entrar Jesús en Jerusalén, «Hosanna… bendito el que viene en nombre del Señor» (Mateo 21, 9).',pos:'De pie, y después según la costumbre local (en muchos lugares se arrodilla desde aquí o desde la consagración)',tip:'Si no recuerdas la letra, léela: es de las partes que más conviene aprender.'},
+{n:'Plegaria Eucarística',que:'Es la oración central de la Misa. Dirigida al Padre, tiene varios momentos que se suceden sin interrupción: invocación del Espíritu, consagración, memorial, ofrecimiento e intercesiones.',dice:[['Sacerdote','(Consagración) Repite las palabras y gestos de Jesús en la Última Cena sobre el pan y sobre el cáliz.'],['Sacerdote','Este es el Sacramento de nuestra fe.'],['Pueblo','Anunciamos tu muerte, proclamamos tu resurrección. ¡Ven, Señor Jesús!'],['Sacerdote','Por Cristo, con él y en él… todo honor y toda gloria por los siglos de los siglos.'],['Pueblo','Amén.']],sig:'Epíclesis: el sacerdote extiende las manos y pide al Espíritu Santo que convierta el pan y el vino en el Cuerpo y la Sangre de Cristo. Consagración: Cristo se hace realmente presente; se eleva la hostia y el cáliz. Memorial: recordamos su muerte y resurrección y las hacemos presentes. Intercesiones: rezamos por la Iglesia, los vivos y los difuntos. Doxología final: «Por Cristo, con él y en él…» y el pueblo responde con el «gran Amén», la respuesta más importante de toda la Misa.',pos:'De rodillas durante la consagración (donde se acostumbra) y de pie para la doxología final',tip:'En la elevación puedes decir en silencio «Señor mío y Dios mío» (Juan 20, 28). Al «Amén» final respóndelo fuerte: es tu «sí» a todo lo anterior.'}
+]},
+{id:'com',n:'Rito de Comunión',lema:'Nos hacemos uno con Cristo',res:'Nos preparamos para recibir a Jesús: rezamos como hijos, nos reconciliamos y compartimos el pan de vida.',partes:[
+{n:'Padre Nuestro',que:'Todos rezamos juntos la oración que enseñó Jesús. El sacerdote introduce y después añade una oración sobre el «líbranos del mal».',dice:[['Todos','Padre nuestro, que estás en el cielo… (texto completo en Oraciones)'],['Pueblo','Tuyo es el reino, tuyo el poder y la gloria, por siempre, Señor.']],sig:'Pedimos el pan de cada día —que también se entiende como el Pan de la Eucaristía— y el perdón, justo antes de comulgar.',pos:'De pie',tip:'Deja que cada petición pase despacio por tu mente.'},
+{n:'Rito de la paz',que:'Nos damos la paz entre nosotros como gesto de reconciliación.',dice:[['Sacerdote','La paz del Señor esté siempre con ustedes.'],['Pueblo','Y con tu espíritu.'],['Sacerdote','Dense fraternalmente la paz.'],['Todos','La paz sea contigo.']],sig:'No es un saludo social. Jesús enseñó a reconciliarse con el hermano antes de presentar la ofrenda (Mateo 5, 23-24).',pos:'De pie',tip:'Mírale a los ojos a quien le das la paz. Si hay alguien con quien tienes un conflicto, pide a Dios la gracia de perdonar.'},
+{n:'Fracción del pan y Cordero de Dios',que:'El sacerdote parte la hostia y deja caer un trozo en el cáliz mientras se canta o reza el Cordero de Dios.',dice:[['Todos','Cordero de Dios, que quitas el pecado del mundo, ten piedad de nosotros. (dos veces)'],['Todos','Cordero de Dios, que quitas el pecado del mundo, danos la paz.']],sig:'Juan Bautista llamó a Jesús «el Cordero de Dios» (Juan 1, 29). En los primeros siglos toda la Misa se llamaba «la fracción del pan» (Hechos 2, 42): muchos que comemos un solo pan formamos un solo cuerpo.',pos:'De pie o de rodillas, según la costumbre del lugar',tip:'Contempla la hostia partida: Cristo se da por entero y por todos.'},
+{n:'Comunión',que:'El sacerdote muestra la hostia. Los fieles se acercan en procesión, reciben a Cristo y regresan a su lugar.',dice:[['Sacerdote','Este es el Cordero de Dios que quita el pecado del mundo. Dichosos los invitados a la cena del Señor.'],['Pueblo','Señor, no soy digno de que entres en mi casa, pero una palabra tuya bastará para sanarme.'],['Ministro','El Cuerpo de Cristo.'],['Tú','Amén.']],sig:'Tu «Amén» es una profesión de fe: «sí, creo que este es el Cuerpo de Cristo». Las palabras del pueblo vienen del centurión que pidió a Jesús sanar a su siervo (Mateo 8, 8). Para comulgar hay que ser católico, haber guardado una hora de ayuno y estar en gracia de Dios; si hay conciencia de pecado grave, primero se debe confesar.',pos:'En procesión. Antes de recibir la comunión se hace una inclinación de cabeza. Puede recibirse en la mano (una mano sobre la otra) o en la lengua, según indique tu parroquia.',tip:'Quien no puede comulgar puede hacer una comunión espiritual (ver Oraciones) y, en muchas parroquias, acercarse con los brazos cruzados sobre el pecho para recibir una bendición.'},
+{n:'Silencio y oración después de la comunión',que:'Un tiempo de silencio y acción de gracias; después el sacerdote dice una oración final para pedir que el sacramento dé fruto.',dice:[['Sacerdote','Oremos.'],['Pueblo','(Al terminar la oración) Amén.']],sig:'Jesús está realmente presente en ti. Es un momento privilegiado para hablar con él personalmente.',pos:'Sentados o de rodillas, en silencio',tip:'Quédate hasta el final y aprovecha estos minutos: no hay mejor momento para rezar.'}
+]},
+{id:'fin',n:'Rito de conclusión',lema:'Nos envían',res:'La Misa termina para que comience la misión: llevamos lo recibido a la casa, la calle y el trabajo.',partes:[
+{n:'Avisos',que:'Se dan anuncios breves de la comunidad (horarios, actividades, intenciones).',dice:[],sig:'Es la vida concreta de la parroquia: ahí también se participa.',pos:'Sentados o de pie, según la parroquia',tip:'Anota lo que te interese: grupos, catequesis, ayuda a los necesitados.'},
+{n:'Bendición',que:'El sacerdote bendice al pueblo en el nombre de la Trinidad.',dice:[['Sacerdote','El Señor esté con ustedes.'],['Pueblo','Y con tu espíritu.'],['Sacerdote','La bendición de Dios todopoderoso, Padre, Hijo y Espíritu Santo, descienda sobre ustedes.'],['Pueblo','Amén.']],sig:'Recibimos la protección de Dios para vivir lo celebrado. Nos santiguamos.',pos:'De pie',tip:'Hazte la señal de la cruz con calma.'},
+{n:'Despedida',que:'El sacerdote o diácono nos envía a vivir y anunciar lo celebrado.',dice:[['Sacerdote','Pueden ir en paz.'],['Pueblo','Demos gracias a Dios.']],sig:'La palabra «Misa» viene del latín «missa», el envío de la despedida «Ite, missa est». La Misa no termina: se prolonga en la vida.',pos:'De pie',tip:'Antes de salir pregúntate qué vas a vivir esta semana de lo que escuchaste.'}
+]}
+];
+
+/* Orden de las partes para el modo práctica */
+const ORDEN=['Canto y procesión de entrada','Saludo y Señal de la Cruz','Acto penitencial','Señor, ten piedad','Gloria','Oración colecta','Primera lectura','Salmo responsorial','Segunda lectura','Aleluya','Evangelio','Homilía','Credo','Oración de los fieles','Presentación de los dones','Oración sobre las ofrendas','Prefacio','Santo','Plegaria Eucarística','Padre Nuestro','Rito de la paz','Fracción del pan y Cordero de Dios','Comunión','Oración después de la comunión','Bendición','Despedida'];
+
+/* Diálogos para practicar: p = lo que dice el celebrante; r = lo que respondemos */
+const DIALOGOS=[
+{p:'El Señor esté con ustedes.',r:'Y con tu espíritu.',por:'Se repite en varios momentos de la Misa (saludo, Evangelio, prefacio, paz y bendición).'},
+{p:'Palabra de Dios.',r:'Te alabamos, Señor.',por:'Al terminar la primera y la segunda lecturas.'},
+{p:'Palabra del Señor.',r:'Gloria a ti, Señor Jesús.',por:'Al terminar el Evangelio. Cristo mismo ha hablado.'},
+{p:'Lectura del santo Evangelio según san Lucas.',r:'Gloria a ti, Señor.',por:'Antes del Evangelio: se hacen las tres cruces con el pulgar.'},
+{p:'Levantemos el corazón.',r:'Lo tenemos levantado hacia el Señor.',por:'Diálogo del prefacio: ponemos el corazón en Dios.'},
+{p:'Demos gracias al Señor, nuestro Dios.',r:'Es justo y necesario.',por:'Eucaristía significa «acción de gracias».'},
+{p:'Oren, hermanos, para que este sacrificio mío y de ustedes sea agradable a Dios, Padre todopoderoso.',r:'El Señor reciba de tus manos este sacrificio, para alabanza y gloria de su nombre, para nuestro bien y el de toda su santa Iglesia.',por:'Cierra la presentación de los dones.'},
+{p:'Este es el Sacramento de nuestra fe.',r:'Anunciamos tu muerte, proclamamos tu resurrección. ¡Ven, Señor Jesús!',por:'Aclamación memorial, justo después de la consagración. Existen otras dos fórmulas aprobadas.'},
+{p:'Por Cristo, con él y en él, a ti, Dios Padre omnipotente, en la unidad del Espíritu Santo, todo honor y toda gloria por los siglos de los siglos.',r:'Amén.',por:'El «gran Amén» que cierra la Plegaria Eucarística.'},
+{p:'La paz del Señor esté siempre con ustedes.',r:'Y con tu espíritu.',por:'Antes del rito de la paz.'},
+{p:'Este es el Cordero de Dios que quita el pecado del mundo. Dichosos los invitados a la cena del Señor.',r:'Señor, no soy digno de que entres en mi casa, pero una palabra tuya bastará para sanarme.',por:'Palabras del centurión (Mateo 8, 8), justo antes de comulgar.'},
+{p:'El Cuerpo de Cristo.',r:'Amén.',por:'Al recibir la comunión: tu «sí, creo».'},
+{p:'La bendición de Dios todopoderoso, Padre, Hijo y Espíritu Santo, descienda sobre ustedes.',r:'Amén.',por:'Bendición final.'},
+{p:'Pueden ir en paz.',r:'Demos gracias a Dios.',por:'Despedida: la Misa se prolonga en la vida.'},
+{p:'…por los siglos de los siglos.',r:'Amén.',por:'Así terminan las oraciones del sacerdote (colecta, ofrendas, después de la comunión). Con el «Amén» haces tuya la oración.'}
+];
+
+/* Preguntas de cultura general de la Misa */
+const FACTOS=[
+{q:'¿Qué hacemos con el pulgar antes de escuchar el Evangelio?',a:'Tres cruces pequeñas: en la frente, en los labios y en el pecho',o:['Una sola cruz grande sobre el cuerpo','Nos golpeamos el pecho tres veces','Nos inclinamos hasta el suelo'],por:'Pedimos que Cristo esté en la mente, en las palabras y en el corazón.'},
+{q:'¿Cuánto ayuno se pide antes de comulgar?',a:'Una hora antes (el agua y las medicinas no cuentan)',o:['Desde la medianoche','Seis horas','Ninguno'],por:'Es la norma actual de la Iglesia latina. Las personas enfermas o mayores tienen más flexibilidad.'},
+{q:'¿Cuál es el momento central de la Misa?',a:'La Plegaria Eucarística, con la consagración',o:['La homilía','El Gloria','El rito de la paz'],por:'Ahí Cristo se hace presente en el pan y el vino.'},
+{q:'¿Cuántos sacramentos hay?',a:'Siete',o:['Tres','Cinco','Doce'],por:'Bautismo, Confirmación, Eucaristía, Reconciliación, Unción de los enfermos, Orden sacerdotal y Matrimonio.'},
+{q:'¿De qué color es el Tiempo Ordinario?',a:'Verde',o:['Morado','Blanco','Rojo'],por:'El verde simboliza la esperanza y el crecimiento. «Ordinario» viene de «ordinal»: semanas numeradas.'},
+{q:'¿Qué pasa con el Gloria en Adviento y Cuaresma?',a:'No se dice',o:['Se dice más largo','Se canta de rodillas','Solo se dice el domingo'],por:'Son tiempos de espera y penitencia; el Gloria se reserva para la alegría de la fiesta.'},
+{q:'¿Cuándo se reza el Credo en la Misa?',a:'Los domingos y en las solemnidades',o:['Todos los días','Solo en Navidad','Solo en Semana Santa'],por:'En las Misas de semana normalmente no se dice.'},
+{q:'¿Qué parte de la Misa termina con el «gran Amén»?',a:'La Plegaria Eucarística',o:['El Gloria','La homilía','La oración de los fieles'],por:'Al final de la doxología «Por Cristo, con él y en él…».'},
+{q:'¿Cuándo nos damos la paz?',a:'Después del Padre Nuestro y antes de la comunión',o:['Al inicio de la Misa','Antes del Evangelio','Al terminar la Misa'],por:'Es un gesto de reconciliación antes de recibir a Cristo.'},
+{q:'¿Para qué sirve el silencio después de «Oremos»?',a:'Para presentar a Dios nuestras intenciones personales',o:['Para esperar que termine el canto','Para revisar el misal','Para saludar a los vecinos'],por:'De ahí viene el nombre de «colecta»: recoge las intenciones.'},
+{q:'¿Qué es el Triduo Pascual?',a:'Del Jueves Santo por la tarde al Domingo de Pascua',o:['Los tres domingos de Adviento','Los tres días de Navidad','El Miércoles de Ceniza'],por:'Es el centro de todo el año litúrgico.'},
+{q:'¿A quién representa el altar?',a:'A Cristo',o:['Solo al sacerdote','A los apóstoles','Al pueblo'],por:'Por eso se besa, se inciensa y no se usa para otros fines.'},
+{q:'¿Qué hacemos con las manos al recibir la comunión en la mano?',a:'Una sobre otra, abiertas, y consumimos allí mismo',o:['La tomamos con los dedos y la guardamos','La tomamos y nos vamos al banco','Cerramos el puño'],por:'Se consume en presencia del ministro. Otra opción permitida es recibirla en la lengua.'}
+];
+
+/* Glosario. d = definición corta (sirve también para el modo práctica) */
+const GLOS=[
+{t:'Misa',d:'Celebración de la Eucaristía. La palabra viene del latín «missa» (envío), de la despedida «Ite, missa est».'},
+{t:'Eucaristía',d:'Del griego «acción de gracias». Sacramento en que Cristo hace presente su sacrificio y se da como alimento en el pan y el vino.'},
+{t:'Liturgia',d:'Del griego «obra pública»; es la oración oficial de la Iglesia, donde Cristo mismo ora con su Cuerpo.'},
+{t:'Sacramento',d:'Signo visible instituido por Cristo que da la gracia que significa. Son siete.'},
+{t:'Presencia real',d:'Cristo está verdadera, real y sustancialmente presente en la Eucaristía, no solo como símbolo.'},
+{t:'Transubstanciación',d:'Término teológico: la sustancia del pan y del vino se convierte en la del Cuerpo y la Sangre de Cristo; permanecen las apariencias.'},
+{t:'Altar',d:'Mesa del sacrificio y de la cena del Señor, centro de la iglesia; simboliza a Cristo.'},
+{t:'Ambón',d:'Lugar desde donde se proclama la Palabra de Dios en la Misa.'},
+{t:'Sagrario',d:'Lugar donde se reserva la Eucaristía. Una lamparita encendida indica que Jesús está presente.'},
+{t:'Misal',d:'Libro con las oraciones y ritos de la Misa. El Leccionario contiene las lecturas y el Evangeliario los Evangelios.'},
+{t:'Homilía',d:'Del griego «conversación»: explicación de la Palabra de Dios aplicada a la vida de hoy.'},
+{t:'Amén',d:'Del hebreo: «así es», «estoy de acuerdo». Al decirlo hacemos nuestra la oración.'},
+{t:'Aleluya',d:'Del hebreo: «alaben al Señor». Es una aclamación de alegría que se canta antes del Evangelio.'},
+{t:'Hosanna',d:'Del hebreo: «sálvanos, por favor». Se hizo grito de alabanza, como en la entrada de Jesús a Jerusalén.'},
+{t:'Kyrie',d:'Del griego: «Señor». Aclamación «Señor, ten piedad» al comienzo de la Misa.'},
+{t:'Colecta',d:'Primera oración del sacerdote; «recoge» las intenciones de todos.'},
+{t:'Prefacio',d:'Oración de alabanza que abre la Plegaria Eucarística y cambia según el tiempo litúrgico.'},
+{t:'Epíclesis',d:'Invocación al Espíritu Santo para que convierta el pan y el vino en el Cuerpo y la Sangre de Cristo.'},
+{t:'Consagración',d:'Momento en que, por las palabras de Cristo y la acción del Espíritu, el pan y el vino se hacen su Cuerpo y su Sangre.'},
+{t:'Memorial (anámnesis)',d:'No es solo recordar: es hacer presente el acontecimiento. En la Misa se hace presente la entrega de Cristo.'},
+{t:'Doxología',d:'Fórmula de alabanza a la Trinidad, como «Por Cristo, con él y en él…» o «Gloria al Padre…».'},
+{t:'Patena',d:'Plato sobre el que se coloca la hostia.'},
+{t:'Cáliz',d:'Copa en la que se consagra el vino que se hace la Sangre de Cristo.'},
+{t:'Corporal',d:'Paño cuadrado blanco que se extiende sobre el altar y sostiene la patena y el cáliz.'},
+{t:'Hostia',d:'Del latín «víctima, ofrenda». Es el pan sin levadura que se consagra.'},
+{t:'Casulla',d:'Vestidura exterior del sacerdote; su color depende del tiempo litúrgico.'},
+{t:'Alba',d:'Túnica blanca que recuerda el vestido del bautismo.'},
+{t:'Estola',d:'Tira de tela que lleva el sacerdote o el diácono; símbolo de su ministerio.'},
+{t:'Genuflexión',d:'Gesto de rodillas al suelo (la derecha) ante el Santísimo Sacramento en el sagrario.'},
+{t:'Diácono',d:'Ministro ordenado que proclama el Evangelio, sirve en el altar y puede predicar.'},
+{t:'Acólito',d:'Servidor del altar (por ejemplo, un monaguillo).'},
+{t:'Incienso',d:'Humo aromático que simboliza la oración que sube a Dios (Salmo 141, 2).'},
+{t:'Cirio pascual',d:'Vela grande que se enciende en Pascua; simboliza a Cristo resucitado, luz del mundo.'},
+{t:'Triduo Pascual',d:'Los tres días del Jueves Santo por la tarde al Domingo de Pascua: la pasión, muerte y resurrección de Jesús.'},
+{t:'Tiempo Ordinario',d:'De «ordinal», no de «común»: son las semanas numeradas fuera de Adviento, Navidad, Cuaresma y Pascua.'},
+{t:'Domingo de precepto',d:'Los católicos están llamados a participar en la Misa los domingos y días de fiesta de guardar.'},
+{t:'Ayuno eucarístico',d:'Una hora sin comer ni beber (salvo agua y medicinas) antes de comulgar.'},
+{t:'Viático',d:'Comunión que se da a quien está en peligro de muerte; significa «provisión para el camino».'},
+{t:'Comunión espiritual',d:'Deseo sincero de recibir a Cristo cuando no se puede comulgar sacramentalmente.'},
+{t:'Solemnidad, fiesta y memoria',d:'Grados de importancia de una celebración: la solemnidad es la mayor; luego la fiesta y la memoria.'},
+{t:'Octava',d:'Ocho días de celebración continua de una gran fiesta, como la de Pascua o Navidad.'},
+{t:'Vigilia',d:'Celebración que se hace en la noche anterior a una fiesta, como la Vigilia Pascual.'},
+{t:'Credo',d:'Del latín «creo». Resume la fe de la Iglesia en la Trinidad.'}
+];
+
+/* Oraciones. Textos tradicionales de uso común; pueden variar levemente según el país. */
+const ORACIONES=[
+{id:'cruz',n:'Señal de la Cruz',t:'Por la señal de la santa cruz,\nde nuestros enemigos líbranos, Señor, Dios nuestro.\nEn el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.',m:'Es la primera y la última oración de la Misa. Al hacerla recordamos que somos bautizados y que Cristo nos salvó con su cruz.'},
+{id:'padre',n:'Padre Nuestro',t:'Padre nuestro, que estás en el cielo,\nsantificado sea tu nombre;\nvenga a nosotros tu reino;\nhágase tu voluntad\nen la tierra como en el cielo.\nDanos hoy nuestro pan de cada día;\nperdona nuestras ofensas,\ncomo también nosotros perdonamos\na los que nos ofenden;\nno nos dejes caer en la tentación,\ny líbranos del mal. Amén.',m:'Tiene siete peticiones: las tres primeras son para Dios (su nombre, su reino, su voluntad) y las cuatro últimas para nosotros (pan, perdón, no caer, ser librados del mal). Algunas conferencias episcopales usan «no nos dejes caer en la tentación», otras «no nos induzcas»: pequeñas variantes según el país.'},
+{id:'ave',n:'Ave María',t:'Dios te salve, María, llena eres de gracia,\nel Señor es contigo;\nbendita tú eres entre todas las mujeres,\ny bendito es el fruto de tu vientre, Jesús.\nSanta María, Madre de Dios,\nruega por nosotros, pecadores,\nahora y en la hora de nuestra muerte. Amén.',m:'La primera parte une el saludo del ángel Gabriel (Lucas 1, 28) y el de Isabel (Lucas 1, 42). La segunda es la súplica de la Iglesia a María.'},
+{id:'vensp',n:'Ven, Espíritu Santo',t:'Ven, Espíritu Santo,\nllena los corazones de tus fieles\ny enciende en ellos el fuego de tu amor.\nV. Envía tu Espíritu y serán creadas todas las cosas.\nR. Y renovarás la faz de la tierra.\n\nOremos: Oh Dios, que has instruido los corazones de tus fieles con la luz del Espíritu Santo, concédenos que, guiados por el mismo Espíritu, sintamos rectamente y gocemos siempre de sus consuelos. Por Cristo, nuestro Señor. Amén.',m:'Se reza al empezar el Encuentro con Cristo, la oración personal o el estudio: pedimos al Espíritu que ilumine la mente, mueva la voluntad y encienda el corazón.'},
+{id:'gloriah',n:'Gloria (himno de la Misa)',t:'Gloria a Dios en el cielo,\ny en la tierra paz a los hombres que ama el Señor.\nPor tu inmensa gloria te alabamos,\nte bendecimos, te adoramos,\nte glorificamos, te damos gracias,\nSeñor Dios, Rey celestial,\nDios Padre todopoderoso.\nSeñor, Hijo único, Jesucristo.\nSeñor Dios, Cordero de Dios, Hijo del Padre;\ntú que quitas el pecado del mundo,\nten piedad de nosotros;\ntú que quitas el pecado del mundo,\natiende nuestra súplica;\ntú que estás sentado a la derecha del Padre,\nten piedad de nosotros;\nporque solo tú eres Santo,\nsolo tú Señor,\nsolo tú Altísimo, Jesucristo,\ncon el Espíritu Santo\nen la gloria de Dios Padre. Amén.',m:'Se canta o se reza los domingos (salvo Adviento y Cuaresma), en solemnidades y fiestas, después del «Señor, ten piedad». Empieza con el canto de los ángeles en Belén.'},
+{id:'credon',n:'Credo de la Misa (Niceno-Constantinopolitano)',t:'Creo en un solo Dios,\nPadre todopoderoso,\nCreador del cielo y de la tierra,\nde todo lo visible y lo invisible.\nCreo en un solo Señor, Jesucristo,\nHijo único de Dios,\nnacido del Padre antes de todos los siglos:\nDios de Dios, Luz de Luz,\nDios verdadero de Dios verdadero,\nengendrado, no creado,\nde la misma naturaleza del Padre,\npor quien todo fue hecho;\nque por nosotros, los hombres,\ny por nuestra salvación bajó del cielo,\n(aquí todos se inclinan)\ny por obra del Espíritu Santo\nse encarnó de María, la Virgen,\ny se hizo hombre;\ny por nuestra causa fue crucificado\nen tiempos de Poncio Pilato;\npadeció y fue sepultado,\ny resucitó al tercer día, según las Escrituras,\ny subió al cielo,\ny está sentado a la derecha del Padre;\ny de nuevo vendrá con gloria\npara juzgar a vivos y muertos,\ny su reino no tendrá fin.\nCreo en el Espíritu Santo, Señor y dador de vida,\nque procede del Padre y del Hijo,\nque con el Padre y el Hijo\nrecibe una misma adoración y gloria,\ny que habló por los profetas.\nCreo en la Iglesia,\nque es una, santa, católica y apostólica.\nConfieso que hay un solo bautismo\npara el perdón de los pecados.\nEspero la resurrección de los muertos\ny la vida del mundo futuro. Amén.',m:'Es el Credo que se proclama de pie en la Misa de los domingos y solemnidades, después de la homilía. En algunas Misas se usa en su lugar el Símbolo de los Apóstoles.'},
+{id:'santo',n:'Santo (Sanctus)',t:'Santo, Santo, Santo es el Señor,\nDios del universo.\nLlenos están el cielo y la tierra de tu gloria.\nHosanna en el cielo.\nBendito el que viene en nombre del Señor.\nHosanna en el cielo.',m:'Se canta al terminar el prefacio, uniéndonos a los ángeles (Isaías 6, 3) y a la multitud que recibió a Jesús en Jerusalén (Mateo 21, 9).'},
+{id:'rcinv',n:'Invocación del Regnum Christi',t:'¡Cristo, Rey nuestro!\n— ¡Venga tu Reino!',m:'Es el lema y la jaculatoria del Regnum Christi, tomado del Padre Nuestro. Pedimos que Cristo reine en nuestro corazón, en la familia, en el trabajo y en la sociedad. Se dice al empezar y al terminar la oración y el Encuentro.'},
+{id:'gloria',n:'Gloria al Padre',t:'Gloria al Padre, y al Hijo, y al Espíritu Santo.\nComo era en el principio, ahora y siempre,\ny por los siglos de los siglos. Amén.',m:'Pequeña alabanza a la Trinidad. Se reza al final de cada decena del Rosario y de los salmos.'},
+{id:'credoap',n:'Credo (Símbolo de los Apóstoles)',t:'Creo en Dios, Padre todopoderoso,\nCreador del cielo y de la tierra.\nCreo en Jesucristo, su único Hijo, nuestro Señor,\nque fue concebido por obra y gracia del Espíritu Santo,\nnació de santa María Virgen,\npadeció bajo el poder de Poncio Pilato,\nfue crucificado, muerto y sepultado,\ndescendió a los infiernos,\nal tercer día resucitó de entre los muertos,\nsubió a los cielos\ny está sentado a la derecha de Dios, Padre todopoderoso.\nDesde allí ha de venir a juzgar a vivos y muertos.\nCreo en el Espíritu Santo,\nla santa Iglesia católica,\nla comunión de los santos,\nel perdón de los pecados,\nla resurrección de la carne\ny la vida eterna. Amén.',m:'Es el credo más breve y antiguo. En la Misa dominical normalmente se proclama el Credo Niceno-Constantinopolitano, más largo; el de los Apóstoles se usa en el Rosario y como alternativa.'},
+{id:'confieso',n:'Yo confieso (Confiteor)',t:'Yo confieso ante Dios todopoderoso\ny ante ustedes, hermanos,\nque he pecado mucho\nde pensamiento, palabra, obra y omisión.\nPor mi culpa, por mi culpa, por mi gran culpa.\nPor eso ruego a santa María, siempre Virgen,\na los ángeles, a los santos\ny a ustedes, hermanos,\nque intercedan por mí ante Dios, nuestro Señor.',m:'Se reza en el acto penitencial. «Omisión» es lo bueno que dejamos de hacer. El golpe de pecho acompaña a «por mi culpa».'},
+{id:'contri',n:'Acto de contrición',t:'Señor mío, Jesucristo,\nDios y hombre verdadero,\nCreador, Padre y Redentor mío:\npor ser Tú quien eres, bondad infinita,\ny porque te amo sobre todas las cosas,\nme pesa de todo corazón haberte ofendido.\nAyudado de tu divina gracia,\npropongo firmemente nunca más pecar,\nconfesarme y cumplir la penitencia que me fuere impuesta.\nAmén.',m:'Se reza en la confesión y por la noche. Contrición perfecta es el dolor por amor a Dios; tiene como fruto el propósito de enmendarse. Versión breve: «Jesús, ten piedad de mí, que soy pecador».'},
+{id:'angelus',n:'Ángelus',t:'V. El ángel del Señor anunció a María.\nR. Y concibió por obra del Espíritu Santo.\n(Dios te salve, María…)\nV. He aquí la esclava del Señor.\nR. Hágase en mí según tu palabra.\n(Dios te salve, María…)\nV. Y el Verbo se hizo carne.\nR. Y habitó entre nosotros.\n(Dios te salve, María…)\nV. Ruega por nosotros, santa Madre de Dios.\nR. Para que seamos dignos de alcanzar las promesas de nuestro Señor Jesucristo.\n\nOremos: Derrama, Señor, tu gracia en nuestros corazones, para que quienes hemos conocido, por el anuncio del ángel, la encarnación de tu Hijo Jesucristo, lleguemos, por su pasión y su cruz, a la gloria de la resurrección. Por el mismo Jesucristo, nuestro Señor. Amén.',m:'Se reza al amanecer, al mediodía (12:00) y al atardecer. Recuerda la Encarnación. En el tiempo de Pascua se sustituye por el Regina Caeli.'},
+{id:'salve',n:'Salve',t:'Dios te salve, Reina y Madre de misericordia,\nvida, dulzura y esperanza nuestra; Dios te salve.\nA ti llamamos los desterrados hijos de Eva;\na ti suspiramos, gimiendo y llorando\nen este valle de lágrimas.\nEa, pues, Señora, abogada nuestra,\nvuelve a nosotros esos tus ojos misericordiosos;\ny después de este destierro,\nmuéstranos a Jesús, fruto bendito de tu vientre.\n¡Oh clemente, oh piadosa, oh dulce Virgen María!\nRuega por nosotros, santa Madre de Dios,\npara que seamos dignos de alcanzar\nlas promesas de nuestro Señor Jesucristo. Amén.',m:'Se reza al terminar el Rosario. Es una oración antigua de súplica a María, nuestra madre y abogada.'},
+{id:'ofrec',n:'Ofrecimiento del día',t:'Señor, te ofrezco este día:\nmis pensamientos, mis palabras, mi trabajo,\nmis alegrías y mis cansancios.\nQue todo lo que haga hoy sea para tu gloria\ny para el bien de las personas que me rodean.\nAmén.',m:'Oración sencilla para empezar el día. Puedes decirla con tus palabras. Existe también el ofrecimiento tradicional del Apostolado de la Oración.'},
+{id:'comida',n:'Bendición de los alimentos',t:'Bendícenos, Señor,\ny bendice estos alimentos que vamos a tomar,\npor Cristo nuestro Señor. Amén.',m:'Dar gracias antes de comer nos recuerda que todo es don. Al final: «Te damos gracias, Señor, por estos alimentos».'},
+{id:'guarda',n:'Ángel de la guarda',t:'Ángel de la guarda,\ndulce compañía,\nno me desampares\nni de noche ni de día.\nHasta que me pongas\nen paz y alegría\ncon todos los santos,\nJesús, José y María.',m:'Oración tradicional para los niños y para toda la familia, especialmente antes de dormir.'},
+{id:'comesp',n:'Comunión espiritual',t:'Creo, Jesús mío, que estás real y verdaderamente\nen el cielo y en el Santísimo Sacramento del altar.\nTe amo sobre todas las cosas\ny deseo recibirte en mi alma.\nYa que ahora no puedo recibirte sacramentalmente,\nven al menos espiritualmente a mi corazón.\nComo si ya hubieras venido, te abrazo y me uno todo a Ti;\nno permitas que jamás me separe de Ti.',m:'Para cuando no puedes comulgar (por ejemplo, si no estás en gracia, estás enfermo o no puedes ir a Misa). Se atribuye a san Alfonso María de Ligorio.'},
+{id:'anima',n:'Alma de Cristo (Anima Christi)',t:'Alma de Cristo, santifícame.\nCuerpo de Cristo, sálvame.\nSangre de Cristo, embriágame.\nAgua del costado de Cristo, lávame.\nPasión de Cristo, confórtame.\n¡Oh, buen Jesús!, óyeme.\nDentro de tus llagas, escóndeme.\nNo permitas que me aparte de ti.\nDel maligno enemigo, defiéndeme.\nEn la hora de mi muerte, llámame.\nY mándame ir a ti,\npara que con tus santos te alabe\npor los siglos de los siglos. Amén.',m:'Oración muy antigua, ideal para después de comulgar.'},
+{id:'miseric',n:'Coronilla de la Divina Misericordia',t:'Empieza con: Padre Nuestro, Ave María y Credo.\n\nEn las cuentas grandes:\nPadre Eterno, te ofrezco el Cuerpo y la Sangre,\nel Alma y la Divinidad\nde tu amadísimo Hijo, nuestro Señor Jesucristo,\nen expiación de nuestros pecados y los del mundo entero.\n\nEn las diez cuentas pequeñas (cada decena):\nPor su dolorosa pasión,\nten misericordia de nosotros y del mundo entero.\n\nAl final (tres veces):\nSanto Dios, Santo Fuerte, Santo Inmortal,\nten piedad de nosotros y del mundo entero.',m:'Se reza tradicionalmente a las 3 p. m., la hora de la muerte de Jesús. Viene de las revelaciones de santa Faustina Kowalska.'}
+];
+
+const MISTERIOS={
+gozosos:{n:'Gozosos',dias:'lunes y sábado',list:['La Anunciación del ángel a María','La Visitación de María a su prima Isabel','El Nacimiento de Jesús en Belén','La Presentación de Jesús en el templo','El Niño Jesús perdido y hallado en el templo']},
+dolorosos:{n:'Dolorosos',dias:'martes y viernes',list:['La oración de Jesús en el huerto','La flagelación','La coronación de espinas','Jesús con la cruz a cuestas','La crucifixión y muerte de Jesús']},
+gloriosos:{n:'Gloriosos',dias:'miércoles y domingo',list:['La Resurrección','La Ascensión','La venida del Espíritu Santo','La Asunción de María','La coronación de María como Reina']},
+luminosos:{n:'Luminosos',dias:'jueves',list:['El Bautismo de Jesús en el Jordán','Las bodas de Caná','El anuncio del Reino y la invitación a convertirse','La Transfiguración','La institución de la Eucaristía']}
+};
+const MIS_DIA=['gloriosos','gozosos','dolorosos','gloriosos','luminosos','dolorosos','gozosos'];
+
+const ROSARIO_PASOS=['Señal de la Cruz y Acto de contrición.','Credo (Símbolo de los Apóstoles).','Un Padre Nuestro, tres Ave Marías (por la fe, la esperanza y la caridad) y un Gloria.','Cinco decenas. En cada una: anuncia el misterio, reza un Padre Nuestro, diez Ave Marías y un Gloria. Puedes añadir: «Oh Jesús mío, perdona nuestros pecados, líbranos del fuego del infierno, lleva al cielo a todas las almas, especialmente a las más necesitadas de tu misericordia».','Al final se reza la Salve y se pide por las intenciones del Papa y las propias.'];
+
+/* Examen del día (cinco pasos inspirados en el examen ignaciano) */
+const EXAMEN=[
+{n:'Dar gracias',g:'Recorre el día y recuerda al menos tres cosas buenas: personas, sucesos, comida, una conversación, un rato de calma. Dale gracias a Dios por cada una.'},
+{n:'Pedir luz',g:'Pide al Espíritu Santo que te ayude a mirar el día como Dios lo mira, sin excusarte y sin condenarte.'},
+{n:'Repasar el día',g:'Desde que te levantaste: ¿cuándo sentí cercanía de Dios? ¿Cuándo me aparté de él? ¿Cómo traté a mi familia, a mis compañeros y a quien me pidió algo? ¿Cómo usé mi tiempo, mi lengua y mi dinero?'},
+{n:'Pedir perdón',g:'Reconoce con sencillez lo que no estuvo bien y dilo a Dios. Rézale el acto de contrición. Recuerda que Dios es más misericordioso de lo que imaginas.'},
+{n:'Renovar la esperanza',g:'Mira el día de mañana. Elige un propósito pequeño y concreto, y encomiéndalo a Dios con el Padre Nuestro.'}
+];
+
+/* Examen de conciencia para la confesión, según los Diez Mandamientos */
+const MANDAMIENTOS=[
+{n:'1.º Amarás a Dios sobre todas las cosas',q:['¿Rezo con regularidad o me olvido de Dios durante semanas?','¿He dudado voluntariamente de la fe o la he escondido por vergüenza?','¿He recurrido a horóscopos, tarot, brujería u otras prácticas ocultas?','¿Qué ocupa el primer lugar en mi vida: el dinero, el trabajo, el placer, la imagen?']},
+{n:'2.º No tomarás el nombre de Dios en vano',q:['¿He usado el nombre de Dios, de la Virgen o de los santos con ligereza, enojo o burla?','¿He maldecido o blasfemado?','¿He faltado a promesas hechas a Dios?']},
+{n:'3.º Santificarás las fiestas',q:['¿He faltado a Misa en domingo o fiesta de guardar sin motivo grave?','¿Llegué tarde o me distraje a propósito?','¿He dedicado el domingo al descanso, a Dios y a la familia?']},
+{n:'4.º Honrarás a tu padre y a tu madre',q:['¿He sido respetuoso y agradecido con mis padres y familiares?','¿Cuido de mi familia, especialmente de los mayores o enfermos?','Si soy padre o madre: ¿doy buen ejemplo y educo en la fe?','¿Cumplo mis deberes con las autoridades legítimas y con mi trabajo?']},
+{n:'5.º No matarás',q:['¿He dañado a alguien con golpes, insultos o desprecio?','¿Guardo rencor, odio o deseos de venganza?','¿Cuido mi salud, o abuso del alcohol, drogas o la imprudencia al manejar?','¿He participado, aconsejado o apoyado un aborto o la eutanasia?']},
+{n:'6.º No cometerás actos impuros',q:['¿He vivido la castidad propia de mi estado de vida (soltero, casado, consagrado)?','¿He consentido actos o relaciones contrarias a la pureza?','¿He sido fiel a mi cónyuge o prometido(a)?']},
+{n:'7.º No robarás',q:['¿He tomado algo ajeno, o hecho trampa en el trabajo, los estudios o los negocios?','¿Pago mis deudas y salarios con justicia, o retraso el pago pudiendo hacerlo?','¿Soy generoso con quienes pasan necesidad?','¿Gasto de forma irresponsable lo que otros necesitan de mí?']},
+{n:'8.º No darás falso testimonio ni mentirás',q:['¿He mentido, exagerado o engañado?','¿He hablado mal de otros (chismes, calumnias, murmuración)?','¿He juzgado a otros sin conocer la verdad?','¿He revelado secretos que debía guardar?']},
+{n:'9.º No consentirás pensamientos ni deseos impuros',q:['¿Cuido lo que miro, leo o veo en redes y pantallas?','¿Consiento pensamientos o fantasías contra la pureza?','¿Evito las ocasiones que me hacen caer?']},
+{n:'10.º No codiciarás los bienes ajenos',q:['¿He sentido envidia, celos o ambición desordenada?','¿Soy agradecido por lo que tengo?','¿Vivo apegado a lo material?']}
+];
+const IGLESIA=['Participar en la Misa los domingos y fiestas de guardar, sin trabajos que lo impidan.','Confesar los pecados al menos una vez al año (y siempre que haya pecado grave antes de comulgar).','Comulgar al menos una vez al año, por Pascua.','Ayunar y abstenerse de carne en los días señalados (Miércoles de Ceniza y Viernes Santo; abstinencia los viernes de Cuaresma).','Ayudar a la Iglesia en sus necesidades.'];
+
+const CONFESAR=[
+'Prepara el examen de conciencia (puedes usar esta lista).',
+'Arrepiéntete: duele haber ofendido a Dios y a los demás. Eso es contrición.',
+'Haz un propósito concreto de enmienda.',
+'Ve al confesionario. Saludo habitual: «Ave María Purísima» — «Sin pecado concebida». Luego di cuánto hace de tu última confesión.',
+'Di tus pecados con sencillez y verdad. Los pecados graves se dicen en especie y número aproximado; los leves, a tu elección. No necesitas dar detalles innecesarios.',
+'Escucha el consejo del sacerdote y acepta la penitencia que te dé.',
+'Reza el acto de contrición. El sacerdote te da la absolución en nombre de Cristo.',
+'Cumple la penitencia y da gracias a Dios.'
+];
+
+const OBRAS=[
+['Corporal','Dar de comer al hambriento'],['Corporal','Dar de beber al sediento'],['Corporal','Vestir al desnudo'],['Corporal','Dar posada al peregrino'],['Corporal','Visitar al enfermo'],['Corporal','Visitar al preso'],['Corporal','Enterrar a los muertos'],
+['Espiritual','Enseñar al que no sabe'],['Espiritual','Dar buen consejo al que lo necesita'],['Espiritual','Corregir con amor al que se equivoca'],['Espiritual','Perdonar las injurias'],['Espiritual','Consolar al triste'],['Espiritual','Sufrir con paciencia los defectos del prójimo'],['Espiritual','Rezar por los vivos y los difuntos']
+];
+
+/* Rutina diaria */
+const RUTINA=[
+{id:'ofrec',h:'Al despertar',t:'Señal de la Cruz y ofrecimiento del día (1 min)'},
+{id:'evang',h:'9:00',t:'Leer el Evangelio del día y su sentido (5 min, pestaña «Hoy»)'},
+{id:'silencio',h:'Mañana',t:'Oración personal en silencio: hablar con Dios y escuchar (10 min)'},
+{id:'comida',h:'Antes de comer',t:'Bendecir los alimentos'},
+{id:'angelus',h:'12:00',t:'Ángelus'},
+{id:'miseric',h:'15:00',t:'Hora de la Misericordia: una pausa breve o la coronilla'},
+{id:'rosario',h:'Tarde',t:'Rosario completo o una decena'},
+{id:'misa',h:'Si puedes',t:'Participar en la Misa (domingos y fiestas es obligatorio)'},
+{id:'obra',h:'Durante el día',t:'Practicar la obra de misericordia del día'},
+{id:'lectura',h:'Tarde o noche',t:'Lectura espiritual: Biblia, vida de un santo, Catecismo (10 min)'},
+{id:'examen',h:'Noche',t:'Examen de conciencia (pestaña «Mi día»)'},
+{id:'noche',h:'Antes de dormir',t:'Ángel de la guarda y Señal de la Cruz'}
+];
+
+/* Fechas fijas importantes (mes 1-12, día) */
+const FIJAS=[
+[1,1,'Santa María, Madre de Dios','Solemnidad',"Octava de Navidad y Jornada Mundial de la Paz."],
+[1,14,'Divina Pastora','Fiesta en Barquisimeto','Procesión de la Divina Pastora, patrona de Barquisimeto, desde Santa Rosa hasta la Catedral; se celebra cada 14 de enero desde 1856.'],
+[1,6,'Epifanía del Señor','Solemnidad','Los Magos adoran al Niño. En muchos países se traslada al domingo.'],
+[2,2,'Presentación del Señor','Fiesta','Jesús es llevado al templo; se bendicen las velas (la Candelaria).'],
+[3,19,'San José','Solemnidad','Esposo de María y custodio de Jesús.'],
+[3,25,'Anunciación del Señor','Solemnidad','El ángel anuncia a María; Dios se hace hombre.'],
+[6,24,'Natividad de san Juan Bautista','Solemnidad','El precursor del Señor.'],
+[6,29,'San Pedro y san Pablo','Solemnidad','Columnas de la Iglesia.'],
+[8,15,'Asunción de la Virgen María','Solemnidad','María es llevada en cuerpo y alma al cielo.'],
+[9,11,'Nuestra Señora de Coromoto','Patrona de Venezuela','Fiesta de la patrona de Venezuela, cuyo santuario está en Guanare.'],
+[10,26,'San José Gregorio Hernández','Memoria','El «médico de los pobres». Con santa Carmen Rendiles, primeros santos de Venezuela (canonizados el 19 de octubre de 2025).'],
+[11,1,'Todos los Santos','Solemnidad','Celebramos a todos los que ya están con Dios.'],
+[11,2,'Fieles Difuntos','Conmemoración','Rezamos por quienes han muerto.'],
+[12,8,'Inmaculada Concepción','Solemnidad','María fue concebida sin pecado original.'],
+[12,25,'Navidad del Señor','Solemnidad','Nace Jesús, el Hijo de Dios.']
+];
+
+const CICLOS_A=[{c:'A',e:'Evangelio según san Mateo'},{c:'B',e:'Evangelio según san Marcos (con Juan 6 en verano)'},{c:'C',e:'Evangelio según san Lucas'}];
+
+const TIEMPOS=[
+{n:'Adviento',col:'morado',d:'Cuatro semanas antes de Navidad. Esperamos la venida del Señor, en Belén y al final de los tiempos. El tercer domingo (Gaudete) se puede usar color rosa.'},
+{n:'Navidad',col:'blanco',d:'Desde la Navidad hasta el Bautismo del Señor. Celebramos el nacimiento de Jesús y su manifestación al mundo.'},
+{n:'Tiempo Ordinario',col:'verde',d:'33 o 34 semanas en dos tramos. Seguimos la vida cotidiana de Jesús y crecemos como discípulos.'},
+{n:'Cuaresma',col:'morado',d:'Cuarenta días desde el Miércoles de Ceniza hasta el Jueves Santo. Camino de conversión: oración, ayuno y limosna.'},
+{n:'Triduo Pascual',col:'blanco',d:'Jueves Santo (tarde), Viernes Santo y Vigilia Pascual: la pasión, muerte y resurrección. Es el centro del año.'},
+{n:'Pascua',col:'blanco',d:'Cincuenta días desde el Domingo de Resurrección hasta Pentecostés. Alegría por la victoria de Cristo.'}
+];
+const COLORES=[
+{n:'Verde',hex:'#3F7D4E',d:'Esperanza y crecimiento. Tiempo Ordinario.'},
+{n:'Morado',hex:'#6B3FA0',d:'Preparación y conversión. Adviento y Cuaresma; también en Misas de difuntos.'},
+{n:'Blanco o dorado',hex:'#E8D9A8',d:'Alegría y gloria. Navidad, Pascua, fiestas del Señor, de la Virgen y de los santos no mártires.'},
+{n:'Rojo',hex:'#B3262E',d:'El Espíritu Santo y el martirio. Pentecostés, Domingo de Ramos, Viernes Santo, fiestas de apóstoles y mártires.'},
+{n:'Rosa',hex:'#D27C9A',d:'Alegría en medio de la espera. Domingo Gaudete (Adviento) y Laetare (Cuaresma), donde se acostumbra.'}
+];
+const LITCOL={verde:'#3F7D4E',morado:'#6B3FA0',blanco:'#C9A24A',rojo:'#B3262E',rosa:'#D27C9A'};
+/* ===== UTILIDADES ===== */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem('elm:'+k);if(v!=null)return JSON.parse(v)}catch(e){}return (k in mem)?mem[k]:d},
+  set(k,v){mem[k]=v;try{localStorage.setItem('elm:'+k,JSON.stringify(v))}catch(e){}}
+};
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const diff=(a,b)=>Math.round((new Date(a.getFullYear(),a.getMonth(),a.getDate())-new Date(b.getFullYear(),b.getMonth(),b.getDate()))/864e5);
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const fmt=d=>DIAS[d.getDay()]+' '+d.getDate()+' de '+MESES[d.getMonth()];
+const fmtCorto=d=>d.getDate()+' '+MESES[d.getMonth()].slice(0,3);
+const ROM=['','I','II','III','IV','V','VI','VII'];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const TTS=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
+
+/* ===== CALENDARIO LITÚRGICO (calculado) ===== */
+function easter(y){
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+  h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+  mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;
+  return new Date(y,mo-1,da);
+}
+function adventStart(y){const x=new Date(y,11,24);x.setDate(24-x.getDay());return addDays(x,-21)}
+function baptism(y){const j=new Date(y,0,6);return addDays(j,7-j.getDay())}
+function cicloDom(d){const y=d.getFullYear();const Y=d>=adventStart(y)?y:y-1;return 'ABC'[Y%3]}
+function cicloSem(d){return d.getFullYear()%2===0?'II':'I'}
+const COL_FIJA={'6-29':'rojo','11-2':'morado'};
+
+function liturgia(d){
+  const y=d.getFullYear(),E=easter(y),ash=addDays(E,-46),pent=addDays(E,49),adv=adventStart(y),bap=baptism(y),ck=addDays(adv,-7);
+  const wd=d.getDay(),nm=cap(DIAS[wd]),k=diff(d,E);
+  let r;
+  if(d>=new Date(y,11,25)){
+    r={tiempo:'Navidad',color:'blanco',titulo:'Octava de Navidad'};
+    if(d.getDate()===25)r.titulo='Natividad del Señor (Navidad)';
+    else if(wd===0)r.titulo='Fiesta de la Sagrada Familia';
+    else r.titulo=nm+' de la Octava de Navidad';
+  }else if(d<=bap){
+    r={tiempo:'Navidad',color:'blanco',titulo:nm+' del tiempo de Navidad'};
+    if(d.getMonth()===0&&d.getDate()===1)r.titulo='Santa María, Madre de Dios';
+    else if(ymd(d)===ymd(bap))r.titulo='Bautismo del Señor';
+    else if(d.getMonth()===0&&d.getDate()===6)r.titulo='Epifanía del Señor';
+    else if(wd===0&&d.getDate()<=5)r.titulo='Domingo II de Navidad';
+  }else if(d>=adv){
+    const w=Math.floor(diff(d,adv)/7)+1;
+    r={tiempo:'Adviento',color:'morado',semana:w};
+    if(wd===0){r.titulo='Domingo '+ROM[w]+' de Adviento';if(w===3){r.color='rosa';r.nota='Domingo Gaudete («alégrense»): se puede usar el color rosa.'}}
+    else if(d.getMonth()===11&&d.getDate()>=17)r.titulo=nm+' '+d.getDate()+' de diciembre, preparación inmediata a la Navidad';
+    else r.titulo=nm+' de la semana '+w+' de Adviento';
+  }else if(d<ash){
+    const s=addDays(d,-wd),N=Math.round(diff(s,bap)/7)+1;
+    r={tiempo:'Tiempo Ordinario',color:'verde',semana:N,titulo:(wd===0?'Domingo '+(N)+' del Tiempo Ordinario':nm+' de la semana '+N+' del Tiempo Ordinario')};
+  }else if(k<-3){
+    r={tiempo:'Cuaresma',color:'morado'};
+    const first=addDays(ash,4);
+    if(diff(d,ash)===0)r.titulo='Miércoles de Ceniza';
+    else if(d<first)r.titulo=nm+' después de Ceniza';
+    else if(k===-7){r.titulo='Domingo de Ramos de la Pasión del Señor';r.color='rojo'}
+    else if(k>=-6){r.titulo=nm+' Santo';r.semana=0}
+    else{
+      const s=addDays(d,-wd),w=Math.round(diff(s,first)/7)+1;r.semana=w;
+      if(wd===0){r.titulo='Domingo '+ROM[w]+' de Cuaresma';if(w===4){r.color='rosa';r.nota='Domingo Laetare («alégrate»): se puede usar el color rosa.'}}
+      else r.titulo=nm+' de la semana '+w+' de Cuaresma';
+    }
+  }else if(k<0){
+    r={tiempo:'Triduo Pascual',color:'blanco'};
+    if(k===-3)r.titulo='Jueves Santo, Cena del Señor';
+    else if(k===-2){r.titulo='Viernes Santo, Pasión del Señor';r.color='rojo'}
+    else r.titulo='Sábado Santo, Vigilia Pascual por la noche';
+  }else if(d<=pent){
+    r={tiempo:'Pascua',color:'blanco'};
+    if(k===0)r.titulo='Domingo de Resurrección';
+    else if(k<7)r.titulo=nm+' de la Octava de Pascua';
+    else if(k===49){r.titulo='Domingo de Pentecostés';r.color='rojo'}
+    else if(wd===0){r.titulo='Domingo '+ROM[k/7+1]+' de Pascua';if(k===7)r.nota='Domingo de la Divina Misericordia.'}
+    else r.titulo=nm+' de la semana '+(Math.floor(k/7)+1)+' de Pascua';
+    if(k===39)r.nota='Ascensión del Señor (en muchos países se celebra el domingo siguiente).';
+  }else{
+    const s=addDays(d,-wd),N=34-Math.round(diff(ck,s)/7);
+    r={tiempo:'Tiempo Ordinario',color:'verde',semana:N};
+    if(ymd(d)===ymd(ck)){r.titulo='Solemnidad de Cristo Rey del Universo';r.color='blanco'}
+    else r.titulo=(wd===0?'Domingo '+N+' del Tiempo Ordinario':nm+' de la semana '+N+' del Tiempo Ordinario');
+    if(k===56)r.nota='Solemnidad de la Santísima Trinidad.';
+    if(k===60)r.nota='Corpus Christi (en muchos países se celebra el domingo siguiente).';
+    if(k===63)r.nota='En muchos países hoy se celebra el Corpus Christi.';
+    if(k===68)r.nota='Solemnidad del Sagrado Corazón de Jesús.';
+  }
+  if(r.tiempo!=='Triduo Pascual'&&!(r.tiempo==='Cuaresma'&&k>=-6&&k<0)){
+    const f=FIJAS.find(x=>x[0]===d.getMonth()+1&&x[1]===d.getDate());
+    if(f){
+      r.especial={n:f[2],g:f[3],d:f[4]};r.color=COL_FIJA[(d.getMonth()+1)+'-'+d.getDate()]||'blanco';
+      if(wd!==0||r.tiempo==='Tiempo Ordinario'||r.tiempo==='Navidad')r.titulo=f[2];
+    }
+  }
+  return r;
+}
+function fechasAnio(y){
+  const E=easter(y),adv=adventStart(y);
+  const L=[
+    [addDays(E,-46),'Miércoles de Ceniza','Comienza la Cuaresma. Día de ayuno y abstinencia. Se impone la ceniza.'],
+    [addDays(E,-7),'Domingo de Ramos','Jesús entra en Jerusalén. Se lee la Pasión.'],
+    [addDays(E,-3),'Jueves Santo','Misa de la Cena del Señor: Jesús instituye la Eucaristía y el sacerdocio, y lava los pies de sus discípulos.'],
+    [addDays(E,-2),'Viernes Santo','Pasión del Señor. No se celebra Misa: se adora la cruz y se puede comulgar. Ayuno y abstinencia.'],
+    [addDays(E,-1),'Sábado Santo y Vigilia Pascual','Por la noche: fuego nuevo, cirio pascual, lecturas, bautismos y primera Misa de Pascua.'],
+    [E,'Domingo de Pascua','Resurrección del Señor, centro de la fe cristiana.'],
+    [addDays(E,39),'Ascensión del Señor','Jueves, día 40 de Pascua. En muchos países se celebra el domingo siguiente.'],
+    [addDays(E,49),'Pentecostés','Venida del Espíritu Santo sobre los apóstoles; termina el tiempo pascual.'],
+    [addDays(E,56),'Santísima Trinidad','Celebramos a Dios Padre, Hijo y Espíritu Santo.'],
+    [addDays(E,60),'Corpus Christi','Cuerpo y Sangre de Cristo: fiesta de la Eucaristía. En muchos países se traslada al domingo.'],
+    [addDays(E,68),'Sagrado Corazón de Jesús','Viernes: el amor de Cristo por todos.'],
+    [addDays(adv,-7),'Cristo Rey del Universo','Último domingo del año litúrgico.'],
+    [adv,'1.er domingo de Adviento','Comienza el año litúrgico. Ciclo '+'ABC'[y%3]+' para los domingos.']
+  ];
+  FIJAS.forEach(f=>L.push([new Date(y,f[0]-1,f[1]),f[2],f[4]]));
+  return L.sort((a,b)=>a[0]-b[0]);
+}
+function litColor(c){
+  const dark=document.documentElement.dataset.theme==='dark'||(document.documentElement.dataset.theme!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const L=dark?{verde:'#5FAE75',morado:'#A184D6',blanco:'#E0C06A',rojo:'#E0606A',rosa:'#E391AC'}:{verde:'#3F7D4E',morado:'#6B3FA0',blanco:'#C9A24A',rojo:'#B3262E',rosa:'#D27C9A'};
+  return L[c]||L.verde;
+}
+
+/* ===== ESTADO ===== */
+const state={
+  tab:store.get('tab','hoy'),
+  sub:Object.assign({enc:'paso',misa:'chu',orar:'ora',apr:'anio',dia:'rutina',apo:'med'},store.get('sub',{})),
+  rv:'paso',rs:0,rc:0,rk:'',
+  gi:0,ps:0,plist:false,q:null,qf:'all',gq:'',year:new Date().getFullYear(),day:ymd(new Date()),say:{},speaking:null
+};
+if(!store.get('misaV3',false)){state.sub.misa='chu';store.set('sub',state.sub);store.set('misaV3',true)}
+{const r=store.get('ros',null);if(r&&r.d===ymd(new Date())){state.rs=r.rs||0;state.rc=r.rc||0;state.rk=r.rk||''}}
+const TABS=[
+  {id:'hoy',n:'Hoy',ic:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'},
+  {id:'enc',n:'Encuentro',ic:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6M10 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>'},
+  {id:'misa',n:'Misa',ic:'<path d="M12 3v18M6.5 9h11"/><path d="M5 21h14"/>'},
+  {id:'orar',n:'Orar',ic:'<path d="M2 5c3-1 7-1 10 1 3-2 7-2 10-1v14c-3-1-7-1-10 1-3-2-7-2-10-1z"/><path d="M12 6v14"/>'},
+  {id:'apr',n:'Aprender',ic:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'},
+  {id:'apo',n:'Apóstol',ic:'<path d="M12 3c1.8 2.6 3.6 4.4 3.6 7a3.6 3.6 0 0 1-7.2 0c0-1.6.8-2.7 1.8-3.6.1 1.6.8 2.5 1.8 2.6-.2-1.8-.8-3.6 0-6z"/><path d="M7 21h10M12 17v4"/>'},
+  {id:'dia',n:'Mi día',ic:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'}
+];
+const SUBS={
+  enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
+  misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
+  apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
+  orar:[['ora','Oraciones'],['ros','Rosario']],
+  apr:[['anio','Año litúrgico'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar']],
+  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
+};
+const segHtml=tab=>'<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+'</div>';
+const sayBtn=(id,text)=>{if(!TTS)return '';state.say[id]=text;return '<button class="btn ghost" data-act="speak" data-v="'+id+'">Escuchar</button>'};
+
+/* ===== ILUSTRACIONES ===== */
+const ICP={
+ dove:'<path d="M3 14c3.5 0 6-2.2 7-6 1 2.8 3.2 4.2 6 4.2L21 9l-2.4 4.6C17.4 17.6 14 20 9.8 20 6.5 20 4.3 18.4 3 16.3l4.2-.9"/><circle cx="16.6" cy="10.4" r=".5"/>',
+ book:'<path d="M3 5.5c3-1.2 6-1 9 1 3-2 6-2.2 9-1v13.5c-3-1-6-.8-9 1-3-1.8-6-2-9-1z"/><path d="M12 6.5v13.5"/>',
+ flame:'<path d="M12 3c1.8 2.6 3.6 4.4 3.6 7a3.6 3.6 0 0 1-7.2 0c0-1.6.8-2.7 1.8-3.6.1 1.6.8 2.5 1.8 2.6-.2-1.8-.8-3.6 0-6z"/><rect x="9.5" y="15" width="5" height="6" rx="1"/>',
+ link:'<circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/>',
+ quote:'<path d="M5 8h5v4.5c0 3-1.8 5-4.2 5.8M14 8h5v4.5c0 3-1.8 5-4.2 5.8"/>',
+ eye:'<path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ scale:'<path d="M12 4v16M6 20h12M4.5 7.5h15M4.5 7.5 2 13a2.6 2.6 0 0 0 5 0zM19.5 7.5 17 13a2.6 2.6 0 0 0 5 0z"/>',
+ path:'<path d="M4 20c3.5-5 7-1.5 10-6.5l4.5-7.5"/><path d="M14.5 6H19v4.5"/>',
+ chat:'<path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M8 9.5h8M8 12.5h5"/>',
+ cross:'<path d="M12 3v18M7 8.5h10"/>',
+ check:'<circle cx="12" cy="12" r="9"/><path d="m7.8 12.3 2.8 2.8 5.6-5.8"/>',
+ rosary:'<circle cx="12" cy="9" r="5.5" stroke-dasharray="1.6 1.6"/><path d="M12 14.5v6M9.6 17.6h4.8"/>',
+ bell:'<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+ heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>'
+};
+const ic=(n,cls)=>'<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(ICP[n]||'')+'</svg>';
+/* Cielo de Barquisimeto, «ciudad de los crepúsculos»: cambia con la hora; las colinas del fondo toman el color litúrgico. */
+function heroSVG(lit,h){
+  const P=h>=6&&h<16?['#6F9CCF','#B9D2E8','#F2E3BC','#F7EFD8']:h>=16&&h<19?['#2C2D63','#875A8C','#E1895C','#F4C46A']:h>=4&&h<6?['#2B3266','#6E6B9C','#D99A86','#F2C99A']:['#0C0E2C','#1E2052','#30306A','#3F3B74'];
+  const night=!(h>=4&&h<19),sunY=h>=6&&h<16?190:262;
+  let stars='';if(night){const S=[[30,170],[80,198],[130,162],[190,186],[240,158],[300,150],[330,230],[60,235],[270,232],[160,220],[110,120],[220,110]];stars=S.map(([x,y],i)=>'<circle cx="'+x+'" cy="'+y+'" r="'+(i%3?0.9:1.4)+'" fill="#fff" opacity="'+(i%2?.6:.9)+'"/>').join('')}
+  return '<svg class="sky" viewBox="0 0 360 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+P[0]+'"/><stop offset=".45" stop-color="'+P[1]+'"/><stop offset=".78" stop-color="'+P[2]+'"/><stop offset="1" stop-color="'+P[3]+'"/></linearGradient><radialGradient id="sg"><stop offset="0" stop-color="#FFF4D6" stop-opacity=".95"/><stop offset="1" stop-color="#FFF4D6" stop-opacity="0"/></radialGradient></defs>'+
+  '<rect width="360" height="400" fill="url(#sk)"/>'+stars+
+  (night?'<circle cx="300" cy="200" r="13" fill="#F3EED8"/><circle cx="306" cy="195" r="12" fill="'+P[1]+'"/>':'<circle cx="250" cy="'+sunY+'" r="60" fill="url(#sg)"/><circle cx="250" cy="'+sunY+'" r="17" fill="#FFF6DE"/>')+
+  '<g transform="translate(0,100)"><path d="M0 190 C60 168 110 176 160 182 C220 190 280 160 360 172 V300 H0Z" fill="'+lit+'" opacity=".55"/>'+
+  '<path d="M0 214 C70 196 140 206 200 200 C260 194 310 204 360 196 V300 H0Z" fill="#26284F" opacity=".75"/>'+
+  /* capilla en la colina */
+  '<g fill="#1A1B3E"><rect x="236" y="176" width="34" height="26"/><path d="M232 177 253 162 274 177Z"/><rect x="262" y="160" width="10" height="20"/><path d="M260 161 267 152 274 161Z"/><rect x="266.2" y="140" width="1.6" height="12"/><rect x="262.5" y="144" width="9" height="1.6"/></g><rect x="249" y="188" width="7" height="14" rx="3.5" fill="#F6C46A" opacity=".85"/>'+
+  '<path d="M0 238 C80 222 150 236 220 230 C280 225 320 232 360 226 V300 H0Z" fill="#15163A"/>'+
+  /* cardones de Lara */
+  '<g fill="#15163A"><path d="M48 236V170a5 5 0 0 1 10 0v66z"/><path d="M48 200h-10v-18a4 4 0 0 1 8 0v12h2z"/><path d="M58 192h9v-20a4 4 0 0 1 8 0v26H58z"/><path d="M92 236v-38a4 4 0 0 1 8 0v38z"/><path d="M92 214h-7v-11a3.5 3.5 0 0 1 7 0z"/></g></g></svg>';
+}
+function oreDays(){return store.get('ore',{})}
+function rachaN(){const o=oreDays();let n=0,d=new Date();if(!o[ymd(d)])d=addDays(d,-1);while(o[ymd(d)]){n++;d=addDays(d,-1)}return n}
+function semanaHtml(){
+  const t=new Date(),o=oreDays(),mon=addDays(t,-((t.getDay()+6)%7)),L=['L','M','M','J','V','S','D'];
+  let s='<div class="week" aria-label="Días que oraste esta semana">';
+  for(let i=0;i<7;i++){const d=addDays(mon,i),k=ymd(d);s+='<span class="'+(o[k]?'on ':'')+(k===ymd(t)?'today':'')+'" title="'+esc(cap(fmt(d)))+'">'+L[i]+'</span>'}
+  return s+'</div>';
+}
+
+/* ===== VISTAS ===== */
+function viewHd(){
+  const t=new Date(),L=liturgia(t);
+  document.documentElement.style.setProperty('--lit',litColor(L.color));
+  if(state.tab==='hoy')return '';
+  return '<div class="hd c"><i class="dot"></i><span><b>'+esc(L.titulo)+'</b><br><span class="mut small">'+esc(cap(fmt(t)))+'</span></span></div>';
+}
+function misDia(t,L){
+  let k=MIS_DIA[t.getDay()];
+  if(t.getDay()===0){if(L.tiempo==='Adviento'||L.tiempo==='Navidad')k='gozosos';else if(L.tiempo==='Cuaresma')k='dolorosos'}
+  return MISTERIOS[k];
+}
+function viewHoy(){
+  const t=new Date(),L=liturgia(t),H=window.HOY,ok=!!(H&&H.evangelio),viejo=ok&&H.fecha!==ymd(t);
+  const link='https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(t);
+  const X=ok&&H.encuentro||{},E=ok?H.evangelio:null;
+  const frase=X.frase?X.frase.texto:(E?'Evangelio según '+E.cita:'Señor, ¿qué quieres decirme hoy?');
+  const cita=X.frase?X.frase.cita:(E?'':'');
+  let h='<section class="hero'+(t.getHours()>=6&&t.getHours()<16?' day':'')+'">'+heroSVG(litColor(L.color),t.getHours())+
+   '<div class="top"><span class="brand">Venga tu Reino</span><span class="pill"><i class="dot"></i>'+esc(cap(L.color))+'</span></div>'+
+   '<div class="ht"><div class="when">'+esc(cap(fmt(t)))+'<br>'+esc(L.titulo)+'</div><div class="frase">'+(X.frase?'«'+esc(frase)+'»':esc(frase))+'</div>'+(cita?'<div class="cita">'+esc(cita)+'</div>':'')+'</div></section>';
+  const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
+  h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
+  h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
+  if(L.especial)h+='<div class="card tint"><b>'+esc(L.especial.n)+'</b> · <span class="mut">'+esc(L.especial.g)+'</span><p>'+esc(L.especial.d)+'</p></div>';
+  else if(L.nota)h+='<div class="card tint"><p style="margin:0">'+esc(L.nota)+'</p></div>';
+  if(viejo)h+='<div class="nota"><b>Evangelio guardado del '+esc(fmt(new Date(H.fecha+'T12:00:00')))+'</b>No se pudo cargar el de hoy (sin conexión o aún sin actualizar). Con internet, toca «Leer las lecturas de hoy».<div class="row" style="margin:8px 0 0"><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div></div>';
+  if(ok){
+    const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
+    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Leer el texto bíblico</a></div>'+
+    '<div class="reading">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
+    '<details><summary>Para ubicarnos</summary><div class="in"><p>'+esc(E.contexto)+'</p></div></details>'+
+    '<details><summary>Qué quiere decir hoy</summary><div class="in"><p>'+esc(E.significado)+'</p></div></details>'+
+    '<h3>Para vivirlo hoy</h3><ul class="tight">'+(E.hoy||[]).map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>'+
+    '<div class="say"><b>Pregunta para el día</b>'+esc(E.pregunta)+'</div>'+
+    '<h3>Oración</h3><p class="prayer">'+esc(E.oracion)+'</p>';
+    if(H.lecturas&&H.lecturas.length)h+='<h2 class="sec">Las otras lecturas</h2>'+H.lecturas.filter(l=>l.tipo!=='Evangelio').map(l=>'<details><summary>'+esc(l.tipo)+' <span class="mut" style="font-weight:400">'+esc(l.cita)+'</span></summary><div class="in"><p>'+esc(l.resumen)+'</p></div></details>').join('');
+  }else{
+    h+='<div class="card"><p style="margin-top:0">El comentario de hoy se publica cada mañana a las 9:00. Si ya pasó la hora, vuelve a abrir la página en un momento.</p><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
+  }
+  const m=misDia(t,L),ob=OBRAS[(Math.floor((t-new Date(t.getFullYear(),0,0))/864e5))%OBRAS.length];
+  h+='<h2 class="sec">Para tu día</h2><div class="tiles">'+
+   '<button class="tile" data-act="go" data-v="orar" data-s="ros">'+ic('rosary','sm')+'<b>Rosario</b><span class="mut">Misterios '+esc(m.n.toLowerCase())+'</span></button>'+
+   '<button class="tile" data-act="go" data-v="orar" data-s="ora">'+ic('bell','sm')+'<b>Ángelus</b><span class="mut">A las 12:00</span></button>'+
+   '<button class="tile" data-act="go" data-v="dia" data-s="rutina">'+ic('heart','sm')+'<b>Obra del día</b><span class="mut">'+esc(ob[1])+'</span></button></div>';
+  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Examen de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
+  h+='<p class="note">El comentario es una paráfrasis para ayudarte a comprender y orar; no reemplaza el texto bíblico.</p>';
+  return h;
+}
+function viewMisa(){
+  if(state.sub.misa==='prac')return segHtml('misa')+viewPractica();
+  if(state.sub.misa==='vivo')return segHtml('misa')+viewVivo();
+  if(state.sub.misa==='chu'||!['vivo','partes','prac'].includes(state.sub.misa))return segHtml('misa')+viewChuleta();
+  let n=0;
+  let h=segHtml('misa')+'<div class="card tint"><p style="margin:0">La Misa tiene <b>cuatro partes</b>: nos reunimos, escuchamos, damos gracias y recibimos, y somos enviados. Toca cada paso para ver qué se dice, qué significa y cómo participar.</p></div>';
+  MISA.forEach(s=>{
+    h+='<h2 class="sec">'+esc(s.n)+' · <span class="mut" style="font-weight:600">'+esc(s.lema)+'</span></h2><p class="note" style="margin-top:2px">'+esc(s.res)+'</p>';
+    s.partes.forEach(p=>{
+      n++;
+      h+='<details><summary><span class="num">'+n+'</span>'+esc(p.n)+'</summary><div class="in"><p>'+esc(p.que)+'</p>';
+      if(p.dice.length)h+='<div class="lbl">Qué se dice</div>'+p.dice.map(d=>'<div class="say"><b>'+esc(d[0])+'</b>'+esc(d[1])+'</div>').join('');
+      if(FULL[p.n])h+='<details style="margin:8px 0"><summary>Texto completo para decirlo</summary><div class="in"><p class="prayer">'+esc(oraT(FULL[p.n]))+'</p></div></details>';
+      h+='<div class="lbl">Qué significa</div><p>'+esc(p.sig)+'</p><div class="lbl">Postura</div><p>'+esc(p.pos)+'</p><div class="lbl">Para participar más</div><p>'+esc(p.tip)+'</p></div></details>';
+    });
+  });
+  h+='<p class="note">Las respuestas pueden variar un poco según el país y la traducción del Misal; las posturas, según la costumbre local. Usa la «Guía en vivo» durante la Misa para ver en cada momento lo que te toca decir.</p>';
+  return h;
+}
+
+/* --- Práctica con repetición espaciada --- */
+function deck(){
+  const c=[];
+  DIALOGOS.forEach((x,i)=>c.push({id:'d'+i,k:'d',q:'El celebrante dice: «'+x.p+'». ¿Qué respondemos?',a:x.r,pool:DIALOGOS.map(y=>y.r),por:x.por}));
+  ORDEN.forEach((n,i)=>{if(i<ORDEN.length-1)c.push({id:'o'+i,k:'o',q:'¿Qué parte viene justo después de «'+n+'»?',a:ORDEN[i+1],pool:ORDEN.filter(m=>m!==n),por:'Después de «'+n+'» viene «'+ORDEN[i+1]+'».'})});
+  GLOS.forEach((g,i)=>c.push({id:'g'+i,k:'g',q:'¿Qué significa «'+g.t+'»?',a:g.d,pool:GLOS.map(y=>y.d),por:'«'+g.t+'»: '+g.d}));
+  FACTOS.forEach((f,i)=>c.push({id:'f'+i,k:'f',q:f.q,a:f.a,fixed:f.o,por:f.por}));
+  return c;
+}
+const DECK=deck();
+function optsFor(c){
+  if(c.fixed)return shuffle([c.a].concat(c.fixed));
+  const pool=Array.from(new Set(c.pool)).filter(x=>x!==c.a);
+  return shuffle([c.a].concat(shuffle(pool).slice(0,3)));
+}
+function nextCard(){
+  const box=store.get('box',{}),cards=DECK.filter(c=>state.qf==='all'||c.k===state.qf);
+  const cand=cards.filter(c=>!state.q||c.id!==state.q.c.id);
+  const w=cand.map(c=>1/Math.pow(1+(box[c.id]||0),2));
+  let r=Math.random()*w.reduce((a,b)=>a+b,0),i=0;
+  for(;i<cand.length-1;i++){r-=w[i];if(r<=0)break}
+  const c=cand[i];state.q={c,opts:optsFor(c),pick:null};
+}
+function quizHtml(){
+  const box=store.get('box',{}),all=DECK.length,learned=DECK.filter(c=>(box[c.id]||0)>=3).length;
+  if(!state.q)nextCard();
+  const q=state.q;
+  let h='<div class="card"><div class="small mut">Dominadas: '+learned+' de '+all+'</div><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+all+'" aria-valuenow="'+learned+'"><i style="width:'+Math.round(learned/all*100)+'%"></i></div>'+
+  '<p class="q">'+esc(q.c.q)+'</p>';
+  q.opts.forEach((o,i)=>{
+    let cls='opt';
+    if(q.pick!==null){if(o===q.c.a)cls+=' ok';else if(i===q.pick)cls+=' bad'}
+    h+='<button class="'+cls+'" data-act="ans" data-i="'+i+'"'+(q.pick!==null?' disabled':'')+'>'+esc(o)+'</button>';
+  });
+  if(q.pick!==null){
+    h+='<p><b>'+(q.opts[q.pick]===q.c.a?'¡Correcto!':'No exactamente.')+'</b> '+esc(q.c.por||'')+'</p><div class="row"><button class="btn" data-act="next">Siguiente</button></div>';
+  }
+  return h+'</div>';
+}
+function viewPractica(){
+  const F=[['all','Todo'],['d','Respuestas'],['o','Orden'],['g','Significados'],['f','Preguntas']];
+  return '<div class="seg" role="group" aria-label="Tipo de pregunta">'+F.map(([id,n])=>'<button data-act="qf" data-v="'+id+'" aria-pressed="'+(state.qf===id)+'">'+n+'</button>').join('')+'</div><div id="quiz">'+quizHtml()+'</div>'+
+  '<p class="note">Lo que falles vuelve a aparecer más seguido; lo que aciertes, cada vez menos. Tu avance se guarda solo en este dispositivo.</p><div class="row"><button class="btn ghost" data-act="resetbox">Reiniciar avance</button></div>';
+}
+
+function viewOrar(){
+  if(state.sub.orar==='ros')return segHtml('orar')+viewRosario();
+  return segHtml('orar')+'<p class="note" style="margin-top:0">Textos tradicionales de uso común. Pueden variar levemente según el país.</p>'+ORACIONES.map(o=>
+    '<details><summary>'+esc(o.n)+'</summary><div class="in"><p class="prayer">'+esc(o.t)+'</p><div class="row">'+sayBtn('o_'+o.id,o.t.replace(/\n/g,' '))+'</div><div class="lbl">Qué significa</div><p>'+esc(o.m)+'</p></div></details>').join('');
+}
+/* --- Aprender --- */
+const EUC=[
+['¿Qué es la Eucaristía?','Es el sacramento en el que Jesús, bajo las apariencias del pan y del vino, se hace presente con su cuerpo, su sangre, su alma y su divinidad, y se nos da como alimento. El Concilio Vaticano II la llama «fuente y cima de toda la vida cristiana».'],
+['Su origen: la Última Cena','En la noche en que fue entregado, Jesús tomó pan, dio gracias, lo partió y lo dio a sus discípulos diciendo que era su cuerpo entregado por ellos; hizo lo mismo con el cáliz (Lucas 22, 19-20; 1 Corintios 11, 23-26). Les pidió que lo hicieran en memoria suya.'],
+['Sacrificio y memorial','La muerte de Cristo ocurrió una sola vez. La Misa no la repite: hace presente ese único sacrificio de la cruz para que podamos unirnos a él. Por eso hablamos de «memorial».'],
+['Presencia real','Creemos que Cristo está presente de verdad, no solo como símbolo. Mientras permanecen las especies consagradas, él está en ellas: por eso se reservan en el sagrario y se hace genuflexión. Mira Juan 6, 51-58 («Yo soy el pan vivo»).'],
+['La comunión','Al recibirlo nos unimos más a Cristo y entre nosotros, se perdonan los pecados leves y recibimos fuerza para vivir como cristianos. Para comulgar: ser católico, una hora de ayuno y no tener pecado grave (si lo hay, primero la confesión).'],
+['Fechas de la Eucaristía','Jueves Santo: Jesús la instituye. Corpus Christi: fiesta del Cuerpo y la Sangre de Cristo, con procesiones. Cada domingo: «pequeña Pascua», día de la Misa. Adoración eucarística: muchas parroquias exponen el Santísimo; puedes ir a acompañarlo.'],
+['Cómo prepararme para comulgar','Reza antes (por ejemplo, «Señor, no soy digno…»). Revisa si hay algo que confesar. Pide perdón a quien ofendiste. Después de comulgar, quédate unos minutos en silencio, agradece y pide lo que necesitas.']
+];
+const PART=[
+['Antes de la Misa',['Llega unos 10 minutos antes y busca un lugar donde puedas escuchar.','Lee el Evangelio del día o del domingo (pestaña «Hoy»).','Respeta el ayuno de una hora antes de comulgar.','Si tienes pecado grave, confiésate antes de comulgar.','Silencia el teléfono. Viste con respeto.']],
+['Durante la Misa',['Responde en voz alta y canta con la comunidad.','Sigue las posturas: de pie, sentado, de rodillas.','Escucha las lecturas como una carta dirigida a ti.','Aprovecha los silencios para decir tus intenciones.','Comulga con devoción; si no puedes, haz una comunión espiritual.']],
+['Después de la Misa',['Quédate unos minutos en acción de gracias.','Elige una frase de las lecturas o de la homilía para llevar contigo.','Saluda y comparte con la comunidad.','Pon por obra algo de lo escuchado durante la semana.']],
+['Cómo servir más',['Lector: proclamar las lecturas.','Coro o música.','Monaguillo o acólito.','Ministro extraordinario de la comunión.','Acomodador o recibimiento.','Catequesis o grupos de oración.','Pregunta en tu parroquia cuáles necesitan ayuda.']]
+];
+const GESTOS=[
+['Señal de la Cruz','Se hace al empezar y terminar la Misa y en las bendiciones.'],
+['Golpe de pecho','En el «por mi culpa» del Yo confieso.'],
+['Tres cruces en el Evangelio','Frente, labios y pecho: mente, boca y corazón.'],
+['Inclinación','De cabeza ante el altar o antes de comulgar; profunda en el Credo (Encarnación).'],
+['Genuflexión','Rodilla derecha al suelo ante el sagrario donde está el Santísimo.'],
+['Postura de rodillas','En la consagración, donde se acostumbre.']
+];
+function viewApr(){
+  const s=state.sub.apr;
+  if(s==='glos'){
+    return segHtml('apr')+'<label class="small mut" for="gq">Buscar un término</label><input id="gq" data-act="gq" type="search" value="'+esc(state.gq)+'" placeholder="Por ejemplo: altar, Amén, cáliz" style="width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);color:var(--ink);font:inherit;margin:6px 0 8px"><div id="glist">'+glosList()+'</div>';
+  }
+  if(s==='euc')return segHtml('apr')+EUC.map((x,i)=>'<details'+(i===0?' open':'')+'><summary>'+esc(x[0])+'</summary><div class="in"><p>'+esc(x[1])+'</p></div></details>').join('');
+  if(s==='part')return segHtml('apr')+PART.map(x=>'<div class="card"><h3>'+esc(x[0])+'</h3><ul class="tight">'+x[1].map(y=>'<li>'+esc(y)+'</li>').join('')+'</ul></div>').join('')+'<h2 class="sec">Gestos</h2><div class="card">'+GESTOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
+  const t=new Date(),L=liturgia(t),y=state.year;
+  let h=segHtml('apr')+'<div class="card tint"><div class="lbl">Hoy</div><p style="margin:0"><b>'+esc(L.titulo)+'</b>. Color <b>'+esc(L.color)+'</b>. Domingos: ciclo <b>'+cicloDom(t)+'</b>; entre semana: año <b>'+cicloSem(t)+'</b>.</p></div>';
+  h+='<h2 class="sec">Fechas del año</h2><div class="row" style="align-items:center"><button class="btn ghost" data-act="yr" data-v="-1" aria-label="Año anterior">‹</button><b style="font-family:var(--fd);font-size:1.2rem;min-width:64px;text-align:center">'+y+'</b><button class="btn ghost" data-act="yr" data-v="1" aria-label="Año siguiente">›</button></div>';
+  h+='<div class="card"><table class="dates"><tbody>'+fechasAnio(y).map(f=>'<tr><td>'+esc(fmtCorto(f[0]))+'</td><td><b>'+esc(f[1])+'</b><br><span class="small mut">'+esc(f[2])+'</span></td></tr>').join('')+'</tbody></table></div>';
+  h+='<p class="note">Las fechas móviles se calculan a partir de la Pascua de cada año. Algunas fiestas (Epifanía, Ascensión, Corpus Christi) cambian de día según el país, y las fiestas locales (patronos, advocaciones) las indica el calendario de tu diócesis.</p>';
+  h+='<h2 class="sec">Tiempos litúrgicos</h2>'+TIEMPOS.map(x=>'<details><summary><i class="dot" style="background:'+(LITCOL[x.col]||'#999')+'"></i>'+esc(x.n)+'</summary><div class="in"><p>'+esc(x.d)+'</p></div></details>').join('');
+  h+='<h2 class="sec">Colores</h2><div class="card">'+COLORES.map(c=>'<div class="colrow"><span class="sw" style="background:'+c.hex+'"></span><div><b>'+esc(c.n)+'.</b> '+esc(c.d)+'</div></div>').join('')+'</div>';
+  h+='<h2 class="sec">Los ciclos de lecturas</h2><div class="card"><p><b>Domingos (A, B, C):</b> cada año se lee principalmente un evangelista. A: Mateo. B: Marcos (con Juan en verano). C: Lucas. Juan se lee sobre todo en Pascua.</p><p><b>Entre semana (I, II):</b> los años impares son I y los pares II. La primera lectura cambia de año; el Evangelio es el mismo.</p><p class="mut small" style="margin-bottom:0">Ahora estamos en ciclo '+cicloDom(t)+' (domingos) y año '+cicloSem(t)+' (entre semana).</p></div>';
+  return h;
+}
+function glosList(){
+  const q=state.gq.trim().toLowerCase();
+  const l=GLOS.filter(g=>!q||g.t.toLowerCase().includes(q)||g.d.toLowerCase().includes(q));
+  if(!l.length)return '<p class="mut">No encontré ese término.</p>';
+  return l.map(g=>'<details><summary>'+esc(g.t)+'</summary><div class="in"><p>'+esc(g.d)+'</p></div></details>').join('');
+}
+
+/* --- Mi día --- */
+function rutDone(){const r=store.get('rut',{});return r[ymd(new Date())]||[]}
+function streak(){
+  const r=store.get('rut',{});let n=0,d=new Date();const ok=x=>(r[ymd(x)]||[]).length>=3;
+  if(!ok(d))d=addDays(d,-1);
+  while(ok(d)){n++;d=addDays(d,-1)}
+  return n;
+}
+function viewDia(){
+  const s=state.sub.dia,t=new Date(),k=ymd(t);
+  if(s==='exa'){
+    const e=(store.get('exa',{})[k])||{};
+    return segHtml('dia')+'<div class="card tint"><p style="margin:0">Dedica 5 minutos antes de dormir. Reza un momento, responde despacio y termina con el acto de contrición. Lo que escribas se guarda <b>solo en tu dispositivo</b>.</p></div>'+
+    EXAMEN.map((x,i)=>'<div class="card"><h3><span class="num" style="margin-right:8px">'+(i+1)+'</span>'+esc(x.n)+'</h3><p>'+esc(x.g)+'</p><textarea data-k="'+i+'" aria-label="'+esc(x.n)+'" placeholder="Escribe aquí si quieres…">'+esc(e[i]||'')+'</textarea></div>').join('')+
+    '<div class="card"><h3>Para terminar</h3><p class="prayer">'+esc(ORACIONES.find(o=>o.id==='contri').t)+'</p><div class="row"><button class="btn" data-act="exadone">Terminé mi examen de hoy</button>'+sayBtn('exa',ORACIONES.find(o=>o.id==='contri').t.replace(/\n/g,' '))+'</div><p class="note" id="examsg" style="margin:6px 0 0">'+(rutDone().includes('examen')?'Marcado en tu rutina de hoy.':'')+'</p></div>';
+  }
+  if(s==='conf'){
+    const c=store.get('conf',{});let nM=Object.keys(c).filter(x=>c[x]).length;
+    let h=segHtml('dia')+'<div class="card tint"><p style="margin:0">Esta lista te ayuda a preparar tu confesión. Marca lo que quieras recordar. <b>No es para juzgarte:</b> es para ver tu vida con la misericordia de Dios. Se guarda solo en tu dispositivo.</p></div>';
+    h+='<p class="note">Marcados: <b id="cn">'+nM+'</b></p>';
+    MANDAMIENTOS.forEach((m,mi)=>{
+      h+='<details><summary>'+esc(m.n)+'</summary><div class="in">'+m.q.map((q,qi)=>{const id='m'+mi+'_'+qi;return '<label class="chk"><input type="checkbox" data-act="conf" data-id="'+id+'"'+(c[id]?' checked':'')+'><span>'+esc(q)+'</span></label>'}).join('')+'</div></details>';
+    });
+    h+='<details><summary>Mandamientos de la Iglesia</summary><div class="in"><ol class="tight">'+IGLESIA.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div></details>';
+    h+='<h2 class="sec">Cómo confesarse</h2><div class="card"><ol class="tight" style="margin:0">'+CONFESAR.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
+    h+='<p class="note">El sacerdote está obligado a guardar un secreto absoluto sobre todo lo confesado (sigilo sacramental). Si hace mucho que no te confiesas, no te preocupes por «hacerlo bien»: dile eso al sacerdote y él te guiará.</p><div class="row"><button class="btn ghost" data-act="resetconf">Borrar marcas</button></div>';
+    return h;
+  }
+  if(s==='cua'){
+    return segHtml('dia')+'<div class="card"><h3>Mi cuaderno</h3><p class="note" style="margin-top:0">Anota lo que aprendas en la Misa, las frases que te llamaron la atención, preguntas para el sacerdote o intenciones de oración. Se guarda solo en este dispositivo.</p><textarea id="notes" data-k="notes" style="min-height:240px" aria-label="Mi cuaderno" placeholder="Escribe aquí…">'+esc(store.get('notes',''))+'</textarea><div class="row"><button class="btn ghost" data-act="notedate">Insertar fecha</button></div></div>';
+  }
+  const done=rutDone(),n=streak(),ob=OBRAS[(Math.floor((t-new Date(t.getFullYear(),0,0))/864e5))%OBRAS.length];
+  return segHtml('dia')+'<div class="card tint"><p style="margin:0">Empieza con dos o tres prácticas y crece despacio: <b>la constancia importa más que la cantidad</b>. No es una lista para sentirse culpable, sino una ayuda para estar cerca de Dios.</p></div>'+
+  '<div class="card"><div class="small mut"><span id="rp">'+done.length+'</span> de '+RUTINA.length+' hoy · Racha: <b id="rs">'+n+'</b> '+(n===1?'día':'días')+' (cuenta el día con 3 o más)</div><div class="bar"><i id="rbar" style="width:'+Math.round(done.length/RUTINA.length*100)+'%"></i></div>'+
+  RUTINA.map(r=>'<label class="chk"><input type="checkbox" data-act="rut" data-id="'+r.id+'"'+(done.includes(r.id)?' checked':'')+'><span><span class="t">'+esc(r.h)+'</span><br>'+esc(r.t)+'</span></label>').join('')+'</div>'+
+  '<div class="card"><div class="lbl">Obra de misericordia de hoy ('+esc(ob[0].toLowerCase())+')</div><p style="margin:0"><b>'+esc(ob[1])+'.</b></p></div>'+
+  '<details><summary>Ritmo de la semana y del mes</summary><div class="in"><ul class="tight"><li><b>Domingo:</b> Misa, descanso y familia.</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo del Regnum Christi.</li><li><b>Jueves:</b> Hora Santa o un rato de adoración.</li><li><b>Viernes:</b> penitencia (en Cuaresma, abstinencia de carne).</li><li><b>Sábado:</b> día dedicado a María; Rosario.</li><li><b>Cada mes:</b> confesión, y si puedes un rato de adoración ante el Santísimo.</li></ul></div></details>';
+}
+
+
+/* ===== ENCUENTRO CON CRISTO (Regnum Christi) ===== */
+const FULL={'Acto penitencial':'confieso','Gloria':'gloriah','Credo':'credon','Santo (Sanctus)':'santo','Padre Nuestro':'padre'};
+const oraT=id=>{const o=ORACIONES.find(x=>x.id===id);return o?o.t:''};
+const INVOC='¡Cristo, Rey nuestro!\n— ¡Venga tu Reino!';
+const ENC_GEN={
+  ver:['¿Qué situación concreta de mi semana (trabajo, familia, amigos, Barquisimeto, el país) se parece a lo que pasa en este Evangelio?','¿Qué estaba pasando por dentro de mí: qué sentí, qué pensé, cómo reaccioné?','¿Dónde veo en ese hecho la acción de Dios, y dónde el egoísmo o el mal?'],
+  juzgar:['¿Cómo vería Jesús esta situación? ¿Qué me diría a mí, no a los demás?','¿Qué virtud está en juego (paciencia, honestidad, generosidad, humildad, valentía…)?','¿Qué otro pasaje del Evangelio me ilumina aquí?'],
+  actuar:['Un propósito pequeño, concreto y medible para esta semana.','Algo para mi conversión personal y algo para acercar a otros a Cristo (apostolado).']
+};
+const ENC_PARTES=[
+ {n:'Oración inicial',q:'El responsable de equipo dirige la oración. Se pide al Espíritu Santo que ilumine la mente, mueva la voluntad y encienda el corazón; se suele añadir un Avemaría o un Gloria y las invocaciones del Regnum Christi.',tu:'Rezar con todos. Responde «¡Venga tu Reino!» cuando digan «¡Cristo, Rey nuestro!».'},
+ {n:'Lectura orante del Evangelio',q:'Alguien lee el pasaje en voz alta (en muchos equipos se escucha de pie). Puede ser el Evangelio del domingo, el del día o uno que elija el equipo. Luego hay unos minutos de silencio.',tu:'Escuchar sin prisa y fijarte en una palabra o frase que te toque. No tienes que leer tú la primera vez, salvo que te lo pidan.'},
+ {n:'Compartir luces',q:'Cada uno comparte con sencillez lo que el Espíritu Santo le hizo ver en el texto: una «luz». No es una clase ni un debate. Un secretario puede resumir.',tu:'Dos o tres frases bastan: qué palabra te tocó y por qué, o cómo lo ves en tu vida. Puedes decir «paso» si aún no te sientes listo.'},
+ {n:'Oración espontánea',q:'Uno o varios rezan en voz alta, con sus palabras, a partir de lo compartido: dar gracias, pedir luz y fuerza, encomendar intenciones.',tu:'Si te animas, una frase como: «Señor, gracias por… ayúdame a…». Si no, une tu intención en silencio.'},
+ {n:'Revisión de compromisos (en algunos equipos)',q:'Algunos equipos repasan brevemente los compromisos de vida espiritual (oración, Misa, etc.) o el propósito de la semana anterior.',tu:'Responder con sencillez y sin justificarte. Nadie está obligado a revelar su conciencia.'},
+ {n:'Elección del caso',q:'Es la parte más larga (cerca de tres cuartas partes del tiempo). Los miembros proponen hechos reales de su vida o de su entorno que les cuestionan, y el equipo elige uno.',tu:'Llevar pensado un caso real y breve, sin nombres ni detalles que expongan a nadie. Puede ser algo del trabajo, la familia, la calle o una noticia.'},
+ {n:'Ver',q:'Se mira el caso como Dios lo mira: ¿qué pasó?, ¿por qué?, ¿qué consecuencias tuvo?, ¿dónde se ve el bien y el mal?, ¿cómo estoy implicado yo?',tu:'Aportar hechos y preguntas, sin juzgar a las personas.'},
+ {n:'Juzgar',q:'A la luz del Evangelio: ¿cómo actuaría Jesús?, ¿qué virtudes o antivalores aparecen?, ¿qué pasaje lo ilumina? El juicio se aplica a uno mismo, no a los demás.',tu:'Puedes citar la frase del Evangelio del día o la de un santo o un Papa: aquí es donde más sirve el «paso a paso» de esta app.'},
+ {n:'Actuar y propósito',q:'Se proponen acciones concretas: unas para la conversión personal y otras de apostolado. El equipo elige un propósito común para la semana, concreto y medible.',tu:'Proponer algo pequeño y realista. Anótalo en «Mis Encuentros» para revisarlo el martes siguiente.'},
+ {n:'Oración final',q:'Se da gracias y se termina con las dos invocaciones propias del Regnum Christi: a Cristo Rey y a la Virgen María. Después pueden darse avisos.',tu:'Responder a las invocaciones. La invocación a la Virgen la vas a aprender escuchándola en tu equipo.'}
+];
+const ENC_TIPS=[
+ 'Llega unos minutos antes y preséntate con sencillez: «Es mi primera vez, vengo a conocer».',
+ 'Lleva tu Biblia o el Evangelio del día en el teléfono, y algo para anotar.',
+ 'No tienes que saber teología: lo que se comparte es la vida a la luz del Evangelio.',
+ 'Habla de ti, en primera persona («a mí me…»), no de lo que «los demás deberían».',
+ 'Lo que se comparte en el equipo se queda en el equipo: es un ambiente de confianza.',
+ 'Si te preguntan algo que no sabes, es válido decir «todavía estoy aprendiendo».',
+ 'Escuchar también es participar. Al principio basta con una luz breve.',
+ 'Al final pregunta al responsable de equipo qué Evangelio leerán el próximo martes y si llevan un caso preparado.'
+];
+const ENC_FRASES=[
+ ['Para compartir una luz','«A mí me tocó la frase “…”, porque esta semana me pasó…»'],
+ ['Para conectar con tu vida','«Esto lo veo en mi trabajo, cuando…» / «Me cuesta vivir esto en…»'],
+ ['Para traer una cita','«Me ayudó algo que dijo [santo o Papa]: “…”»'],
+ ['Para proponer un caso','«Les propongo un caso: … La virtud en juego creo que es…»'],
+ ['Para proponer un propósito','«Podríamos esta semana… y el martes vemos cómo nos fue.»'],
+ ['Si no quieres hablar aún','«Prefiero escuchar esta vez, gracias.»']
+];
+const ENC_GLOS=[
+ ['Equipo','Pequeña comunidad de fe del Regnum Christi; suele ser de personas de la misma etapa de vida.'],
+ ['Responsable de equipo','Quien guía el Encuentro y acompaña a cada miembro.'],
+ ['Luz','Lo que el Espíritu Santo te hace ver al meditar el Evangelio.'],
+ ['Caso','Un hecho real que se analiza con el método ver, juzgar y actuar.'],
+ ['Propósito o compromiso apostólico','Acción concreta que se asume para la semana.'],
+ ['Hora Santa','Tradición del Regnum Christi: un rato de adoración ante el Santísimo, de ordinario el jueves.'],
+ ['¡Venga tu Reino!','Lema del Regnum Christi, tomado del Padre Nuestro: que Cristo reine en el corazón y en la sociedad.']
+];
+function nextTue(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());return addDays(x,(2-x.getDay()+7)%7)}
+function prevTue(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());const k=(x.getDay()-2+7)%7;return addDays(x,-(k===0?7:k))}
+function encData(){const H=window.HOY,t=new Date();return (H&&H.fecha===ymd(t))?H:null}
+function encNotes(k){return (store.get('encn',{})[k])||{}}
+function ta(k,ph,val,min){return '<textarea data-enc="'+k+'" placeholder="'+esc(ph)+'" style="min-height:'+(min||80)+'px">'+esc(val||'')+'</textarea>'}
+function composeShare(cita,n){
+  const p=[];
+  if(n.palabra)p.push('Del Evangelio de hoy ('+cita+') me tocó: '+n.palabra.trim());
+  if(n.luz)p.push('Lo que siento que Dios me dice: '+n.luz.trim());
+  if(n.ver)p.push('Lo veo en mi vida en esto: '+n.ver.trim());
+  if(n.juzgar)p.push('Creo que Jesús me pide: '+n.juzgar.trim());
+  if(n.proposito)p.push('Mi propósito: '+n.proposito.trim());
+  return p.join('\n');
+}
+function viewEnc(){
+  const s=state.sub.enc;
+  if(s==='guia')return segHtml('enc')+viewEncGuia();
+  if(s==='martes')return segHtml('enc')+viewEncMartes();
+  if(s==='diario')return segHtml('enc')+viewEncDiario();
+  return segHtml('enc')+viewEncPaso();
+}
+function step(n,title,body,open){return '<details'+(open?' open':'')+'><summary><span class="num">'+n+'</span>'+esc(title)+'</summary><div class="in">'+body+'</div></details>'}
+function pasosHoy(H,N){
+  const k=ymd(new Date()),E=H.evangelio,X=H.encuentro||{},link='https://www.ewtn.com/es/catolicismo/lecturas/'+k;
+  const ver=X.ver||ENC_GEN.ver,juz=X.juzgar||ENC_GEN.juzgar,act=X.actuar||ENC_GEN.actuar;
+  const P=[];
+  P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
+  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Abrir el texto bíblico</a></div>'+
+    (X.frase?'<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>':'')+
+    '<div class="lbl">¿Qué palabra o frase te tocó a ti?</div>'+ta('palabra','Escríbela aquí…',N.palabra,70)});
+  P.push({ic:'flame',t:'Las luces',b:'<p class="mut">Ideas para meditar. Quédate con la que más te hable.</p><ul class="tight">'+(X.luces||[E.significado]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Tu luz: lo que sientes que Dios te dice</div>'+ta('luz','En dos o tres frases…',N.luz)});
+  if(X.conexion)P.push({ic:'link',t:'El Evangelio se ilumina con…',b:'<h3 style="margin-top:4px">'+esc(X.conexion.cita)+'</h3><p>'+esc(X.conexion.idea)+'</p>'});
+  if(X.voz)P.push({ic:'quote',t:'La voz de la Iglesia',b:'<p class="prayer" style="font-family:var(--fd);font-size:1.35rem;line-height:1.45">«'+esc(X.voz.texto)+'»</p><p><b>'+esc(X.voz.autor)+'</b><br><span class="small mut">'+esc(X.voz.obra||'')+'</span>'+(X.voz.url?' · <a class="small" href="'+esc(X.voz.url)+'" target="_blank" rel="noopener noreferrer">ver fuente</a>':'')+'</p>'+(X.voz.nota?'<p>'+esc(X.voz.nota)+'</p>':'')});
+  P.push({ic:'eye',t:'Ver: tu vida a esta luz',b:'<ul class="tight">'+ver.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Un hecho concreto (puede ser tu caso del martes)</div>'+ta('ver','Qué pasó, por qué, qué consecuencias tuvo… sin nombres',N.ver,100)});
+  P.push({ic:'scale',t:'Juzgar: cómo lo ve Jesús',b:'<ul class="tight">'+juz.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Lo que creo que Jesús me pide</div>'+ta('juzgar','Aplícalo a ti, no a los demás…',N.juzgar)});
+  P.push({ic:'path',t:'Actuar: tu propósito',b:'<p class="mut">Ideas:</p><ul class="tight">'+act.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Mi propósito de hoy</div>'+ta('proposito','Pequeño, concreto y que puedas cumplir hoy…',N.proposito,60)});
+  const sh=composeShare(E.cita,N);
+  P.push({ic:'chat',t:'Lo que dirías en el Encuentro',b:(X.compartir?'<p class="mut small">Un ejemplo:</p><p class="prayer" style="margin-top:0">'+esc(X.compartir)+'</p>':'')+'<div class="lbl">Tu intervención, armada con lo que escribiste</div><p class="prayer" id="mishare">'+(sh?esc(sh):'<span class="mut">Cuando escribas tu palabra, tu luz o tu propósito, aquí aparecerá tu intervención.</span>')+'</p><div class="row">'+(sh?sayBtn('share',sh)+'<a class="btn ghost" href="https://wa.me/?text='+encodeURIComponent(sh)+'" target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a>':'')+'</div>'});
+  P.push({ic:'cross',t:'Oración final',b:'<p class="prayer">'+esc(E.oracion)+'</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
+  return P;
+}
+function viewEncPaso(){
+  const t=new Date(),k=ymd(t),H=encData(),N=encNotes(k);
+  if(!H)return '<div class="card"><p style="margin-top:0">El paso a paso de hoy se prepara cada mañana a las 9:00 junto con el Evangelio. Si ya pasó la hora, vuelve a abrir la página en un momento.</p><div class="row"><a class="btn" href="https://www.ewtn.com/es/catolicismo/lecturas/'+k+'" target="_blank" rel="noopener noreferrer">Leer el Evangelio de hoy</a><button class="btn ghost" data-act="sub" data-v="guia">Cómo es un Encuentro</button></div></div>';
+  const E=H.evangelio,X=H.encuentro||{};
+  const hist=store.get('hist',{});if(!hist[k]||hist[k].cita!==E.cita){hist[k]={cita:E.cita,frase:(X.frase&&X.frase.texto)||''};store.set('hist',hist)}
+  const P=pasosHoy(H,N),tot=P.length;
+  if(state.plist)return '<div class="row" style="justify-content:flex-end"><button class="btn ghost" data-act="plist" data-v="0">Volver al modo paso a paso</button></div>'+P.map((p,i)=>step(i+1,p.t,p.b,i===0)).join('');
+  let i=Math.max(0,Math.min(state.ps||0,tot));state.ps=i;
+  let h='<div class="pager">';
+  h+='<div class="ph"><div class="dots" role="group" aria-label="Pasos">'+P.map((p,j)=>'<button data-act="ps" data-v="'+j+'" class="'+(j===i?'on':j<i?'done':'')+'" aria-label="Paso '+(j+1)+': '+esc(p.t)+'"></button>').join('')+'</div><span class="small mut">'+(i<tot?(i+1)+' de '+tot:'Listo')+'</span></div>';
+  if(i<tot){
+    const p=P[i];
+    h+='<div class="pb">'+ic(p.ic)+'<h2>'+esc(p.t)+'</h2>'+p.b+'</div>';
+    h+='<div class="pn"><button class="btn ghost" data-act="ps" data-v="'+(i-1)+'"'+(i===0?' disabled':'')+'>Anterior</button><button class="btn" data-act="ps" data-v="'+(i+1)+'">'+(i===tot-1?'Amén. Terminar':'Siguiente')+'</button></div>';
+  }else{
+    const o=oreDays();if(!o[k]){o[k]=true;store.set('ore',o)}
+    const n=rachaN();
+    h+='<div class="pb fin">'+ic('check')+'<h2>Que venga su Reino a tu día</h2><p>Terminaste tu oración con el Evangelio de hoy.</p><p class="mut">'+(n===1?'Primer día de tu racha.':n+' días seguidos orando.')+'</p>'+semanaHtml().replace('class="week"','class="week" style="justify-content:center;margin:12px 0"')+'</div>'+
+    '<div class="pn"><button class="btn ghost" data-act="ps" data-v="0">Repasar</button><button class="btn" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
+  }
+  h+='</div><div class="row" style="justify-content:center"><button class="btn ghost" data-act="plist" data-v="1">Ver todos los pasos en una lista</button></div>';
+  h+='<p class="note">Lo que escribes se guarda solo en este dispositivo. Las frases de santos y Papas llevan enlace a su fuente.</p>';
+  return h;
+}
+function viewEncMartes(){
+  const t=new Date(),nt=nextTue(t),hoyEs=t.getDay()===2,pt=prevTue(t),hist=store.get('hist',{}),notes=store.get('encn',{});
+  const start=hoyEs?addDays(t,-6):addDays(pt,0);
+  let h='<div class="card tint"><div class="lbl">Próximo Encuentro</div><h2 style="margin:2px 0 4px">'+(hoyEs?'¡Hoy martes!':esc(cap(fmt(nt))))+'</h2><p class="small mut" style="margin:0">'+(hoyEs?'Repasa tus luces de la semana y lleva tu caso pensado.':'Faltan '+diff(nt,t)+' '+(diff(nt,t)===1?'día':'días')+'. Aquí se reúne lo que vas escribiendo cada día.')+'</p></div>';
+  const dias=[];for(let d=new Date(start);d<=t;d=addDays(d,1)){const k=ymd(d);if(hist[k]||notes[k])dias.push(k)}
+  h+='<h2 class="sec">Mis luces de la semana</h2>';
+  if(!dias.length)h+='<p class="note">Todavía no hay notas desde el último martes. Usa «Paso a paso de hoy» cada día.</p>';
+  dias.reverse().forEach(k=>{const n=notes[k]||{},c=(hist[k]||{}).cita||'';const d=new Date(k+'T12:00:00');
+    h+='<details><summary>'+esc(cap(fmt(d)))+(c?' · '+esc(c):'')+'</summary><div class="in">'+(n.palabra?'<p><b>Me tocó:</b> '+esc(n.palabra)+'</p>':'')+(n.luz?'<p><b>Mi luz:</b> '+esc(n.luz)+'</p>':'')+(n.ver?'<p><b>Hecho:</b> '+esc(n.ver)+'</p>':'')+(n.proposito?'<p><b>Propósito:</b> '+esc(n.proposito)+'</p>':'')+(!n.palabra&&!n.luz&&!n.ver&&!n.proposito?'<p class="mut">Leíste el Evangelio, sin notas.</p>':'')+'</div></details>'});
+  const kc='caso_'+ymd(hoyEs?t:nt),C=store.get(kc,{});
+  h+='<h2 class="sec">Mi caso para el martes</h2><div class="card"><p class="small mut" style="margin-top:0">Un hecho real y breve que te cuestione. Sin nombres ni detalles que expongan a nadie.</p>'+
+   '<div class="lbl">Qué pasó</div><textarea data-caso="'+kc+'" data-f="hecho" placeholder="Los hechos, en pocas frases…">'+esc(C.hecho||'')+'</textarea>'+
+   '<div class="lbl">Por qué pasó y qué consecuencias tuvo</div><textarea data-caso="'+kc+'" data-f="causas">'+esc(C.causas||'')+'</textarea>'+
+   '<div class="lbl">Virtud en juego</div><textarea data-caso="'+kc+'" data-f="virtud" style="min-height:50px" placeholder="Paciencia, honestidad, caridad, valentía…">'+esc(C.virtud||'')+'</textarea>'+
+   '<div class="lbl">Qué dice el Evangelio</div><textarea data-caso="'+kc+'" data-f="evangelio" style="min-height:50px">'+esc(C.evangelio||'')+'</textarea></div>';
+  const D=store.get('diario',[]),last=D[0];
+  h+='<h2 class="sec">Mi propósito del último Encuentro</h2><div class="card">'+(last&&(last.proposito||last.mio)?'<p style="margin-top:0"><b>'+esc(last.proposito||last.mio)+'</b></p><p class="small mut">Del Encuentro del '+esc(last.fecha)+'. ¿Cómo te fue? Anótalo en «Mis Encuentros».</p>':'<p class="mut" style="margin:0">Aún no has guardado ningún Encuentro. Después del martes, anota el propósito en «Mis Encuentros».</p>')+'</div>';
+  h+='<h2 class="sec">Antes de salir</h2><div class="card"><ul class="tight" style="margin:0"><li>Biblia o el Evangelio en el teléfono.</li><li>Una luz breve pensada (de esta semana).</li><li>Tu caso, en dos o tres frases.</li><li>Una intención para la oración espontánea.</li></ul></div>';
+  return h;
+}
+function viewEncGuia(){
+  let h='<div class="card tint"><p style="margin:0">El <b>Encuentro con Cristo</b> es la reunión semanal del equipo del Regnum Christi: se lee el Evangelio en clima de oración, se comparten las luces y se mira la vida real con los ojos de Dios (ver, juzgar y actuar) para terminar en un propósito concreto. Es el centro de la vida de equipo.</p></div>';
+  h+='<h2 class="sec">Las partes, una por una</h2>';
+  ENC_PARTES.forEach((p,i)=>{h+='<details'+(i===0?' open':'')+'><summary><span class="num">'+(i+1)+'</span>'+esc(p.n)+'</summary><div class="in"><p>'+esc(p.q)+'</p><div class="say"><b>Qué haces tú</b>'+esc(p.tu)+'</div></div></details>'});
+  h+='<h2 class="sec">Tu primera vez</h2><div class="card"><ul class="tight" style="margin:0">'+ENC_TIPS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+  h+='<h2 class="sec">Frases que te ayudan a participar</h2><div class="card">'+ENC_FRASES.map(f=>'<p><b>'+esc(f[0])+':</b> '+esc(f[1])+'</p>').join('')+'</div>';
+  h+='<h2 class="sec">Palabras que vas a escuchar</h2><div class="card">'+ENC_GLOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
+  h+='<h2 class="sec">La semana del Regnum Christi</h2><div class="card"><ul class="tight" style="margin:0"><li><b>Cada día:</b> encuentro personal con Cristo en la oración (el «Paso a paso de hoy»).</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo.</li><li><b>Jueves:</b> Hora Santa o adoración, como es tradición en el Regnum Christi.</li><li><b>Viernes:</b> un pequeño sacrificio.</li><li><b>Domingo:</b> Misa.</li></ul></div>';
+  h+='<p class="note">Cada equipo adapta el orden y los tiempos; tu responsable de equipo te irá guiando. Fuente: <a href="https://www.regnumchristi.com/en/wp-content/uploads/2023/05/Ensayo-Encuentro-con-CRISTO-2022.pdf" target="_blank" rel="noopener noreferrer">«El Encuentro con Cristo en la vida del Regnum Christi»</a> (2022).</p>';
+  return h;
+}
+function viewEncDiario(){
+  const D=store.get('diario',[]),t=new Date(),def=ymd(t.getDay()===2?t:prevTue(t));
+  let h='<div class="card"><h3>Anotar un Encuentro</h3>'+
+  '<div class="lbl">Fecha</div><input id="dfecha" type="date" value="'+def+'" style="min-height:44px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--bg);color:var(--ink);font:inherit">'+
+  '<div class="lbl">Evangelio que leímos</div><textarea id="devang" style="min-height:46px" placeholder="Cita">'+esc(((store.get('hist',{})[def])||{}).cita||'')+'</textarea>'+
+  '<div class="lbl">Luces que me llamaron la atención (mías o de otros)</div><textarea id="dluces"></textarea>'+
+  '<div class="lbl">Caso que se eligió</div><textarea id="dcaso" style="min-height:60px"></textarea>'+
+  '<div class="lbl">Propósito del equipo</div><textarea id="dprop" style="min-height:50px"></textarea>'+
+  '<div class="lbl">Mi propósito personal</div><textarea id="dmio" style="min-height:50px"></textarea>'+
+  '<div class="row"><button class="btn" data-act="dsave">Guardar Encuentro</button></div><p class="note" id="dmsg" style="margin:4px 0 0"></p></div>';
+  h+='<h2 class="sec">Mis Encuentros</h2>';
+  if(!D.length)h+='<p class="note">Aquí aparecerán tus Encuentros guardados.</p>';
+  D.forEach((e,i)=>{h+='<details><summary>'+esc(e.fecha)+(e.evang?' · '+esc(e.evang):'')+'</summary><div class="in">'+(e.luces?'<p><b>Luces:</b> '+esc(e.luces)+'</p>':'')+(e.caso?'<p><b>Caso:</b> '+esc(e.caso)+'</p>':'')+(e.proposito?'<p><b>Propósito del equipo:</b> '+esc(e.proposito)+'</p>':'')+(e.mio?'<p><b>Mi propósito:</b> '+esc(e.mio)+'</p>':'')+'<div class="lbl">¿Cómo me fue?</div><textarea data-dres="'+i+'" style="min-height:50px">'+esc(e.res||'')+'</textarea><div class="row"><button class="btn ghost" data-act="ddel" data-i="'+i+'">Borrar</button></div></div></details>'});
+  h+='<p class="note">Se guarda solo en este dispositivo.</p>';
+  return h;
+}
+
+/* --- Guía en vivo de la Misa --- */
+/* ===== GUÍA PASO A PASO DE LA MISA (con las lecturas del día) ===== */
+function misaHoy(){
+  const t=new Date(),L=liturgia(t),H=window.HOY,ok=!!(H&&H.fecha===ymd(t)),M=(ok&&H.misa)||{};
+  const dom=t.getDay()===0,g=L.especial?L.especial.g:'',sol=/Solemnidad/i.test(g)||/Solemnidad/.test(L.titulo||'')||/Solemnidad/.test(L.nota||''),fie=/Fiesta/i.test(g);
+  const penit=L.tiempo==='Adviento'||L.tiempo==='Cuaresma';
+  const lec=k=>ok&&H.lecturas?H.lecturas.find(l=>l.tipo===k):null;
+  const ev=lec('Evangelio');
+  return {ok,L,M,
+    titulo:M.celebracion||(ok&&H.titulo)||L.titulo,
+    rango:M.rango||(sol?'Solemnidad':fie?'Fiesta':dom?'Domingo':''),
+    color:M.color||L.color,
+    gloria:typeof M.gloria==='boolean'?M.gloria:((dom&&!penit)||sol||fie),
+    credo:typeof M.credo==='boolean'?M.credo:(dom||sol),
+    segunda:typeof M.segunda==='boolean'?M.segunda:(ok?!!lec('Segunda lectura'):(dom||sol)),
+    cuaresma:L.tiempo==='Cuaresma'||L.tiempo==='Triduo Pascual',
+    l1:lec('Primera lectura'),sal:lec('Salmo responsorial'),l2:lec('Segunda lectura'),ev,
+    salResp:M.salmo&&M.salmo.respuesta||'',
+    evIntro:M.evangelioIntro||(ev?'Lectura del santo Evangelio según '+evSegun(ev.cita):''),
+    relato:M.relato||null,
+    homilia:M.homilia||(ok&&H.evangelio?H.evangelio.pregunta:''),
+    fieles:M.fieles||'Te rogamos, óyenos.',
+    aviso:M.aviso||'',
+    link:(ok&&H.fuente)||('https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(t))
+  };
+}
+function evSegun(c){const m=(c||'').match(/^(Mateo|Marcos|Lucas|Juan)/i);return m?'san '+cap(m[1].toLowerCase()):'san…'}
+function guiaPasos(){
+  const D=misaHoy(),L=[{intro:true,s:'Antes de empezar',p:{n:'La Misa de hoy'}}];
+  MISA.forEach(s=>s.partes.forEach(p=>{
+    let skip='';
+    if(p.n==='Gloria'&&!D.gloria)skip='Hoy no se dice el Gloria.';
+    if(p.n==='Segunda lectura'&&!D.segunda)skip='Hoy no hay segunda lectura.';
+    if(p.n==='Credo'&&!D.credo)skip='Hoy no se reza el Credo.';
+    if(skip)return;
+    if(!dialogo(p,D,true)&&!hoyBox(p,D))return;
+    L.push({s:s.n,p,skip});
+  }));
+  return {D,G:L};
+}
+/* Lo propio de hoy para cada parte */
+function hoyBox(p,D){
+  const box=(t,b)=>'<div class="hoyb"><b>'+t+'</b>'+b+'</div>';
+  const lec=(l,tit)=>l?box(tit,'<div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'):(D.ok?'':box(tit,'<p class="small mut" style="margin:0">Las lecturas de hoy aparecen cada mañana a las 9:00. <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Verlas ahora</a></p>'));
+  switch(p.n){
+    case 'Primera lectura':return lec(D.l1,'Hoy se lee');
+    case 'Segunda lectura':return lec(D.l2,'Hoy se lee');
+    case 'Salmo responsorial':
+      return (D.salResp?'<div class="say big"><b>Tú repites después de cada estrofa</b><span class="prayer">'+esc(D.salResp)+'</span></div>':'<div class="say big"><b>Tú repites</b><span class="prayer">La frase que diga el salmista al comenzar (repítela igual después de cada estrofa).</span></div>')+(D.sal?box('Salmo de hoy','<div class="cita">'+esc(D.sal.cita)+'</div><p>'+esc(D.sal.resumen)+'</p>'):'');
+    case 'Aleluya':return D.cuaresma?box('Hoy es Cuaresma','<p>No se dice «Aleluya». Se canta otra aclamación, por ejemplo: «Gloria y alabanza a ti, Señor Jesús».</p>'):'';
+    case 'Evangelio':{
+      let h=D.ev?box('Evangelio de hoy','<div class="cita">'+esc(D.ev.cita)+'</div><p>'+esc(D.ev.resumen)+'</p>'):lec(null,'Evangelio de hoy');
+      if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+' de hoy: '+esc(D.relato.titulo||'')+'</b><p>'+esc(D.relato.resumen||'')+'</p>'+(D.relato.ensenanza?'<p class="small"><b style="display:inline;color:var(--ink)">Lo que enseña:</b> '+esc(D.relato.ensenanza)+'</p>':'')+'</div>';
+      return h;}
+    case 'Homilía':return D.homilia?box('Escucha pensando en esto','<p>'+esc(D.homilia)+'</p>'):'';
+    case 'Oración de los fieles':return '<div class="say big"><b>Tú respondes a cada petición</b><span class="prayer">'+esc(D.fieles)+'</span></div><p class="small mut" style="margin:4px 0 0">Si el lector dice otra fórmula al empezar, usa esa.</p>';
+  }
+  return '';
+}
+const YO=r=>/^(Pueblo|Todos|Tú)$/.test(r);
+function dialogo(p,D,compact){
+  const full=FULL[p.n];let h='';
+  p.dice.forEach(d=>{
+    if(p.n==='Oración de los fieles'||(p.n==='Salmo responsorial'))return;
+    if(YO(d[0])){
+      if(full&&/\(/.test(d[1]))return;
+      if(/^\(/.test(d[1])&&!/Amén/.test(d[1]))return;
+      let txt=d[1];
+      h+='<div class="say'+(compact?'':' big')+'"><b>'+(d[0]==='Todos'?'Todos decimos':'Tú respondes')+'</b><span class="prayer">'+esc(txt.replace(/^\(.*?\)\s*/,''))+'</span></div>';
+    }else{
+      let txt=d[1];
+      if(p.n==='Evangelio'&&/^Lectura del santo Evangelio/.test(txt)&&D.evIntro)txt=D.evIntro+'.';
+      h+='<div class="cue"><span>'+esc(d[0])+'</span>'+esc(txt)+'</div>';
+    }
+  });
+  if(full){
+    const T=oraT(full);
+    h+=compact?'<details class="mini"><summary>'+esc(p.n==='Acto penitencial'?'Yo confieso':p.n.replace(/ \(.*\)/,''))+' — ver texto completo</summary><div class="in"><p class="prayer">'+esc(T)+'</p></div></details>'
+      :'<div class="say big"><b>Todos decimos</b><span class="prayer">'+esc(T)+'</span></div>';
+  }
+  return h;
+}
+function introHtml(D){
+  const yes=(b,t)=>'<li class="'+(b?'y':'n')+'"><i>'+(b?'✓':'–')+'</i>'+esc(t)+'</li>';
+  let h='<div class="small mut">'+esc(cap(fmt(new Date())))+'</div><h2 style="margin:6px 0 8px">'+esc(D.titulo)+'</h2><div class="chips">'+(D.rango?'<span class="chip">'+esc(D.rango)+'</span>':'')+'<span class="chip"><i class="dot" style="background:'+esc(litColor(D.color))+'"></i>Color '+esc(D.color)+'</span></div>';
+  h+='<ul class="hoyl">'+yes(D.gloria,D.gloria?'Hoy se dice el Gloria':'Hoy no hay Gloria')+yes(D.segunda,D.segunda?'Hay segunda lectura':'Sin segunda lectura')+yes(D.credo,D.credo?'Hoy se reza el Credo':'Hoy no hay Credo')+'</ul>';
+  if(D.ok){
+    h+='<div class="hoyb"><b>Lecturas de hoy</b><p style="margin:2px 0 0">'+[D.l1,D.sal,D.l2,D.ev].filter(Boolean).map(l=>'<span class="cita" style="display:inline">'+esc(l.cita)+'</span>').join(' · ')+'</p></div>';
+    if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+' de hoy</b><p style="margin:2px 0 0">'+esc(D.relato.titulo||'')+'</p></div>';
+  }else h+='<p class="small mut">Las lecturas y la parábola del día se cargan cada mañana a las 9:00. Mientras tanto la guía funciona igual, con lo que se dice en cada Misa.</p>';
+  if(D.aviso)h+='<p class="small" style="margin:8px 0 0">'+esc(D.aviso)+'</p>';
+  h+='<p class="small" style="margin:12px 0 0">Toca <b>Siguiente</b> en cada momento. En dorado está <b>lo que tú dices</b>; en gris, lo que dice el sacerdote.</p>';
+  return h;
+}
+function viewVivo(){
+  const {D,G}=guiaPasos();let i=Math.max(0,Math.min(state.gi||0,G.length-1));
+  if(state.gskip!==false){while(i>0&&i<G.length-1&&G[i].skip)i+=(state.gdir||1)}
+  state.gi=i;const st=G[i],p=st.p;
+  let h='<div class="card guia"><div class="small mut">'+(i?'Paso '+i+' de '+(G.length-1)+' · ':'')+esc(st.s)+'</div><div class="bar"><i style="width:'+Math.round(i/(G.length-1)*100)+'%"></i></div>';
+  if(st.intro)h+=introHtml(D);
+  else{
+    h+='<h2 style="margin:8px 0 6px">'+esc(p.n)+'</h2><span class="chip">'+esc(p.pos)+'</span>';
+    if(st.skip)h+='<div class="hoyb"><b>Hoy se omite</b><p>'+esc(st.skip)+'</p></div>';
+    h+=hoyBox(p,D);
+    const dg=dialogo(p,D,false);h+=dg;
+    h+='<details class="mini"><summary>¿Qué pasa aquí y qué significa?</summary><div class="in"><p>'+esc(p.que)+'</p><p>'+esc(p.sig)+'</p><p class="small mut">'+esc(p.tip)+'</p></div></details>';
+  }
+  h+='</div><div class="gnav"><button class="btn ghost" data-act="gv" data-v="-1"'+(i===0?' disabled':'')+'>‹ Atrás</button><button class="btn" data-act="gv" data-v="1"'+(i===G.length-1?' disabled':'')+'>'+(i===0?'Empezar ›':'Siguiente ›')+'</button></div>';
+  h+='<label class="small mut" for="gsel">Ir a una parte</label><select id="gsel" data-act="gsel" class="gsel">'+G.map((g,j)=>'<option value="'+j+'"'+(j===i?' selected':'')+'>'+(j?j+'. ':'')+esc(g.p.n)+(g.skip?' (hoy no)':'')+'</option>').join('')+'</select>';
+  h+='<p class="note">Los textos siguen el Misal en español usado en Venezuela; pueden variar un poco según la parroquia. Si dudas, sigue a la comunidad.</p>';
+  return h;
+}
+/* ===== MISA: «Lo de hoy» — solo lo importante y lo que tú dices ===== */
+/* (se mantiene el nombre viewChuleta: la tarea diaria lo busca para saber que la app tiene la guía nueva) */
+function respHtml(p,D){
+  let h='';
+  if(p.n==='Salmo responsorial')h+='<div class="say"><b>Tú repites después de cada estrofa</b><span class="prayer">'+esc(D.salResp||'La frase que diga el salmista al comenzar.')+'</span></div>';
+  if(p.n==='Oración de los fieles')h+='<div class="say"><b>Tú respondes a cada petición</b><span class="prayer">'+esc(D.fieles)+'</span></div>';
+  if(p.n==='Aleluya'&&D.cuaresma)h+='<p class="small mut" style="margin:6px 0 0">Hoy no se dice «Aleluya»: se canta otra aclamación, por ejemplo «Gloria y alabanza a ti, Señor Jesús».</p>';
+  return h+dialogo(p,D,true);
+}
+function viewChuleta(){
+  const {D,G}=guiaPasos();
+  const yes=(b,t)=>'<li class="'+(b?'y':'n')+'"><i>'+(b?'✓':'–')+'</i>'+esc(t)+'</li>';
+  let h='<div class="card imp"><div class="small mut">'+esc(cap(fmt(new Date())))+'</div><h2>'+esc(D.titulo)+'</h2>'+
+    '<div class="chips">'+(D.rango?'<span class="chip">'+esc(D.rango)+'</span>':'')+'<span class="chip"><i class="dot" style="background:'+esc(litColor(D.color))+'"></i>Color '+esc(D.color)+'</span></div>'+
+    '<ul class="hoyl">'+yes(D.gloria,'Gloria')+yes(D.segunda,'2.ª lectura')+yes(D.credo,'Credo')+'</ul>';
+  if(D.aviso)h+='<div class="nota"><b>Nota importante</b>'+esc(D.aviso)+'</div>';
+  if(D.ev)h+='<div class="hoyb"><b>Evangelio de hoy</b><div class="cita">'+esc(D.ev.cita)+'</div><p>'+esc(D.ev.resumen)+'</p></div>';
+  else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Se carga cada mañana a las 9:00. <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Ver las lecturas ahora</a></p></div>';
+  if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+': '+esc(D.relato.titulo||'')+'</b><p>'+esc(D.relato.resumen||'')+'</p>'+(D.relato.ensenanza?'<p><b style="color:var(--ink)">Lo que enseña:</b> '+esc(D.relato.ensenanza)+'</p>':'')+'</div>';
+  if(D.homilia)h+='<div class="hoyb"><b>En la homilía, escucha</b><p>'+esc(D.homilia)+'</p></div>';
+  h+='</div><div class="row"><button class="btn big" data-act="gto" data-v="0">Seguir la Misa paso a paso</button></div>';
+  h+='<h2 class="sec">Lo que tú dices</h2><p class="note" style="margin-top:0">Solo los momentos en que respondes o rezas, en orden. En gris lo que dice el sacerdote; en dorado, lo tuyo.</p>';
+  let sec='',n=0;
+  G.slice(1).forEach((g,j)=>{
+    const r=respHtml(g.p,D);if(!r)return;
+    if(g.s!==sec){sec=g.s;h+='<div class="lbl" style="margin-top:20px">'+esc(sec)+'</div>'}
+    n++;
+    h+='<div class="resp"><div class="rh"><span class="num">'+n+'</span><b>'+esc(g.p.n.replace(/ \(.*\)/,''))+'</b><span class="pos">'+esc(g.p.pos.split(/[,(]/)[0])+'</span></div>'+r+'</div>';
+  });
+  h+='<p class="note">Los textos siguen el Misal en español usado en Venezuela; pueden variar un poco según la parroquia. Si dudas, sigue a la comunidad.</p>';
+  return h;
+}
+
+/* ===== ROSARIO GUIADO PARA PRINCIPIANTES ===== */
+const FATIMA='Oh Jesús mío, perdona nuestros pecados, líbranos del fuego del infierno, lleva al cielo a todas las almas, especialmente a las más necesitadas de tu misericordia.';
+const ORD=['Primer','Segundo','Tercer','Cuarto','Quinto'];
+const MED={
+gozosos:[['El ángel Gabriel le anuncia a María que será la Madre de Jesús, y ella responde: «Hágase».','la humildad'],['María va deprisa a ayudar a su prima Isabel, que espera a Juan el Bautista.','la caridad con los demás'],['Jesús nace pobre, en un establo de Belén.','un corazón sencillo'],['María y José llevan al Niño al templo y lo ofrecen a Dios.','la obediencia'],['Después de tres días buscándolo, encuentran a Jesús en el templo, en las cosas de su Padre.','buscar siempre a Jesús']],
+dolorosos:[['Jesús reza con angustia en el huerto de Getsemaní y acepta la voluntad del Padre.','aceptar la voluntad de Dios'],['Jesús es azotado y lo soporta en silencio por amor a nosotros.','la pureza y el dominio de uno mismo'],['Los soldados se burlan de Jesús y le ponen una corona de espinas.','la humildad ante las humillaciones'],['Jesús carga la cruz camino del Calvario; cae, pero se levanta y sigue.','la paciencia'],['Jesús muere en la cruz, perdona a quienes lo crucifican y nos entrega a María como Madre.','el amor y el perdón']],
+gloriosos:[['Al tercer día, Jesús vence a la muerte y resucita.','la fe'],['Jesús sube al cielo y envía a sus discípulos a anunciarlo a todos.','la esperanza'],['El Espíritu Santo desciende sobre María y los apóstoles reunidos.','el amor a Dios y las ganas de anunciarlo'],['María es llevada en cuerpo y alma al cielo.','el deseo del cielo'],['María es coronada Reina del cielo y de la tierra.','la confianza en María']],
+luminosos:[['Jesús es bautizado en el Jordán y el Padre lo llama «mi Hijo amado».','vivir como hijo de Dios'],['En unas bodas, por petición de María, Jesús convierte el agua en vino.','hacer lo que Jesús nos diga'],['Jesús anuncia el Reino de Dios y nos invita a convertirnos.','la conversión'],['En el monte, Jesús muestra su gloria a Pedro, Santiago y Juan.','escuchar a Jesús'],['En la Última Cena, Jesús se queda con nosotros en la Eucaristía.','el amor a la Eucaristía']]
+};
+const ROS_ORDER=(()=>{const o=['X','P1','s1','s2','s3','P2'];for(let k=1;k<=5;k++){for(let i=1;i<=10;i++)o.push('d'+k+'_'+i);if(k<5)o.push('G'+k)}o.push('M');return o})();
+function rosMap(active){
+  const ai=ROS_ORDER.indexOf(active),st=id=>{const i=ROS_ORDER.indexOf(id);return i===ai?' a':(ai>=0&&i<ai?' d':'')};
+  const cx=100,cy=86,R=70,loop=[];for(let k=1;k<=5;k++){for(let i=1;i<=10;i++)loop.push('d'+k+'_'+i);if(k<5)loop.push('G'+k)}
+  const N=loop.length+1;let s='<svg class="rmap" viewBox="0 0 200 262" aria-hidden="true"><circle class="ch" cx="'+cx+'" cy="'+cy+'" r="'+R+'"/><path class="ch" d="M100 156V244"/>';
+  let ring='';
+  loop.forEach((id,i)=>{const a=(90+(i+1)*360/N)*Math.PI/180,x=(cx+R*Math.cos(a)).toFixed(1),y=(cy+R*Math.sin(a)).toFixed(1),big=id[0]==='G',r=big?5.6:3.5;
+    s+='<circle class="b'+st(id)+'" cx="'+x+'" cy="'+y+'" r="'+r+'"/>';if(id===active)ring='<circle class="ring" cx="'+x+'" cy="'+y+'" r="'+(r+4)+'"/>'});
+  const pend=[['M',158,'m'],['P2',174,5.6],['s3',188,3.5],['s2',199,3.5],['s1',210,3.5],['P1',224,5.6]];
+  pend.forEach(([id,y,r])=>{
+    if(r==='m'){s+='<rect class="b'+st(id)+'" x="93" y="'+(y-6)+'" width="14" height="12" rx="5"/>';if(id===active)ring='<rect class="ring" x="88" y="'+(y-11)+'" width="24" height="22" rx="9"/>'}
+    else{s+='<circle class="b'+st(id)+'" cx="100" cy="'+y+'" r="'+r+'"/>';if(id===active)ring='<circle class="ring" cx="100" cy="'+y+'" r="'+(r+4)+'"/>'}
+  });
+  const xc=st('X');s+='<path class="cx'+xc+'" d="M100 234V258M92 242H108"/>';if(active==='X')ring='<circle class="ring" cx="100" cy="245" r="15"/>';
+  return s+ring+'</svg>';
+}
+function rosPasos(k){
+  const M=MISTERIOS[k],md=MED[k],P=[];
+  const pr=id=>'<div class="say"><b>Reza</b><span class="prayer">'+esc(oraT(id))+'</span></div>';
+  P.push({intro:true,t:'Antes de empezar',bead:''});
+  P.push({t:'Señal de la Cruz',bead:'X',w:'Toma la cruz con la mano',b:'<p>Con la mano derecha toca la frente (Padre), el pecho (Hijo), el hombro izquierdo y luego el derecho (Espíritu Santo).</p><div class="say"><b>Di</b><span class="prayer">En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</span></div>'});
+  P.push({t:'Ofrece tu Rosario',bead:'X',w:'Sigue con la cruz en la mano',b:'<p>Dile a Dios, con tus palabras, por quién o por qué rezas hoy. Por ejemplo:</p><div class="say"><b>Di</b><span class="prayer">Señor, te ofrezco este Rosario por… (tu intención).</span></div><details class="mini"><summary>Si quieres, añade el Acto de contrición</summary><div class="in"><p class="prayer">'+esc(oraT('contri'))+'</p></div></details>'});
+  P.push({t:'Credo',bead:'X',w:'Todavía en la cruz',b:'<p class="small mut">Es la profesión de fe. Si aún no te lo sabes, léelo aquí sin pena: así se aprende.</p>'+pr('credoap'),say:'credoap'});
+  P.push({t:'Padre Nuestro',bead:'P1',w:'Primera cuenta grande, encima de la cruz',b:pr('padre'),say:'padre'});
+  P.push({t:'Tres Ave Marías',bead:'s',n:3,w:'Las tres cuentas pequeñas',b:'<p class="small mut">Una por cada virtud: la fe, la esperanza y la caridad. Pasa una cuenta con los dedos en cada Ave María.</p>'+pr('ave'),say:'ave'});
+  P.push({t:'Gloria',bead:'P2',w:'En la cadena, antes de la siguiente cuenta grande',b:pr('gloria'),say:'gloria'});
+  for(let i=0;i<5;i++){
+    const nm=ORD[i]+' misterio '+M.n.toLowerCase().replace(/s$/,''),big=i===0?'P2':'G'+i;
+    P.push({t:nm,bead:big,w:'En la cuenta grande',myst:i,b:'<div class="say"><b>Anuncia en voz alta</b><span class="prayer">'+esc(nm)+': '+esc(M.list[i])+'.</span></div><p>'+esc(md[i][0])+'</p><p class="small"><b>Pídele a Dios:</b> '+esc(md[i][1])+'.</p>'});
+    P.push({t:'Padre Nuestro',bead:big,w:'En la misma cuenta grande',b:pr('padre'),say:'padre'});
+    P.push({t:'Diez Ave Marías',bead:'d'+(i+1)+'_',n:10,w:'Las diez cuentas pequeñas',b:'<p class="small mut">Mientras rezas, imagina la escena: '+esc(md[i][0].charAt(0).toLowerCase()+md[i][0].slice(1))+'</p>'+pr('ave'),say:'ave'});
+    P.push({t:'Gloria y «Oh Jesús mío»',bead:i<4?'G'+(i+1):'M',w:'Al terminar las diez, antes de la siguiente cuenta grande',b:pr('gloria')+'<div class="say"><b>Y añade</b><span class="prayer">'+esc(FATIMA)+'</span></div>'});
+  }
+  P.push({t:'Salve',bead:'M',w:'En la medalla, donde se unen las cuentas',b:'<p class="small mut">Terminaste las cinco decenas. Ahora saludas a María como Reina y Madre.</p>'+pr('salve'),say:'salve'});
+  P.push({t:'Por el Papa (opcional)',bead:'M',w:'Sigue en la medalla',b:'<p>Reza un Padre Nuestro, un Ave María y un Gloria por las intenciones del Papa.</p>'});
+  P.push({t:'Señal de la Cruz',bead:'X',w:'Vuelve a la cruz',b:'<div class="say"><b>Di</b><span class="prayer">En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</span></div>'});
+  return P;
+}
+function rosSave(){store.set('ros',{d:ymd(new Date()),rs:state.rs,rc:state.rc,rk:state.rk})}
+function viewRosPaso(){
+  const t=new Date(),L=liturgia(t),hoyK=Object.keys(MISTERIOS).find(k=>MISTERIOS[k]===misDia(t,L));
+  if(!state.rk)state.rk=hoyK;
+  const P=rosPasos(state.rk),tot=P.length;let i=Math.max(0,Math.min(state.rs||0,tot));state.rs=i;
+  let h='<div class="pager"><div class="small mut">'+(i===0?'Rosario guiado':i<tot?'Paso '+i+' de '+(tot-1):'¡Terminaste!')+'</div><div class="bar"><i style="width:'+Math.round(Math.min(i,tot-1)/(tot-1)*100)+'%"></i></div><div class="pb">';
+  if(i===tot){
+    h+='<div class="fin">'+ic('check')+'<h2>¡Rezaste el Rosario!</h2><p>María te acompaña. Lo que hoy meditaste se queda contigo.</p></div></div><div class="pn"><button class="btn ghost" data-act="rs" data-v="0">Empezar de nuevo</button><button class="btn" data-act="rdone">Marcar en mi rutina</button></div><p class="note" id="rmsg" style="text-align:center"></p></div>';
+    return h;
+  }
+  const p=P[i];
+  if(p.intro){
+    h+=rosMap('')+'<h2>Antes de empezar</h2><ul class="tight"><li><b>Qué es:</b> repasas con María la vida de Jesús mientras rezas.</li><li><b>Qué necesitas:</b> un rosario, o tus diez dedos para contar.</li><li><b>Cuánto dura:</b> unos 20 minutos. Si tienes poco tiempo, una sola decena también vale.</li><li><b>Cómo funciona aquí:</b> en cada paso te digo dónde van tus dedos (la cuenta en dorado) y qué rezar.</li></ul>'+
+      '<div class="lbl">Misterios que vas a rezar</div><div class="pick">'+Object.keys(MISTERIOS).map(k=>'<button data-act="rk" data-v="'+k+'" aria-pressed="'+(state.rk===k)+'">'+esc(MISTERIOS[k].n)+'<small>'+(k===hoyK?'Los de hoy':esc(MISTERIOS[k].dias))+'</small></button>').join('')+'</div>';
+  }else{
+    const n=p.n||0,c=Math.min(state.rc||0,n);
+    const bead=n?(p.bead==='s'?'s'+Math.min(c+1,3):p.bead+Math.min(c+1,10)):p.bead;
+    h+=rosMap(bead)+'<h2 style="margin-top:6px">'+esc(p.t)+'</h2><span class="where">👉 '+esc(p.w)+'</span>'+p.b;
+    if(p.say)h+='<div class="row" style="margin:6px 0">'+sayBtn('r_'+p.say,oraT(p.say).replace(/\n/g,' '))+'</div>';
+    if(n){
+      h+='<div class="beads" aria-hidden="true">'+Array.from({length:n},(_,j)=>'<i class="'+(j<c?'on':'')+'"></i>').join('')+'</div>';
+      h+=c<n?'<button class="tap" data-act="rtap">Toca al terminar cada Ave María · '+c+' de '+n+'</button>':'<button class="tap ok" data-act="rs" data-v="'+(i+1)+'">¡Listo, '+n+' de '+n+'! Toca para seguir ›</button>';
+      if(c>0)h+='<div style="text-align:center"><button class="lk" data-act="rtap" data-v="-1">Me equivoqué, quitar una</button></div>';
+    }
+  }
+  h+='</div><div class="pn"><button class="btn ghost" data-act="rs" data-v="'+(i-1)+'"'+(i===0?' disabled':'')+'>‹ Atrás</button><button class="btn" data-act="rs" data-v="'+(i+1)+'">'+(i===0?'Empezar ›':i===tot-1?'Terminar ›':'Siguiente ›')+'</button></div></div>';
+  h+='<p class="note">Se recuerda dónde ibas si cierras la app hoy. Puedes ir a tu ritmo: no hay prisa.</p>';
+  return h;
+}
+function viewRosario(){
+  const v=state.rv||'paso';
+  let h='<div class="seg" role="group" aria-label="Rosario"><button data-act="rv" data-v="paso" aria-pressed="'+(v==='paso')+'">Rezar paso a paso</button><button data-act="rv" data-v="info" aria-pressed="'+(v==='info')+'">Los misterios</button></div>';
+  if(v==='paso')return h+viewRosPaso();
+  const t=new Date(),L=liturgia(t),m=misDia(t,L);
+  h+='<div class="card tint"><div class="lbl">Misterios de hoy</div><h3 style="margin-top:0">'+esc(m.n)+'</h3><ol class="tight">'+m.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
+  h+='<h2 class="sec">Qué día se reza cada uno</h2>'+Object.keys(MISTERIOS).map(k=>{const x=MISTERIOS[k];return '<details><summary>'+esc(x.n)+' · <span class="mut" style="font-weight:400">'+esc(x.dias)+'</span></summary><div class="in"><ol class="tight">'+x.list.map((y,i)=>'<li><b>'+esc(y)+'.</b> <span class="small">'+esc(MED[k][i][0])+'</span></li>').join('')+'</ol></div></details>'}).join('');
+  h+='<h2 class="sec">El Rosario en resumen</h2><div class="card"><ol class="tight" style="margin:0">'+ROSARIO_PASOS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div><p class="note">Los domingos de Adviento y Navidad se suelen rezar los gozosos, y los de Cuaresma los dolorosos.</p>';
+  return h;
+}
+
+/* ===== APÓSTOL: para quien acompaña, hace apostolado y dirección espiritual ===== */
+const DIR_PASOS=[
+['Acogida y oración','Pon la conversación en manos del Espíritu Santo (un «Ven, Espíritu Santo» breve). Escucha antes de hablar.'],
+['¿Cómo llegas?','Una pregunta abierta: «¿Cómo has estado desde la última vez?». Deja que la persona marque el tema.'],
+['Revisión de vida','Repasa con calma dos o tres áreas (abajo). No todas cada vez.'],
+['Discernir','Ayuda a distinguir lo que viene de Dios de lo que no: consolación y desolación.'],
+['Un propósito','Pequeño, concreto y medible, formulado por la persona con sus palabras.'],
+['Cierre','Una oración breve, fecha de la próxima conversación y anota lo esencial en «Mis acompañados».']
+];
+const DIR_AREAS=[
+['Vida de oración',['¿Cuánto tiempo das cada día a la oración personal?','¿Cómo rezas: lees, hablas, escuchas, te quedas en silencio?','¿Qué te está diciendo Dios últimamente?','¿Qué te distrae o te cuesta más?']],
+['Sacramentos',['¿Con qué frecuencia vas a Misa y te confiesas?','¿Cómo vives la comunión? ¿Te preparas y das gracias?','¿Hay algo que te impida acercarte?']],
+['Trabajo y deberes',['¿Ofreces tu trabajo o estudio a Dios?','¿Trabajas con orden, honradez y alegría?','¿Qué tensiones vives ahí y cómo las llevas?']],
+['Familia y relaciones',['¿Cómo está tu relación con tu familia?','¿Hay alguien a quien necesites perdonar o pedir perdón?','¿Tus amistades te acercan o te alejan de Dios?']],
+['Virtudes y lucha',['¿Cuál es tu defecto dominante?','¿Qué virtud estás trabajando ahora?','¿Dónde caes con más frecuencia y qué medios pones?']],
+['Apostolado',['¿A quién estás acercando a Dios?','¿Qué te frena para hablar de tu fe?','¿Cómo sirves en tu comunidad o en tu equipo?']],
+['Formación',['¿Qué estás leyendo?','¿Qué duda de fe tienes hoy?','¿Qué te gustaría entender mejor?']]
+];
+const DISCER=[
+['Consolación','Todo lo que aumenta la fe, la esperanza y el amor, y deja paz interior que lleva a Dios.'],
+['Desolación','Oscuridad, inquietud, tristeza o ganas de dejarlo todo; aleja de Dios.'],
+['En desolación, no cambies','No se toman decisiones nuevas: se mantienen los propósitos hechos en tiempo de paz.'],
+['En desolación, insiste','Más oración, examen y alguna pequeña penitencia; recordar que la gracia sigue ahí.'],
+['En consolación, prepárate','Agradece con humildad y guarda fuerzas para cuando lleguen los días difíciles.'],
+['Lo que se habla pierde fuerza','La tentación pide secreto; contarla a quien acompaña le quita poder.'],
+['El punto débil','El mal ataca por donde somos más frágiles: conocerlo ayuda a fortalecerlo.']
+];
+const LIMITES=[
+'La dirección espiritual no es confesión: lo que corresponde a la absolución, llévalo al sacerdote.',
+'Si notas tristeza profunda y persistente, ansiedad fuerte, ideas de hacerse daño, adicciones o escrúpulos que paralizan, recomienda con cariño buscar también ayuda profesional (psicólogo o médico).',
+'Si hay riesgo para alguien o una situación de abuso, no lo manejes solo: acude al sacerdote responsable y a las autoridades que correspondan.',
+'Guarda absoluta reserva de lo que te confían.',
+'Respeta la libertad: propones, no impones. El protagonista es el Espíritu Santo.',
+'Tú también necesitas acompañamiento: nadie se guía solo.'
+];
+const KERIGMA=[['Dios te ama','Te creó por amor y tiene un plan bueno para tu vida.'],['El pecado nos aleja','Solos no podemos volver a Él.'],['Jesús nos salva','Murió y resucitó para darnos vida nueva.'],['Tu respuesta','Creer, convertirse, recibir el Espíritu Santo y vivir la fe en la Iglesia.']];
+const APO_TIPS=['Reza primero por la persona; después habla con ella.','Escucha más de lo que hablas: interésate por su vida.','Cuenta tu experiencia; no ganes discusiones.','Invita a algo concreto: una Misa, un Encuentro, una visita al Santísimo.','Ten paciencia: tú siembras, Dios hace crecer.'];
+const OBJ=[
+['«Yo creo en Dios, pero no en la Iglesia»','Jesús no dejó solo una idea, sino una comunidad: llamó a los apóstoles y fundó su Iglesia sobre ellos. Los defectos de sus miembros son reales, pero la Iglesia es santa por Cristo, no por nosotros.','Catecismo 748-776'],
+['«¿Por qué confesarme con un sacerdote?»','Solo Dios perdona los pecados, y Jesús quiso dar a los apóstoles ese ministerio («a quienes les perdonen los pecados…», Juan 20, 23). En la confesión escuchas con tus oídos que estás perdonado.','Catecismo 1441-1442 y 1461'],
+['«Si Dios es bueno, ¿por qué hay sufrimiento?»','No hay una respuesta corta: la respuesta es toda la fe cristiana. Dios no es indiferente: en Jesús sufre con nosotros y saca bien incluso del mal.','Catecismo 309-314'],
+['«La Misa es aburrida»','La Misa no es un espectáculo: es Jesús que se da. Entender sus partes y participar cambia la experiencia (la pestaña Misa ayuda).','Catecismo 1324'],
+['«Basta con ser buena persona»','Ser bueno es parte del camino, pero la fe es una relación con Alguien que nos ama y nos da fuerzas para amar más de lo que podríamos solos.','Catecismo 1691-1698']
+];
+function viewApo(){
+  const s=state.sub.apo,H=encData();
+  if(s==='dir'){
+    let h=segHtml('apo')+'<h2 class="sec" style="margin-top:14px">Cómo llevar una conversación</h2>'+DIR_PASOS.map((p,i)=>step(i+1,p[0],'<p>'+esc(p[1])+'</p>',false)).join('');
+    h+='<h2 class="sec">Preguntas por área</h2>'+DIR_AREAS.map(a=>'<details><summary>'+esc(a[0])+'</summary><div class="in"><ul class="qa">'+a[1].map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div></details>').join('');
+    h+='<h2 class="sec">Discernimiento</h2><div class="card">'+DISCER.map(d=>'<p><b>'+esc(d[0])+'.</b> '+esc(d[1])+'</p>').join('')+'<p class="small mut" style="margin-bottom:0">Resumen con nuestras palabras de las reglas de discernimiento de los Ejercicios Espirituales de san Ignacio de Loyola.</p></div>';
+    h+='<h2 class="sec">Prudencia y límites</h2><div class="card"><ul class="tight" style="margin:0">'+LIMITES.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+    return h;
+  }
+  if(s==='apo'){
+    const act=H&&H.encuentro&&H.encuentro.actuar?H.encuentro.actuar.filter(x=>/apostolado/i.test(x)):[];
+    let h=segHtml('apo');
+    if(act.length)h+='<div class="nota"><b>Propuesta de apostolado de hoy</b>'+esc(act[0].replace(/^Apostolado:\s*/i,''))+'</div>';
+    h+='<h2 class="sec" style="margin-top:14px">El anuncio en 4 pasos</h2><div class="card">'+KERIGMA.map((k,i)=>'<p><span class="num" style="display:inline-flex;margin-right:8px">'+(i+1)+'</span><b>'+esc(k[0])+'.</b> '+esc(k[1])+'</p>').join('')+'</div>';
+    h+='<h2 class="sec">Para hablar de fe</h2><div class="card"><ul class="tight" style="margin:0">'+APO_TIPS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
+    h+='<h2 class="sec">Preguntas difíciles</h2>'+OBJ.map(o=>'<details><summary>'+esc(o[0])+'</summary><div class="in"><p>'+esc(o[1])+'</p><p class="small mut">Para profundizar: '+esc(o[2])+'</p></div></details>').join('');
+    h+='<h2 class="sec">Mis tres personas</h2><div class="card"><p class="small mut" style="margin-top:0">Escribe por quién rezas y a quién quieres acercar a Dios este mes. Se guarda solo en este dispositivo.</p><textarea data-k="apo3" placeholder="1. …&#10;2. …&#10;3. …">'+esc(store.get('apo3',''))+'</textarea></div>';
+    h+='<div class="row"><a class="btn ghost" href="https://www.vatican.va/archive/catechism_sp/index_sp.html" target="_blank" rel="noopener noreferrer">Abrir el Catecismo</a></div>';
+    return h;
+  }
+  if(s==='fichas'){
+    const F=store.get('fichas',[]);
+    let h=segHtml('apo')+'<div class="card"><h3>Nueva conversación</h3>'+
+      '<label class="lbl" for="fn">Nombre o iniciales</label><input id="fn" class="fi" placeholder="Por ejemplo: J. R.">'+
+      '<label class="lbl" for="ff">Fecha</label><input id="ff" class="fi" type="date" value="'+ymd(new Date())+'">'+
+      '<label class="lbl" for="ft">Temas que salieron</label><textarea id="ft" style="min-height:70px"></textarea>'+
+      '<label class="lbl" for="fp">Propósito que tomó</label><textarea id="fp" style="min-height:50px"></textarea>'+
+      '<label class="lbl" for="fx">Próxima conversación</label><input id="fx" class="fi" type="date">'+
+      '<div class="row"><button class="btn" data-act="fsave">Guardar</button></div><p class="note" id="fmsg" style="margin:0"></p></div>';
+    if(F.length){
+      h+='<h2 class="sec">Historial</h2><div class="card">'+F.map((f,i)=>'<div class="ficha"><b>'+esc(f.n)+'</b> <span class="small mut">· '+esc(f.f)+'</span>'+(f.t?'<p class="small" style="margin:4px 0"><b>Temas:</b> '+esc(f.t)+'</p>':'')+(f.p?'<p class="small" style="margin:4px 0"><b>Propósito:</b> '+esc(f.p)+'</p>':'')+(f.x?'<p class="small mut" style="margin:4px 0">Próxima: '+esc(f.x)+'</p>':'')+'<button class="lk" data-act="fdel" data-i="'+i+'">Borrar</button></div>').join('')+'</div>';
+    }
+    h+='<p class="note">Todo se guarda solo en este dispositivo. Usa iniciales para cuidar la privacidad de quien te abre su alma.</p>';
+    return h;
+  }
+  /* Meditación de hoy */
+  let h=segHtml('apo');
+  if(!H)return h+'<div class="card"><p style="margin-top:0">La meditación de hoy se prepara cada mañana a las 9:00 con el Evangelio.</p><a class="btn ghost" href="https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(new Date())+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
+  const E=H.evangelio,X=H.encuentro||{};
+  h+='<div class="card imp"><div class="lbl" style="margin-top:0">Evangelio · '+esc(E.cita)+'</div>'+(X.frase?'<p class="prayer" style="font-family:var(--fd);font-size:1.3rem;line-height:1.4;margin:4px 0">«'+esc(X.frase.texto)+'»</p>':'')+'</div>';
+  if(X.luces)h+='<h2 class="sec">Puntos para meditar o predicar</h2><div class="card"><ol class="tight" style="margin:0">'+X.luces.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
+  if(X.conexion)h+='<div class="hoyb par"><b>Se ilumina con · '+esc(X.conexion.cita)+'</b><p>'+esc(X.conexion.idea)+'</p></div>';
+  if(X.voz)h+='<div class="hoyb"><b>'+esc(X.voz.autor)+'</b><p>«'+esc(X.voz.texto)+'»</p>'+(X.voz.url?'<p class="small"><a href="'+esc(X.voz.url)+'" target="_blank" rel="noopener noreferrer">'+esc(X.voz.obra||'Fuente')+'</a></p>':'')+'</div>';
+  h+='<details><summary>El sentido de fondo</summary><div class="in"><p>'+esc(E.contexto)+'</p><p>'+esc(E.significado)+'</p></div></details>';
+  const qs=[].concat(X.ver||[],X.juzgar||[]);
+  if(qs.length)h+='<details><summary>Preguntas para acompañar a otros hoy</summary><div class="in"><ul class="qa">'+qs.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div></details>';
+  h+='<h2 class="sec">Lectio divina en 4 tiempos</h2><div class="card"><p><b>Leer:</b> ¿qué dice el texto?</p><p><b>Meditar:</b> ¿qué me dice a mí?</p><p><b>Orar:</b> ¿qué le respondo a Dios?</p><p style="margin-bottom:0"><b>Contemplar:</b> quedarme en silencio con Él.</p></div>';
+  h+='<div class="row"><a class="btn ghost" href="'+esc(H.fuente||'https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(new Date()))+'" target="_blank" rel="noopener noreferrer">Texto bíblico completo</a></div>';
+  return h;
+}
+
+/* ===== RENDER ===== */
+const VIEWS={hoy:viewHoy,enc:viewEnc,misa:viewMisa,orar:viewOrar,apr:viewApr,apo:viewApo,dia:viewDia};
+function renderNav(){
+  $('#tabs').innerHTML='<div class="in">'+TABS.map(t=>'<button data-act="tab" data-v="'+t.id+'"'+(state.tab===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>').join('')+'</div>';
+}
+function render(keepScroll){
+  stopSpeak();
+  const y=window.scrollY;state.say={};
+  $('#hd').innerHTML=viewHd();
+  $('#main').innerHTML=VIEWS[state.tab]();
+  renderNav();
+  window.scrollTo(0,keepScroll?y:0);
+}
+
+/* ===== VOZ ===== */
+function stopSpeak(){
+  if(TTS)try{speechSynthesis.cancel()}catch(e){}
+  state.speaking=null;
+  document.querySelectorAll('[data-act="speak"]').forEach(b=>b.textContent='Escuchar');
+}
+function speak(id,btn){
+  if(!TTS)return;
+  if(state.speaking===id){stopSpeak();return}
+  stopSpeak();
+  const u=new SpeechSynthesisUtterance(state.say[id]||'');
+  u.lang='es-419';u.rate=.95;
+  try{const v=speechSynthesis.getVoices().find(x=>/^es/i.test(x.lang));if(v)u.voice=v}catch(e){}
+  u.onend=u.onerror=()=>{if(state.speaking===id){state.speaking=null;btn.textContent='Escuchar'}};
+  state.speaking=id;btn.textContent='Detener';
+  speechSynthesis.speak(u);
+}
+
+/* ===== EVENTOS ===== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,v=b.dataset.v;
+  if(a==='tab'){state.tab=v;store.set('tab',v);render()}
+  else if(a==='sub'){state.sub[state.tab]=v;store.set('sub',state.sub);render()}
+  else if(a==='go'){state.tab=v;if(b.dataset.s){state.sub[v]=b.dataset.s;store.set('sub',state.sub)}store.set('tab',v);render()}
+  else if(a==='qf'){state.qf=v;state.q=null;render(true)}
+  else if(a==='ans'){
+    const q=state.q;if(!q||q.pick!==null)return;
+    q.pick=+b.dataset.i;
+    const box=store.get('box',{}),good=q.opts[q.pick]===q.c.a;
+    box[q.c.id]=good?Math.min((box[q.c.id]||0)+1,4):0;store.set('box',box);
+    $('#quiz').innerHTML=quizHtml();
+  }
+  else if(a==='next'){nextCard();$('#quiz').innerHTML=quizHtml()}
+  else if(a==='resetbox'){store.set('box',{});state.q=null;render(true)}
+  else if(a==='speak')speak(v,b);
+  else if(a==='yr'){state.year+=+v;render(true)}
+  else if(a==='exadone'){
+    const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];if(!r[k].includes('examen'))r[k].push('examen');store.set('rut',r);
+    $('#examsg').textContent='Marcado en tu rutina de hoy. Que Dios te dé buen descanso.';
+  }
+  else if(a==='pray'){state.tab='enc';state.sub.enc='paso';state.ps=0;state.plist=false;store.set('tab','enc');store.set('sub',state.sub);render()}
+  else if(a==='ps'){state.ps=Math.max(0,+v);render()}
+  else if(a==='plist'){state.plist=v==='1';render()}
+  else if(a==='gv'){state.gdir=+v;state.gi=(state.gi||0)+(+v);render()}
+  else if(a==='gto'){state.gdir=1;state.gi=+v;state.sub.misa='vivo';store.set('sub',state.sub);render()}
+  else if(a==='dsave'){
+    const g=id=>($('#'+id)||{}).value||'';const e={fecha:g('dfecha'),evang:g('devang').trim(),luces:g('dluces').trim(),caso:g('dcaso').trim(),proposito:g('dprop').trim(),mio:g('dmio').trim(),res:''};
+    if(!e.luces&&!e.caso&&!e.proposito&&!e.mio){$('#dmsg').textContent='Escribe al menos una luz, el caso o un propósito.';return}
+    const D=store.get('diario',[]);D.unshift(e);D.sort((x,y)=>x.fecha<y.fecha?1:-1);store.set('diario',D);render(true);
+  }
+  else if(a==='ddel'){const D=store.get('diario',[]);D.splice(+b.dataset.i,1);store.set('diario',D);render(true)}
+  else if(a==='rv'){state.rv=v;render()}
+  else if(a==='rk'){state.rk=v;rosSave();render(true)}
+  else if(a==='rs'){state.rs=Math.max(0,+v);state.rc=0;rosSave();render()}
+  else if(a==='rtap'){state.rc=Math.max(0,(state.rc||0)+(v==='-1'?-1:1));rosSave();render(true)}
+  else if(a==='rdone'){const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];if(!r[k].includes('rosario'))r[k].push('rosario');store.set('rut',r);$('#rmsg').textContent='Marcado en tu rutina de hoy.'}
+  else if(a==='fsave'){
+    const g=id=>(($('#'+id)||{}).value||'').trim();const f={n:g('fn'),f:g('ff'),t:g('ft'),p:g('fp'),x:g('fx')};
+    if(!f.n){$('#fmsg').textContent='Escribe al menos el nombre o las iniciales.';return}
+    const F=store.get('fichas',[]);F.unshift(f);F.sort((x,y)=>x.f<y.f?1:-1);store.set('fichas',F);render(true);
+  }
+  else if(a==='fdel'){const F=store.get('fichas',[]);F.splice(+b.dataset.i,1);store.set('fichas',F);render(true)}
+  else if(a==='resetconf'){store.set('conf',{});render(true)}
+  else if(a==='notedate'){
+    const ta=$('#notes');ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n':'')+cap(fmt(new Date()))+':\n';store.set('notes',ta.value);ta.focus();
+  }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='gsel'){state.gdir=1;state.gi=+e.target.value;state.gskip=false;render();state.gskip=true;return}
+  const b=e.target.closest('input[type="checkbox"][data-act]');if(!b)return;
+  if(b.dataset.act==='rut'){
+    const r=store.get('rut',{}),k=ymd(new Date());let l=r[k]||[];
+    l=b.checked?l.concat(l.includes(b.dataset.id)?[]:[b.dataset.id]):l.filter(x=>x!==b.dataset.id);
+    r[k]=l;store.set('rut',r);
+    $('#rp').textContent=l.length;$('#rbar').style.width=Math.round(l.length/RUTINA.length*100)+'%';
+    const n=streak();$('#rs').textContent=n;
+  }else if(b.dataset.act==='conf'){
+    const c=store.get('conf',{});if(b.checked)c[b.dataset.id]=true;else delete c[b.dataset.id];store.set('conf',c);
+    $('#cn').textContent=Object.keys(c).length;
+  }
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.matches('textarea[data-k]')){
+    if(t.dataset.k==='notes'||t.dataset.k==='apo3'){store.set(t.dataset.k,t.value)}
+    else{const x=store.get('exa',{}),k=ymd(new Date());x[k]=x[k]||{};x[k][t.dataset.k]=t.value;store.set('exa',x)}
+  }else if(t.matches('textarea[data-enc]')){
+    const k=ymd(new Date()),all=store.get('encn',{});all[k]=all[k]||{};all[k][t.dataset.enc]=t.value;store.set('encn',all);
+    const H=encData(),el=$('#mishare');if(H&&el){const sh=composeShare(H.evangelio.cita,all[k]);el.innerHTML=sh?esc(sh):'<span class="mut">Escribe arriba tu palabra, tu luz o tu propósito y aquí se arma tu intervención.</span>';state.say.share=sh}
+  }else if(t.matches('textarea[data-caso]')){
+    const c=store.get(t.dataset.caso,{});c[t.dataset.f]=t.value;store.set(t.dataset.caso,c);
+  }else if(t.matches('textarea[data-dres]')){
+    const D=store.get('diario',[]),i=+t.dataset.dres;if(D[i]){D[i].res=t.value;store.set('diario',D)}
+  }else if(t.id==='gq'){state.gq=t.value;$('#glist').innerHTML=glosList()}
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&ymd(new Date())!==state.day){state.day=ymd(new Date());state.year=new Date().getFullYear();render()}});
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>render(true))}catch(e){}
+render();
+})();
+</script>
+
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
+</body></html>
