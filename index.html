@@ -777,11 +777,11 @@ function misDia(t,L){
 function viewHoy(){
   const t=new Date(),L=liturgia(t),H=window.HOY,ok=!!(H&&H.evangelio),viejo=ok&&H.fecha!==ymd(t);
   const link='https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(t);
-  const X=ok&&H.encuentro||{},E=ok?H.evangelio:null;
-  const frase=X.frase?X.frase.texto:(E?'Evangelio según '+E.cita:'Señor, ¿qué quieres decirme hoy?');
-  const cita=X.frase?X.frase.cita:(E?'':'');
+  const X=ok&&!viejo&&H.encuentro||{},E=ok?H.evangelio:null;
+  const FD=fraseDia(t),frase=X.frase?X.frase.texto:(viejo||!E?FD[1]:'Evangelio según '+E.cita);
+  const cita=X.frase?X.frase.cita:(viejo||!E?FD[0]:'');
   const HK=Object.keys(FE),nvh=novenaHoy(t),dk=(nvh&&NOV_IMG[nvh.f.nov.id])||HK[((dayN()%HK.length)+HK.length)%HK.length];
-  let h=phHtml(dk,'<i class="dot"></i>'+esc(L.titulo)+' · '+esc(cap(fmt(t))),(X.frase?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
+  let h=phHtml(dk,'<i class="dot"></i>'+esc(L.titulo)+' · '+esc(cap(fmt(t))),(X.frase||viejo||!E?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
