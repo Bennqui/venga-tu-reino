@@ -1,12 +1,10 @@
-<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FAF7F0"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FFFDF8"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name="color-scheme" content="light only"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
 <style>
 /* Diseño «Crepúsculo de Barquisimeto»: lo único llamativo es el cielo de la portada, que cambia con la hora
    y lleva el color litúrgico del día. Todo lo demás es tranquilo: fondo de cal fría, tinta índigo, oro discreto.
    Marcellus (letra de inscripción romana) para títulos; Literata (hecha para leer en pantalla) para el texto. */
-:root{--bg:#FAF7F0;--card:#FFFFFF;--ink:#1F2140;--mut:#5F627A;--line:#EAE3D3;--soft:#F2ECDF;--gold:#9A6E0C;--gold-bg:#FBF1D6;--wine:#1F2140;--on-wine:#FFFFFF;--ok:#2E7A4F;--bad:#B3302F;--lit:#3F7D4E;--tint:#F6F0E3;--vy:#E8B923;--vw:#FFFFFF;
---fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13142A;--card:#1C1E38;--ink:#ECEAF6;--mut:#A9ABC6;--line:#2F3254;--soft:#24264A;--gold:#E2B75E;--gold-bg:#2A2638;--wine:#ECEAF6;--on-wine:#13142A;--ok:#6CC38A;--bad:#FF8F8A;--tint:#22244A;color-scheme:dark}}
+:root{--bg:#FFFDF8;--card:#FFFFFF;--ink:#2A2316;--mut:#7A6D55;--line:#EFE5CC;--soft:#F8F1DE;--gold:#9C700A;--gold-bg:#FDF4D6;--wine:#E1AE1E;--on-wine:#2A2316;--ok:#2E7A4F;--bad:#B3302F;--lit:#C9960F;--litc:#C9960F;--tint:#FBF5E6;--vy:#E8B923;--vw:#FFFFFF;--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.6;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:12px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 #app{max-width:620px;margin:0 auto}
@@ -34,7 +32,7 @@ a{color:var(--ink);text-decoration-color:var(--gold);text-underline-offset:3px}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;padding:3px 11px;border-radius:999px;background:var(--soft);color:var(--ink)}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--lit);display:inline-block;box-shadow:0 0 0 2px color-mix(in srgb,var(--lit) 25%,transparent)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--litc);display:inline-block;box-shadow:0 0 0 2px color-mix(in srgb,var(--lit) 25%,transparent)}
 /* Superficies: una sola tarjeta blanca sin sombra; lo secundario va sobre el fondo */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:12px 0}
 .card.tint{background:transparent;border:0;border-left:3px solid var(--lit);border-radius:0;padding:4px 0 4px 14px}
@@ -228,6 +226,36 @@ summary:active{background:var(--soft);border-radius:16px}
 .story .cap{text-align:left;padding:0 26px calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(calc((1 - var(--o,1))*-34px))}
 .story .cap .w{display:inline-block;opacity:calc(var(--o,1)*1.4 - var(--i,0)*.06);transform:translateY(calc((1 - var(--o,1))*14px))}
 @media (prefers-reduced-motion:reduce){.fe{transform:none;border-radius:0}.fe img,.story img{transform:none}.fe figcaption{opacity:1;transform:none}}
+/* ===== Portada de cada pestaña: imagen de fe a todo lo ancho, con aureola dorada ===== */
+.ph{position:relative;height:min(46vh,430px);min-height:300px;margin:-12px calc(50% - 50vw) 8px;overflow:hidden;color:#fff;isolation:isolate;border-radius:0 0 30px 30px;background:#2a1e08}
+.ph.big{height:min(64vh,580px);min-height:420px}
+.ph .pi{position:absolute;inset:0;z-index:-2}
+.ph .pi img{position:absolute;inset:-6% 0;width:100%;height:112%;object-fit:cover;transform:translate3d(0,calc(var(--k,0)*22%),0) scale(calc(1.06 + var(--k,0)*.14))}
+.ph::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(30,20,4,.35) 0%,rgba(30,20,4,0) 28%,rgba(30,20,4,.15) 50%,rgba(30,20,4,.78) 100%)}
+.ph .glow{position:absolute;right:-18%;top:-22%;width:70vw;max-width:420px;aspect-ratio:1;border-radius:50%;z-index:-1;background:radial-gradient(circle,rgba(255,240,190,.55) 0%,rgba(232,185,35,.25) 35%,transparent 70%);mix-blend-mode:screen;transform:scale(calc(1 + var(--k,0)*.4))}
+.ph .pt{position:absolute;left:0;right:0;bottom:0;padding:0 max(22px,calc(50vw - 300px)) 26px;transform:translateY(calc(var(--k,0)*-46px));opacity:calc(1 - var(--k,0)*1.5)}
+.ph .kick{font-size:.82rem;letter-spacing:.04em;color:#FBE7A6;display:flex;align-items:center;gap:8px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.ph h1{font-size:2.3rem;line-height:1.12;margin:6px 0 4px;text-shadow:0 2px 20px rgba(0,0,0,.45);text-wrap:balance}
+.ph.big h1{font-size:1.75rem;line-height:1.25}
+.ph .sub{font-size:.92rem;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.ph .vk{margin-bottom:10px}
+.ph .fe-cr{top:auto;bottom:8px;right:max(14px,calc(50vw - 300px));font-size:.6rem;opacity:.55}
+.ph .dot{box-shadow:0 0 0 2px rgba(255,255,255,.6)}
+@media (prefers-reduced-motion:no-preference){
+.ph .pi img{animation:phz 1.6s cubic-bezier(.2,.7,.2,1) both}
+.ph .pt>*{animation:phu .9s cubic-bezier(.2,.7,.2,1) both}
+.ph .pt>*:nth-child(2){animation-delay:.08s}.ph .pt>*:nth-child(3){animation-delay:.16s}.ph .pt>*:nth-child(4){animation-delay:.24s}
+@keyframes phz{from{opacity:0;scale:1.18}to{opacity:1;scale:1}}
+@keyframes phu{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
+}
+/* Minimalista: menos líneas, más aire */
+details,.card{border-color:var(--line);box-shadow:0 1px 0 rgba(156,112,10,.04)}
+.seg{background:var(--soft)}
+.seg button[aria-pressed="true"]{background:var(--vy);color:var(--ink);box-shadow:none;font-weight:600}
+nav.tabs button[aria-current="page"]{color:var(--ink)}
+nav.tabs button[aria-current="page"] svg{stroke:var(--gold)}
+nav.tabs{background:rgba(255,253,248,.9)}
+.btn.ghost{border-color:var(--vy)}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -616,7 +644,7 @@ function fechasAnio(y){
   return L.sort((a,b)=>a[0]-b[0]);
 }
 function litColor(c){
-  const dark=document.documentElement.dataset.theme==='dark'||(document.documentElement.dataset.theme!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const dark=false;
   const L=dark?{verde:'#5FAE75',morado:'#A184D6',blanco:'#E0C06A',rojo:'#E0606A',rosa:'#E391AC'}:{verde:'#3F7D4E',morado:'#6B3FA0',blanco:'#C9A24A',rojo:'#B3262E',rosa:'#D27C9A'};
   return L[c]||L.verde;
 }
@@ -696,9 +724,10 @@ function semanaHtml(){
 /* ===== VISTAS ===== */
 function viewHd(){
   const t=new Date(),L=liturgia(t);
-  document.documentElement.style.setProperty('--lit',litColor(L.color));
+  document.documentElement.style.setProperty('--litc',litColor(L.color));
   if(state.tab==='hoy')return '';
-  return '<div class="hd c"><i class="dot"></i><span><b>'+esc(L.titulo)+'</b><br><span class="mut small">'+esc(cap(fmt(t)))+'</span></span></div>';
+  const hh=FE_HERO[state.tab]||['basilica',''];
+  return phHtml(hh[0],'<i class="dot"></i>'+esc(L.titulo),esc(hh[1]),esc(cap(fmt(t))));
 }
 function misDia(t,L){
   let k=MIS_DIA[t.getDay()];
@@ -711,9 +740,8 @@ function viewHoy(){
   const X=ok&&H.encuentro||{},E=ok?H.evangelio:null;
   const frase=X.frase?X.frase.texto:(E?'Evangelio según '+E.cita:'Señor, ¿qué quieres decirme hoy?');
   const cita=X.frase?X.frase.cita:(E?'':'');
-  let h='<section class="hero'+(t.getHours()>=6&&t.getHours()<16?' day':'')+'">'+heroSVG(litColor(L.color),t.getHours())+
-   '<div class="top"><span class="brand">Venga tu Reino</span><span class="pill"><i class="dot"></i>'+esc(cap(L.color))+'</span></div>'+
-   '<div class="ht"><div class="when">'+esc(cap(fmt(t)))+'<br>'+esc(L.titulo)+'</div><div class="frase">'+(X.frase?'«'+esc(frase)+'»':esc(frase))+'</div>'+(cita?'<div class="cita">'+esc(cita)+'</div>':'')+'</div></section>';
+  const HK=Object.keys(FE),dk=HK[Math.floor((t-new Date(t.getFullYear(),0,0))/864e5)%HK.length];
+  let h=phHtml(dk,'<i class="dot"></i>'+esc(L.titulo)+' · '+esc(cap(fmt(t))),(X.frase?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
@@ -1394,7 +1422,7 @@ function renderNav(){
   $('#tabs').innerHTML='<div class="in">'+TABS.map(t=>'<button data-act="tab" data-v="'+t.id+'"'+(state.tab===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>').join('')+'</div>';
 }
 const FE={corazon:["https://upload.wikimedia.org/wikipedia/commons/4/4f/SacredHeartBatoni.jpg", "«Venid a mí todos los que estáis cansados y agobiados, y yo os aliviaré».", "Mt 11,28", "Pompeo Batoni, Sagrado Corazón (1767) · dominio público"],getsemani:["https://upload.wikimedia.org/wikipedia/commons/6/68/Christ_in_Gethsemane.jpg", "«No se haga mi voluntad, sino la tuya».", "Lc 22,42", "Heinrich Hofmann, Cristo en Getsemaní (1886) · dominio público"],resurreccion:["https://upload.wikimedia.org/wikipedia/commons/8/87/Carl_Heinrich_Bloch_-_The_Resurrection.jpg", "«No está aquí: ha resucitado, como había dicho».", "Mt 28,6", "Carl Bloch, La Resurrección · dominio público"],virgen:["https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Sassoferrato_-_Jungfrun_i_b%C3%B6n.jpg/1280px-Sassoferrato_-_Jungfrun_i_b%C3%B6n.jpg", "«He aquí la esclava del Señor; hágase en mí según tu palabra».", "Lc 1,38", "Sassoferrato, La Virgen en oración · dominio público"],inmaculada:["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg/1280px-La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg", "«Alégrate, llena de gracia, el Señor está contigo».", "Lc 1,28", "Murillo, Inmaculada de Soult (1678) · dominio público"],pieta:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg/1280px-Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg", "«Junto a la cruz de Jesús estaba su madre».", "Jn 19,25", "La Piedad de Miguel Ángel · foto: Stanislav Traykov, CC BY 2.5"],cena:["https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg/1920px-Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg", "«Haced esto en memoria mía».", "Lc 22,19", "Leonardo da Vinci, La Última Cena · dominio público"],basilica:["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/1920px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", "«Tú eres Pedro, y sobre esta piedra edificaré mi Iglesia».", "Mt 16,18", "Basílica de San Pedro · foto: Alvesgaspar, CC BY-SA 4.0"],plaza:["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/1920px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg", "«Id por todo el mundo y anunciad el Evangelio».", "Mc 16,15", "Plaza de San Pedro · foto: Diliff, CC BY-SA 3.0"]};
-const FE_TAB={enc:['getsemani','resurreccion','cena'],misa:['cena','basilica','pieta'],orar:['virgen','inmaculada','pieta'],apr:['plaza','basilica','cena'],apo:['corazon','plaza','resurreccion'],dia:['resurreccion','virgen','corazon']};
+const FE_TAB={enc:['resurreccion','cena'],misa:['basilica','pieta'],orar:['inmaculada','pieta'],apr:['plaza','cena'],apo:['corazon','resurreccion'],dia:['virgen','corazon']};
 function feHtml(k){const f=FE[k];return '<figure class="fe" aria-label="'+esc(f[3])+'"><img src="'+f[0]+'" alt="" loading="lazy" decoding="async"><figcaption><span class="vk"></span><p class="fe-t">'+esc(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span></figcaption><small class="fe-cr">'+esc(f[3])+'</small></figure>'}
 function storyHtml(ks){const W=t=>t.split(' ').map((w,i)=>'<span class="w" style="--i:'+i+'">'+esc(w)+'</span>').join(' ');return '<section class="story" style="height:'+(ks.length*110+60)+'vh" aria-label="Contempla"><div class="stick"><div class="hd2">Contempla</div><div class="sol"><div class="disc"></div><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><linearGradient id=\"rg\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#FFF3C4\"/><stop offset=\"1\" stop-color=\"#E8B923\" stop-opacity=\"0\"/></linearGradient></defs><path d=\"M50 50 L98.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 98.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L2.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 2.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/></svg></div>'+ks.map((k,i)=>{const f=FE[k];return '<div class="ly"><div class="pic"><img src="'+f[0]+'" alt="" loading="lazy" decoding="async"></div><div class="cap"><span class="vk"></span><p class="fe-t">'+W(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span><p class="small" style="opacity:.7;margin-top:10px">'+esc(f[3])+'</p></div></div>'}).join('')+'<div class="pips">'+ks.map((k,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join('')+'</div></div></section>'}
 function decorate(){
@@ -1413,6 +1441,7 @@ function feFrame(){
   feTick=false;const vh=innerHeight,de=document.documentElement;
   const pr=$('#prog');if(pr)pr.style.setProperty('--sp',(scrollY/Math.max(1,de.scrollHeight-vh)).toFixed(4));
   if(RM())return;
+  document.querySelectorAll('.ph').forEach(el=>{const h=el.offsetHeight||1;el.style.setProperty('--k',cl(scrollY/h,0,1).toFixed(4))});
   document.querySelectorAll('.fe').forEach(el=>{
     const r=el.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50)return;
     const en=cl((vh-r.top)/(vh*.7),0,1),p=cl((vh-r.top)/(vh+r.height),0,1);
@@ -1440,6 +1469,8 @@ function feFrame(){
 }
 const feReq=()=>{if(!feTick){feTick=true;requestAnimationFrame(feFrame)}};
 addEventListener('scroll',feReq,{passive:true});addEventListener('resize',feReq);
+const FE_HERO={"enc": ["getsemani", "Encuentro con Cristo"], "misa": ["cena", "La Santa Misa"], "orar": ["virgen", "Orar"], "apr": ["basilica", "Aprender la fe"], "apo": ["plaza", "Apóstol"], "dia": ["resurreccion", "Mi día con Dios"]};
+function phHtml(k,kick,title,sub,big){const f=FE[k];return '<header class="ph'+(big?' big':'')+'"><div class="pi"><img src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
 let LAST=null;
 function render(keepScroll){
   stopSpeak();
@@ -1480,7 +1511,7 @@ function reveal(){
   if(!IO||RM())return;
   IO.disconnect();
   const mark=par=>{for(const el of par.children){
-    if(el.matches('.seg,script,style,[hidden],.fe,.story'))continue;
+    if(el.matches('.seg,script,style,[hidden],.fe,.story,.ph'))continue;
     const r=el.getBoundingClientRect();
     if(r.height>innerHeight*.9&&el.children.length>1&&!el.matches('details')){mark(el);continue}
     if(r.top<innerHeight&&r.bottom>0)continue;
@@ -1614,7 +1645,6 @@ document.addEventListener('input',e=>{
   }else if(t.id==='gq'){state.gq=t.value;$('#glist').innerHTML=glosList()}
 });
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&ymd(new Date())!==state.day){state.day=ymd(new Date());state.year=new Date().getFullYear();render()}});
-try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>render(true))}catch(e){}
 render();
 })();
 </script>
