@@ -198,8 +198,9 @@ summary:active{background:var(--soft);border-radius:16px}
 }
 /* ===== Vitrales: imágenes de fe que se revelan al desplazarse (oro y blanco del Vaticano) ===== */
 #prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:9;transform-origin:0 50%;transform:scaleX(var(--sp,0));background:linear-gradient(90deg,var(--vy) 0 50%,#fff 50% 100%);background-size:24px 3px;box-shadow:0 0 0 .5px rgba(154,110,12,.35);pointer-events:none}
-.fe{position:relative;height:min(84vh,680px);min-height:420px;margin:36px calc(50% - 50vw);overflow:hidden;background:#1a140a;color:#fff;
- clip-path:inset(calc(var(--c,0)*1%) calc(var(--c,0)*1.6%) round calc(var(--c,0)*2.4px));isolation:isolate}
+.fe{position:relative;height:min(84vh,680px);min-height:420px;margin:36px calc(50% - 50vw);overflow:hidden;background:#1a140a;color:#fff;isolation:isolate;
+ transform-origin:50% 100%;transform:perspective(1100px) rotateX(calc(var(--c,0)*3.2deg)) scale(calc(1 - var(--c,0)*.024));
+ border-radius:calc(var(--c,0)*5px) calc(var(--c,0)*5px) calc(var(--c,0)*3px) calc(var(--c,0)*3px)/calc(var(--c,0)*9px) calc(var(--c,0)*9px) calc(var(--c,0)*3px) calc(var(--c,0)*3px);will-change:transform}
 .fe img,.story img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover;transform:translate3d(0,calc(var(--y,0)*1%),0) scale(var(--s,1));will-change:transform}
 .fe::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,4,.05) 35%,rgba(20,14,4,.78) 100%);z-index:1}
 .fe figcaption,.story .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 max(24px,calc(50vw - 290px)) 36px;opacity:var(--o,1);transform:translateY(calc((1 - var(--o,1))*24px))}
@@ -216,7 +217,17 @@ summary:active{background:var(--soft);border-radius:16px}
 .story .pips{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:8px}
 .story .pips i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .3s,transform .3s}
 .story .pips i.on{background:var(--vy);transform:scale(1.5)}
-@media (prefers-reduced-motion:reduce){.fe{clip-path:none}.fe img,.story img{transform:none}.fe figcaption{opacity:1;transform:none}}
+.story .stick{background:radial-gradient(120% 80% at 50% 42%,#2a1e08 0%,#120d05 60%,#0b0803 100%)}
+.story .sol{position:absolute;left:50%;top:44%;width:min(86vw,520px);aspect-ratio:1;z-index:0;transform:translate(-50%,-50%) scale(var(--hs,.7));pointer-events:none}
+.story .sol .disc{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle at 50% 50%,#FFF8E1 0%,#FBE08A 35%,#E8B923 62%,#B9820F 100%);box-shadow:0 0 80px 20px rgba(232,185,35,.35),0 0 200px 60px rgba(232,185,35,.15)}
+.story .sol svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(var(--hr,0deg));opacity:.85}
+.story .ly{opacity:1;z-index:1}
+.story .ly .pic{position:absolute;inset:0;clip-path:circle(var(--r,0%) at 50% 44%);z-index:0}
+.story .ly .pic img{inset:-6% 0;height:112%}
+.story .ly::after{opacity:var(--o,0)}
+.story .cap{text-align:left;padding:0 26px calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(calc((1 - var(--o,1))*-34px))}
+.story .cap .w{display:inline-block;opacity:calc(var(--o,1)*1.4 - var(--i,0)*.06);transform:translateY(calc((1 - var(--o,1))*14px))}
+@media (prefers-reduced-motion:reduce){.fe{transform:none;border-radius:0}.fe img,.story img{transform:none}.fe figcaption{opacity:1;transform:none}}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -1385,7 +1396,7 @@ function renderNav(){
 const FE={corazon:["https://upload.wikimedia.org/wikipedia/commons/4/4f/SacredHeartBatoni.jpg", "«Venid a mí todos los que estáis cansados y agobiados, y yo os aliviaré».", "Mt 11,28", "Pompeo Batoni, Sagrado Corazón (1767) · dominio público"],getsemani:["https://upload.wikimedia.org/wikipedia/commons/6/68/Christ_in_Gethsemane.jpg", "«No se haga mi voluntad, sino la tuya».", "Lc 22,42", "Heinrich Hofmann, Cristo en Getsemaní (1886) · dominio público"],resurreccion:["https://upload.wikimedia.org/wikipedia/commons/8/87/Carl_Heinrich_Bloch_-_The_Resurrection.jpg", "«No está aquí: ha resucitado, como había dicho».", "Mt 28,6", "Carl Bloch, La Resurrección · dominio público"],virgen:["https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Sassoferrato_-_Jungfrun_i_b%C3%B6n.jpg/1280px-Sassoferrato_-_Jungfrun_i_b%C3%B6n.jpg", "«He aquí la esclava del Señor; hágase en mí según tu palabra».", "Lc 1,38", "Sassoferrato, La Virgen en oración · dominio público"],inmaculada:["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg/1280px-La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg", "«Alégrate, llena de gracia, el Señor está contigo».", "Lc 1,28", "Murillo, Inmaculada de Soult (1678) · dominio público"],pieta:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg/1280px-Michelangelo%27s_Pieta_5450_cropncleaned_edit.jpg", "«Junto a la cruz de Jesús estaba su madre».", "Jn 19,25", "La Piedad de Miguel Ángel · foto: Stanislav Traykov, CC BY 2.5"],cena:["https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg/1920px-Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg", "«Haced esto en memoria mía».", "Lc 22,19", "Leonardo da Vinci, La Última Cena · dominio público"],basilica:["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/1920px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", "«Tú eres Pedro, y sobre esta piedra edificaré mi Iglesia».", "Mt 16,18", "Basílica de San Pedro · foto: Alvesgaspar, CC BY-SA 4.0"],plaza:["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/1920px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg", "«Id por todo el mundo y anunciad el Evangelio».", "Mc 16,15", "Plaza de San Pedro · foto: Diliff, CC BY-SA 3.0"]};
 const FE_TAB={enc:['getsemani','resurreccion','cena'],misa:['cena','basilica','pieta'],orar:['virgen','inmaculada','pieta'],apr:['plaza','basilica','cena'],apo:['corazon','plaza','resurreccion'],dia:['resurreccion','virgen','corazon']};
 function feHtml(k){const f=FE[k];return '<figure class="fe" aria-label="'+esc(f[3])+'"><img src="'+f[0]+'" alt="" loading="lazy" decoding="async"><figcaption><span class="vk"></span><p class="fe-t">'+esc(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span></figcaption><small class="fe-cr">'+esc(f[3])+'</small></figure>'}
-function storyHtml(ks){return '<section class="story" style="height:'+(ks.length*100+40)+'vh" aria-label="Contempla"><div class="stick"><div class="hd2">Contempla</div>'+ks.map((k,i)=>{const f=FE[k];return '<div class="ly"'+(i===0?' style="--a:1"':'')+'><img src="'+f[0]+'" alt="" loading="lazy" decoding="async"><div class="cap"><span class="vk"></span><p class="fe-t">'+esc(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span><p class="small" style="opacity:.7;margin-top:10px">'+esc(f[3])+'</p></div></div>'}).join('')+'<div class="pips">'+ks.map((k,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join('')+'</div></div></section>'}
+function storyHtml(ks){const W=t=>t.split(' ').map((w,i)=>'<span class="w" style="--i:'+i+'">'+esc(w)+'</span>').join(' ');return '<section class="story" style="height:'+(ks.length*110+60)+'vh" aria-label="Contempla"><div class="stick"><div class="hd2">Contempla</div><div class="sol"><div class="disc"></div><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><linearGradient id=\"rg\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#FFF3C4\"/><stop offset=\"1\" stop-color=\"#E8B923\" stop-opacity=\"0\"/></linearGradient></defs><path d=\"M50 50 L98.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 98.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L2.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 2.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/></svg></div>'+ks.map((k,i)=>{const f=FE[k];return '<div class="ly"><div class="pic"><img src="'+f[0]+'" alt="" loading="lazy" decoding="async"></div><div class="cap"><span class="vk"></span><p class="fe-t">'+W(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span><p class="small" style="opacity:.7;margin-top:10px">'+esc(f[3])+'</p></div></div>'}).join('')+'<div class="pips">'+ks.map((k,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join('')+'</div></div></section>'}
 function decorate(){
   const m=$('#main');if(!m)return;
   if(state.tab==='hoy'){m.insertAdjacentHTML('beforeend',storyHtml(['corazon','inmaculada','basilica']));return}
@@ -1412,12 +1423,19 @@ function feFrame(){
   });
   document.querySelectorAll('.story').forEach(st=>{
     const r=st.getBoundingClientRect();if(r.bottom<0||r.top>vh)return;
-    const ls=st.querySelectorAll('.ly'),n=ls.length,p=cl(-r.top/Math.max(1,r.height-vh),0,1),x=p*(n-1);
-    ls.forEach((l,i)=>{const d=x-i;l.style.setProperty('--a',cl(1-Math.abs(d)*1.4,0,1).toFixed(3));
-      l.style.setProperty('--s',(1.15-.15*cl(1-Math.abs(d),0,1)+(d>0?d*.06:0)).toFixed(4));
-      l.style.setProperty('--y',(d*-6).toFixed(2));
-      l.style.setProperty('--o',cl(1-Math.abs(d)*2.2,0,1).toFixed(3))});
-    st.querySelectorAll('.pips i').forEach((d,i)=>d.classList.toggle('on',Math.round(x)===i));
+    const ls=st.querySelectorAll('.ly'),n=ls.length,p=cl(-r.top/Math.max(1,r.height-vh),0,1),x=p*n;
+    const sol=st.querySelector('.sol');
+    if(sol){sol.style.setProperty('--hs',(.95+.35*p).toFixed(4));sol.style.setProperty('--hr',(p*140).toFixed(2)+'deg');sol.style.opacity=(1-cl((x-(n-.6))/.5,0,1)).toFixed(3)}
+    ls.forEach((l,i)=>{
+      const t=x-i; /* 0→1 mientras esta escena es la protagonista */
+      const grow=cl(t/.45,0,1),gone=cl((t-1)/.35,0,1),last=i===n-1;
+      const rad=last?(19+81*cl((t-.4)/.5,0,1)):19*grow;
+      l.style.setProperty('--r',(t<=0?0:rad*(last?1:1-gone)).toFixed(2)+'%');
+      l.style.setProperty('--s',(1.25-.2*cl(t,0,1)).toFixed(4));
+      l.style.setProperty('--y',((t-.5)*-6).toFixed(2));
+      l.style.setProperty('--o',(t<=0||(!last&&t>=1.25)?0:cl(Math.min((t-.15)/.3,(last?9:(1.15-t)/.25)),0,1)).toFixed(3));
+      l.style.zIndex=1+i});
+    st.querySelectorAll('.pips i').forEach((d,i)=>d.classList.toggle('on',Math.min(n-1,Math.floor(x))===i));
   });
 }
 const feReq=()=>{if(!feTick){feTick=true;requestAnimationFrame(feFrame)}};
