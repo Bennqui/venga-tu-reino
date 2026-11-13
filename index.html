@@ -269,6 +269,33 @@ a{text-decoration-color:var(--red)}
 .story .pips i.on{background:var(--red);box-shadow:0 0 0 2px var(--vy)}
 .btn.ghost{border-color:color-mix(in srgb,var(--red) 35%,var(--vy))}
 .ph,.fe,.story .stick{background:#3a0f12}
+/* ===== Fiestas, novenas y frase del día ===== */
+.novnow{display:block;position:relative;background:linear-gradient(135deg,#fffaf0,#fff);border:1px solid var(--vy);border-radius:20px;padding:16px 18px;margin:14px 0;cursor:pointer;box-shadow:0 6px 20px -12px rgba(176,24,42,.35)}
+.novnow .kk,.quote .kk,.nvh .kk{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.novnow b{font-family:var(--fd);font-weight:400;font-size:1.3rem;display:block;margin:4px 0 2px}
+.novnow .small:last-child{color:var(--gold);font-weight:600}
+.quote{margin:22px 0;padding:20px 20px 16px;background:var(--card);border-radius:20px;position:relative;border:1px solid var(--line)}
+.quote .qm{position:absolute;top:-14px;left:16px;font-family:var(--fd);font-size:3.4rem;line-height:1;color:var(--vy)}
+.quote blockquote{margin:6px 0 10px;font-family:var(--fd);font-size:1.2rem;line-height:1.4}
+.quote figcaption{font-size:.88rem;color:var(--mut)}
+.quote figcaption b{color:var(--ink)}
+.quote .kk{position:absolute;top:12px;right:16px;font-size:.62rem}
+.nextf{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px}
+.nextf button,.fi summary{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px;font-weight:400}
+.fi summary{border:0;padding:10px 16px}
+.fd{flex:none;width:48px;height:52px;border-radius:12px;background:var(--gold-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;border-top:3px solid var(--red)}
+.fd b{font-family:var(--fd);font-weight:400;font-size:1.35rem;color:var(--ink)}
+.fd i{font-style:normal;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--red)}
+.fn b{font-weight:600}
+.mesl{font-family:var(--fd);font-size:1.05rem;margin:22px 2px 4px;color:var(--gold)}
+.chip.gR{background:var(--red-bg);color:var(--red)}
+.chip.gV,.chip.gB{background:var(--gold-bg);color:var(--gold)}
+.nvbox{background:var(--tint);border-radius:14px;padding:12px 14px;margin-top:10px;border-left:3px solid var(--red)}
+.nvh{margin:12px 0}
+.nvh h2{margin:4px 0 6px}
+.nvd.on{border-color:var(--vy);box-shadow:0 0 0 2px color-mix(in srgb,var(--vy) 40%,transparent)}
+.nvd.done .num{background:var(--vy);border-color:var(--vy);color:var(--ink)}
+.nvd.on .num{background:var(--red);border-color:var(--red);color:#fff}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -684,7 +711,7 @@ const SUBS={
   enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
-  orar:[['ora','Oraciones'],['ros','Rosario']],
+  orar:[['ora','Oraciones'],['ros','Rosario'],['fie','Fiestas y novenas']],
   apr:[['anio','Año litúrgico'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar']],
   dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
 };
@@ -753,11 +780,17 @@ function viewHoy(){
   const X=ok&&H.encuentro||{},E=ok?H.evangelio:null;
   const frase=X.frase?X.frase.texto:(E?'Evangelio según '+E.cita:'Señor, ¿qué quieres decirme hoy?');
   const cita=X.frase?X.frase.cita:(E?'':'');
-  const HK=Object.keys(FE),dk=HK[Math.floor((t-new Date(t.getFullYear(),0,0))/864e5)%HK.length];
+  const HK=Object.keys(FE),nvh=novenaHoy(t),dk=(nvh&&NOV_IMG[nvh.f.nov.id])||HK[((dayN()%HK.length)+HK.length)%HK.length];
   let h=phHtml(dk,'<i class="dot"></i>'+esc(L.titulo)+' · '+esc(cap(fmt(t))),(X.frase?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
+  {const nh=novenaHoy(t),fr=fraseDia(t);
+   if(nh){const x=novDia(nh.f,nh.k);h+='<div class="novnow" data-act="nov" data-v="'+nh.f.nov.id+ymd(nh.f.d)+'"><span class="vk"></span><div class="kk">'+esc((NOV_INFO[nh.f.nov.id]||{}).n||'Novena')+' · día '+(nh.k+1)+' de 9</div><b>'+esc(x.t)+'</b>'+(x.cita?'<p class="small" style="margin:2px 0 0">'+esc(x.cita)+'</p>':'')+'<span class="small">Rezar el día de hoy ›</span></div>'}
+   h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
+   const nx=proximas(t,3).filter(f=>!nh||f!==nh.f).slice(0,2);
+   if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
+  }
   if(L.especial)h+='<div class="card tint"><b>'+esc(L.especial.n)+'</b> · <span class="mut">'+esc(L.especial.g)+'</span><p>'+esc(L.especial.d)+'</p></div>';
   else if(L.nota)h+='<div class="card tint"><p style="margin:0">'+esc(L.nota)+'</p></div>';
   if(viejo)h+='<div class="nota"><b>Evangelio guardado del '+esc(fmt(new Date(H.fecha+'T12:00:00')))+'</b>No se pudo cargar el de hoy (sin conexión o aún sin actualizar). Con internet, toca «Leer las lecturas de hoy».<div class="row" style="margin:8px 0 0"><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div></div>';
@@ -848,7 +881,172 @@ function viewPractica(){
   '<p class="note">Lo que falles vuelve a aparecer más seguido; lo que aciertes, cada vez menos. Tu avance se guarda solo en este dispositivo.</p><div class="row"><button class="btn ghost" data-act="resetbox">Reiniciar avance</button></div>';
 }
 
+/* ===== FIESTAS, NOVENAS Y FRASE DEL DÍA ===== */
+/* Grupos: I = Iglesia universal, V = Venezuela, B = Barquisimeto, R = Regnum Christi */
+const NOV_CR=[ /* Novena de Cristo Rey del Regnum Christi: título y Evangelio de cada día (texto completo en su página) */
+['Rey esperado','Lc 1,30-33','El ángel anuncia a María que su Hijo reinará para siempre. Jesús es el Rey que Israel esperaba: hoy le pido que venga a reinar también en lo que yo espero.'],
+['Rey pobre y humilde','Mt 2,1-2','Los magos buscan al Rey recién nacido y lo encuentran pobre, en Belén. Su realeza no se impone: se deja encontrar por quien lo busca con sencillez.'],
+['Rey manso','Jn 12,13-15','Jesús entra en Jerusalén montado en un burrito, no en un caballo de guerra. Reina con mansedumbre: ¿dónde necesito yo cambiar la fuerza por la paciencia?'],
+['Rey de justicia','Mt 25,31-36','El Rey se identifica con el hambriento, el forastero, el enfermo y el preso. Su juicio será sobre el amor concreto: ¿a quién puedo servir hoy?'],
+['Rey de vida eterna','Jn 18,36-37','Ante Pilato, Jesús dice que su Reino no es de este mundo y que vino a dar testimonio de la verdad. Pertenecer a su Reino es escuchar su voz.'],
+['Rey redentor','Mt 27,27-29','Los soldados se burlan de Jesús con un manto y una corona de espinas. Así, humillado, nos rescata: su trono es la cruz y su corona, el amor que se entrega.'],
+['Rey de la paz','Jn 19,17-19','Sobre la cruz ponen el letrero «Jesús Nazareno, el Rey de los judíos». Desde ahí reconcilia todo: le entrego hoy un conflicto que me quita la paz.'],
+['Rey de misericordia','Lc 23,39-43','El buen ladrón pide: «Acuérdate de mí cuando llegues a tu Reino», y Jesús le promete el paraíso hoy. Nunca es tarde para pedirle que me recuerde.'],
+['Rey de reyes','Ap 17,14','El Cordero vencerá, porque es Señor de señores y Rey de reyes, y con Él vencen los que lo siguen. Mañana lo celebramos: ¡Cristo, Rey nuestro, venga tu Reino!']
+];
+const NOV_MIS=['Toda la humanidad, sobre todo los pecadores','Los sacerdotes y los consagrados','Los fieles devotos y piadosos','Los que no creen o aún no conocen a Jesús','Los hermanos separados de la Iglesia','Los mansos y humildes, y los niños','Los que veneran y difunden la misericordia de Dios','Las almas del purgatorio','Las almas tibias'];
+const NOV_PEN=['Ven, Espíritu Santo: prepárame para recibirte','Don de temor de Dios: que respete y ame a Dios por encima de todo','Don de piedad: que trate a Dios como Padre y a los demás como hermanos','Don de fortaleza: valor para hacer el bien cuando cuesta','Don de ciencia: ver las cosas creadas como camino hacia Dios','Don de consejo: acertar en las decisiones de hoy','Don de entendimiento: comprender mejor la Palabra y la fe','Don de sabiduría: saborear las cosas de Dios','Frutos del Espíritu: amor, alegría, paz, paciencia y bondad en mi vida'];
+const NOV_NAV=['La espera: preparar el corazón como María','La anunciación: decirle sí a Dios','La visitación: llevar a Jesús a los demás','El camino a Belén: confiar cuando no hay certezas','«No hay sitio en la posada»: hacerle lugar a Jesús','Los pastores: la alegría de los sencillos','La familia: Jesús en mi casa','La paz: ser constructor de paz','La Nochebuena: Dios con nosotros'];
+function fiestas(y){
+  const E=easter(y),adv=adventStart(y),ck=addDays(adv,-7),D=(m,d)=>new Date(y,m-1,d),
+    epi=(()=>{let d=new Date(y,0,2);while(d.getDay())d=addDays(d,1);return d})(),
+    nv=(id,ini,dias)=>({id,ini,dias});
+  const L=[
+  [D(1,1),'Santa María, Madre de Dios','Solemnidad','I','Comienza el año civil poniéndolo en manos de María. Jornada Mundial de la Paz.'],
+  [D(1,3),'Aniversario de la fundación de la Legión de Cristo','Fiesta de familia','R','Se recuerda la fundación de la Legión de Cristo (3 de enero de 1941), origen del Regnum Christi. Día para dar gracias por el carisma.'],
+  [epi,'Epifanía del Señor (Reyes Magos)','Solemnidad','I V','Jesús se manifiesta a todos los pueblos. En Venezuela se celebra el domingo entre el 2 y el 8 de enero.'],
+  [D(1,14),'Divina Pastora','Fiesta','B V','La gran procesión de Barquisimeto: la imagen de la Divina Pastora sale de Santa Rosa hacia la Catedral. Una de las mayores manifestaciones marianas del mundo.',nv('pastora',D(1,5),null)],
+  [D(2,2),'Presentación del Señor (Candelaria)','Fiesta','I','Jesús es presentado en el Templo: Luz de las naciones. Se bendicen las velas.'],
+  [D(2,11),'Nuestra Señora de Lourdes','Memoria','I','Jornada Mundial del Enfermo: día para rezar por los enfermos y visitarlos.'],
+  [addDays(E,-46),'Miércoles de Ceniza','Inicio de la Cuaresma','I','Ayuno y abstinencia. Comienzan 40 días de oración, ayuno y limosna para preparar la Pascua.'],
+  [D(3,19),'San José, esposo de la Virgen María','Solemnidad','I','Patrono de la Iglesia universal y de los trabajadores; modelo de padre y de fe silenciosa.',nv('jose',D(3,10),null)],
+  [D(3,25),'Anunciación del Señor','Solemnidad','I','El «sí» de María: el Hijo de Dios se hace hombre en su seno.'],
+  [addDays(E,-7),'Domingo de Ramos','Semana Santa','I','Jesús entra en Jerusalén como Rey manso. Comienza la Semana Santa.'],
+  [addDays(E,-3),'Jueves Santo','Triduo Pascual','I','Institución de la Eucaristía y del sacerdocio; lavatorio de los pies.'],
+  [addDays(E,-2),'Viernes Santo','Triduo Pascual','I','Pasión y muerte del Señor. Ayuno y abstinencia. Hoy empieza la novena de la Divina Misericordia.'],
+  [E,'Domingo de Resurrección','Solemnidad','I','¡Cristo ha resucitado! La fiesta más grande del año; se prolonga cincuenta días.'],
+  [addDays(E,7),'Domingo de la Divina Misericordia','Fiesta','I','Segundo domingo de Pascua, pedido por Jesús a santa Faustina.',nv('mis',addDays(E,-2),NOV_MIS)],
+  [addDays(E,42),'Ascensión del Señor','Solemnidad','I V','Jesús sube al cielo y nos envía a ser sus testigos. En Venezuela se celebra el domingo.'],
+  [addDays(E,49),'Pentecostés','Solemnidad','I','Venida del Espíritu Santo sobre María y los apóstoles: nacimiento misionero de la Iglesia.',nv('pen',addDays(E,40),NOV_PEN)],
+  [addDays(E,56),'Santísima Trinidad','Solemnidad','I','Un solo Dios en tres Personas: Padre, Hijo y Espíritu Santo.'],
+  [addDays(E,63),'Corpus Christi','Solemnidad','I V','Fiesta del Cuerpo y la Sangre de Cristo, con procesión eucarística. En Venezuela, el domingo.'],
+  [addDays(E,68),'Sagrado Corazón de Jesús','Solemnidad','I R','Fiesta muy querida por el Regnum Christi, que suele preparar una novena propia.',nv('scj',addDays(E,59),null)],
+  [addDays(E,69),'Inmaculado Corazón de María','Memoria','I','Al día siguiente del Sagrado Corazón: el corazón de María que guarda todo en silencio.'],
+  [D(6,24),'Natividad de San Juan Bautista','Solemnidad','I','El precursor que señala a Jesús: «Este es el Cordero de Dios».'],
+  [D(6,29),'San Pedro y San Pablo','Solemnidad','I','Columnas de la Iglesia de Roma; día del Papa.'],
+  [D(7,16),'Nuestra Señora del Carmen','Memoria','I V','Virgen del escapulario, muy querida en Venezuela.'],
+  [D(8,15),'Asunción de la Virgen María','Solemnidad','I','María es llevada en cuerpo y alma al cielo.',nv('asun',D(8,6),null)],
+  [D(9,11),'Nuestra Señora de Coromoto','Solemnidad','V','Patrona de Venezuela, aparecida al cacique Coromoto en Guanare (1652).',nv('coro',D(9,2),null)],
+  [D(9,14),'Exaltación de la Santa Cruz','Fiesta','I','La cruz, signo de la victoria del amor.'],
+  [D(9,15),'Nuestra Señora de los Dolores','Memoria','I','María al pie de la cruz.'],
+  [D(10,7),'Nuestra Señora del Rosario','Memoria','I','Octubre es el mes del Rosario.'],
+  [D(10,26),'San José Gregorio Hernández','Memoria (Venezuela)','V','El médico de los pobres, canonizado en 2025: primer santo venezolano.'],
+  [D(11,1),'Todos los Santos','Solemnidad','I','La fiesta de todos los que ya están con Dios: la santidad es para todos.'],
+  [D(11,2),'Fieles Difuntos','Conmemoración','I','Oramos por todos los que han muerto.'],
+  [ck,'Jesucristo, Rey del Universo','Solemnidad','I R','Último domingo del año litúrgico y fiesta titular del Regnum Christi: «¡Cristo, Rey nuestro! ¡Venga tu Reino!».',nv('cr',addDays(ck,-9),NOV_CR)],
+  [adv,'Primer domingo de Adviento','Inicio del año litúrgico','I','Cuatro semanas para preparar la Navidad con esperanza.'],
+  [D(12,8),'Inmaculada Concepción','Solemnidad','I','María, concebida sin pecado original.',nv('inm',D(11,29),null)],
+  [D(12,12),'Nuestra Señora de Guadalupe','Fiesta','I','Patrona de América.'],
+  [D(12,25),'Natividad del Señor (Navidad)','Solemnidad','I V','Dios se hace niño. En Venezuela se prepara con las Misas de aguinaldo del 16 al 24 de diciembre.',nv('nav',D(12,16),NOV_NAV)],
+  [D(12,28),'Santos Inocentes','Fiesta','I','Los niños mártires de Belén.']
+  ];
+  return L.map(x=>({d:x[0],n:x[1],r:x[2],g:x[3].split(' '),t:x[4],nov:x[5]||null})).sort((a,b)=>a.d-b.d);
+}
+const NOV_INFO={
+  cr:{n:'Novena de Cristo Rey',src:'Regnum Christi',url:'https://regnumchristi.es/cristo-rey-2026/',nota:'Títulos y Evangelios de la novena del Regnum Christi. La reflexión de cada día es una ayuda breve de la app; la oración inicial y final completas están en la página del Regnum Christi.'},
+  mis:{n:'Novena de la Divina Misericordia',src:'Diario de santa Faustina',nota:'Cada día se reza la Coronilla de la Divina Misericordia (en Orar › Oraciones) por la intención del día.'},
+  pen:{n:'Novena al Espíritu Santo',src:'La primera novena de la Iglesia',nota:'Es la novena más antigua: los apóstoles con María esperaron así al Espíritu Santo. Reza el «Ven, Espíritu Santo» y pide el don del día.'},
+  nav:{n:'Novena de Navidad (Misas de aguinaldo)',src:'Tradición venezolana',nota:'En Venezuela se celebran las Misas de aguinaldo de madrugada con cantos y gaitas. Cada día, un paso hacia Belén.'},
+  scj:{n:'Novena al Sagrado Corazón',src:'Regnum Christi',url:'https://regnumchristi.org/',nota:'El Regnum Christi publica cada año una novena propia: búscala en su página. Cada día puedes repetir: «Sagrado Corazón de Jesús, en vos confío».'},
+  pastora:{n:'Novena a la Divina Pastora',src:'Arquidiócesis de Barquisimeto',nota:'Barquisimeto se prepara para la procesión del 14 de enero. Reza cada día el Rosario o un Ave María pidiendo por tu familia y por Lara.'},
+  jose:{n:'Novena a San José',src:'Tradición',nota:'Pide a San José por tu trabajo, tu familia y una buena muerte.'},
+  asun:{n:'Novena de la Asunción',src:'Tradición',nota:'Nueve días mirando a María, que ya está en el cielo en cuerpo y alma.'},
+  coro:{n:'Novena a la Virgen de Coromoto',src:'Tradición venezolana',nota:'Nueve días pidiendo por Venezuela a su Patrona.'},
+  inm:{n:'Novena a la Inmaculada',src:'Tradición',nota:'Nueve días pidiendo un corazón limpio como el de María.'}
+};
+const GRUPO={I:'Iglesia',V:'Venezuela',B:'Barquisimeto',R:'Regnum Christi'};
+function proximas(t,n){const y=t.getFullYear();return fiestas(y-1).concat(fiestas(y),fiestas(y+1)).filter(f=>diff(f.d,t)>=0||(f.nov&&diff(t,f.nov.ini)>=0&&diff(f.d,t)>=0)).filter(f=>diff(f.d,t)<=400).slice(0,n||99)}
+function novenaHoy(t){const y=t.getFullYear();for(const f of fiestas(y).concat(fiestas(y+1))){if(!f.nov)continue;const k=diff(t,f.nov.ini);if(k>=0&&k<9)return {f,k}}return null}
+function enDias(n){return n===0?'Hoy':n===1?'Mañana':'En '+n+' días'}
+/* Frases de santos y Papas: una distinta cada día */
+const FRASES=[
+['San Agustín','Nos hiciste, Señor, para ti, y nuestro corazón está inquieto hasta que descanse en ti.','Confesiones I,1'],
+['Santa Teresa de Jesús','Nada te turbe, nada te espante; todo se pasa, Dios no se muda. Quien a Dios tiene nada le falta: solo Dios basta.','Poesías'],
+['San Juan de la Cruz','A la tarde te examinarán en el amor.','Dichos de luz y amor, 59'],
+['San Juan Pablo II','¡No tengáis miedo! ¡Abrid, más todavía, abrid de par en par las puertas a Cristo!','Homilía de inicio del pontificado, 1978'],
+['Benedicto XVI','No se comienza a ser cristiano por una decisión ética o una gran idea, sino por el encuentro con una Persona.','Deus caritas est, 1'],
+['San Ireneo de Lyon','La gloria de Dios es el hombre viviente.','Contra las herejías IV,20,7'],
+['San Ignacio de Loyola','En todo amar y servir.','Ejercicios Espirituales, 233'],
+['San Josemaría Escrivá','Que busques a Cristo. Que encuentres a Cristo. Que ames a Cristo.','Camino, 382'],
+['San Agustín','Tarde te amé, hermosura tan antigua y tan nueva, tarde te amé.','Confesiones X,27'],
+['Santa Catalina de Siena','Si sois lo que debéis ser, prenderéis fuego al mundo entero.','Cartas'],
+['San Benito','No anteponer nada al amor de Cristo.','Regla, 4'],
+['San Jerónimo','Desconocer la Escritura es desconocer a Cristo.','Comentario a Isaías, prólogo'],
+['San Atanasio','El Hijo de Dios se hizo hombre para que nosotros nos hiciéramos Dios.','Sobre la Encarnación, 54'],
+['Santa Teresa del Niño Jesús','Para mí, la oración es un impulso del corazón, una sencilla mirada lanzada hacia el cielo.','Manuscritos autobiográficos'],
+['San Agustín','Canta y camina.','Sermón 256'],
+['San Juan Pablo II','La fe y la razón son como las dos alas con las cuales el espíritu humano se eleva hacia la contemplación de la verdad.','Fides et ratio'],
+['Papa Francisco','La alegría del Evangelio llena el corazón y la vida entera de los que se encuentran con Jesús.','Evangelii gaudium, 1'],
+['Pío XI','¡Oh, qué felicidad podríamos gozar si los individuos, las familias y las sociedades se dejaran gobernar por Cristo!','Quas primas, 19'],
+['San Alberto Hurtado','Contento, Señor, contento.',''],
+['Santa Faustina Kowalska','Jesús, en ti confío.','Diario'],
+['San Maximiliano Kolbe','Solo el amor crea.',''],
+['San Juan Pablo II','El hombre no puede vivir sin amor.','Redemptor hominis, 10'],
+['San Carlo Acutis','La Eucaristía es mi autopista hacia el cielo.',''],
+['San Pier Giorgio Frassati','Verso l’alto: ¡hacia lo alto!',''],
+['Santa Teresa de Jesús','Orar es tratar de amistad, estando muchas veces tratando a solas con quien sabemos nos ama.','Libro de la Vida 8,5'],
+['San Juan de la Cruz','Donde no hay amor, pon amor y sacarás amor.','Carta a la M. María de la Encarnación'],
+['Benedicto XVI','No habéis sido creados para la comodidad, sino para la grandeza.','A los peregrinos alemanes, 2005'],
+['San Juan Pablo II','¡Remad mar adentro!','Novo millennio ineunte, 1'],
+['San Bernardo','Mira la estrella, invoca a María.','Homilías sobre el «Missus est»'],
+['Santa Isabel de la Trinidad','He encontrado mi cielo en la tierra, porque el cielo es Dios y Dios está en mi alma.','Cartas'],
+['San Policarpo','Ochenta y seis años hace que le sirvo y ningún mal me ha hecho; ¿cómo puedo blasfemar de mi Rey que me ha salvado?','Martirio de Policarpo, 9'],
+['San Ignacio de Loyola','Tomad, Señor, y recibid toda mi libertad, mi memoria, mi entendimiento y toda mi voluntad.','Ejercicios Espirituales, 234'],
+['San Pablo VI','El hombre contemporáneo escucha más a gusto a los que dan testimonio que a los que enseñan.','Evangelii nuntiandi, 41'],
+['Concilio Vaticano II','Cristo manifiesta plenamente el hombre al propio hombre.','Gaudium et spes, 22'],
+['Santa Teresa Benedicta de la Cruz','Quien busca la verdad, busca a Dios, sea consciente de ello o no.','Cartas'],
+['G. K. Chesterton','El ideal cristiano no ha sido probado y hallado deficiente: ha sido hallado difícil y no se ha probado.','Lo que está mal en el mundo'],
+['San Juan Pablo II','Familia, ¡sé lo que eres!','Familiaris consortio, 17'],
+['San Juan María Vianney','El sacerdocio es el amor del Corazón de Jesús.','Citado en el Catecismo, 1589'],
+['San Agustín','Ama y haz lo que quieras.','Comentario a la 1.ª carta de san Juan VII,8'],
+['Santo Tomás de Aquino','Te adoro con devoción, Dios escondido.','Himno «Adoro te devote»'],
+['San Francisco de Asís','Alabado seas, mi Señor, con todas tus criaturas.','Cántico de las criaturas'],
+['León XIV','¡La paz esté con todos ustedes!','Primer saludo como Papa, 8 de mayo de 2025'],
+['San Juan Damasceno','La oración es la elevación del alma a Dios.','Citado en el Catecismo, 2559'],
+['Santa Teresa de Calcuta','No todos podemos hacer grandes cosas, pero sí cosas pequeñas con gran amor.',''],
+['San Luis María Grignion de Montfort','A Jesús por María.','Tratado de la verdadera devoción'],
+['San Felipe Neri','Sed buenos, si podéis.',''],
+['San Pío de Pietrelcina','Reza, espera y no te preocupes.',''],
+['San Juan Bosco','Basta que seáis jóvenes para que yo os ame con toda mi alma.',''],
+['San Agustín','Si lo comprendes, no es Dios.','Sermón 117']
+];
+function fraseDia(t){const n=Math.floor((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(2026,0,1))/864e5);return FRASES[((n%FRASES.length)+FRASES.length)%FRASES.length]}
+function novDia(f,k){
+  const I=NOV_INFO[f.nov.id]||{n:'Novena'},d=f.nov.dias&&f.nov.dias[k];
+  if(f.nov.id==='cr'&&d)return {t:d[0],cita:d[1],b:d[2]};
+  if(d)return {t:d,b:I.nota||''};
+  return {t:'Día '+(k+1),b:I.nota||''};
+}
+function fiestaChips(f){return f.g.map(g=>'<span class="chip g'+g+'">'+esc(GRUPO[g])+'</span>').join('')}
+function novenaHtml(f,hoyK){
+  const I=NOV_INFO[f.nov.id]||{n:'Novena'},t=new Date();
+  let h='<div class="nvh"><div class="kk">'+esc(I.src||'')+'</div><h2>'+esc(I.n)+'</h2><p class="mut small">'+esc(cap(fmt(f.nov.ini)))+' – '+esc(fmt(addDays(f.nov.ini,8)))+' · prepara '+esc(f.n)+' ('+esc(fmt(f.d))+')</p>'+(I.nota?'<p class="small">'+esc(I.nota)+'</p>':'')+'</div>';
+  h+='<div class="steps">'+[0,1,2,3,4,5,6,7,8].map(k=>{const x=novDia(f,k),dd=addDays(f.nov.ini,k),on=k===hoyK,done=diff(t,dd)>0;
+    return '<details class="nvd'+(on?' on':'')+(done?' done':'')+'"'+(on?' open':'')+'><summary><span class="num">'+(k+1)+'</span><span><b>'+esc(x.t)+'</b><br><span class="mut small">'+esc(cap(fmt(dd)))+(on?' · hoy':'')+'</span></span></summary><div class="in">'+
+    (x.cita?'<div class="lbl">'+(f.nov.id==='cr'&&k===8?'Lectura':'Evangelio')+'</div><p><b>'+esc(x.cita)+'</b></p>':'')+(x.b?'<p>'+esc(x.b)+'</p>':'')+
+    '<div class="lbl">Cómo rezarla</div><p class="small">Señal de la cruz · «Ven, Espíritu Santo» · lee el texto del día · un momento de silencio · Padre Nuestro, Ave María y Gloria · tu petición'+(f.nov.id==='cr'?' · «¡Cristo, Rey nuestro! ¡Venga tu Reino!»':'')+'.</p></div></details>'}).join('')+'</div>';
+  if(I.url)h+='<div class="row"><a class="btn ghost" href="'+esc(I.url)+'" target="_blank" rel="noopener noreferrer">Texto completo en '+esc(I.src)+'</a></div>';
+  return h;
+}
+function viewFiestas(){
+  const t=new Date(),nh=novenaHoy(t);
+  if(state.nov){const f=proximas(t).concat(fiestas(t.getFullYear())).find(x=>x.nov&&x.nov.id+ymd(x.d)===state.nov);
+    if(f)return segHtml('orar')+'<button class="btn ghost" data-act="nov" data-v="">‹ Todas las fiestas</button>'+novenaHtml(f,diff(t,f.nov.ini)>=0&&diff(t,f.nov.ini)<9?diff(t,f.nov.ini):-1)}
+  let h=segHtml('orar');
+  if(nh)h+='<div class="novnow" data-act="nov" data-v="'+nh.f.nov.id+ymd(nh.f.d)+'"><span class="vk"></span><div class="kk">Novena en curso · día '+(nh.k+1)+' de 9</div><b>'+esc((NOV_INFO[nh.f.nov.id]||{}).n||'Novena')+'</b><p>'+esc(novDia(nh.f,nh.k).t)+'</p><span class="small">Abrir la novena ›</span></div>';
+  h+='<h2 class="sec">Próximas fiestas</h2>';
+  let mes=-1;
+  proximas(t,40).forEach(f=>{
+    if(f.d.getMonth()!==mes){mes=f.d.getMonth();h+='<div class="mesl">'+esc(cap(MESES[mes]))+' '+f.d.getFullYear()+'</div>'}
+    const n=diff(f.d,t),ni=f.nov?diff(f.nov.ini,t):null;
+    h+='<details class="fi"><summary><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span class="fn"><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(f.r)+' · '+esc(enDias(n))+'</span></span></summary><div class="in"><div class="chips">'+fiestaChips(f)+'</div><p>'+esc(f.t)+'</p>'+
+      (f.nov?'<div class="nvbox"><b>'+esc((NOV_INFO[f.nov.id]||{}).n||'Novena')+'</b><br><span class="small">'+(ni>0?'Empieza '+esc(enDias(ni).toLowerCase())+' ('+esc(fmt(f.nov.ini))+')':ni>-9?'En curso: hoy es el día '+(1-ni)+' de 9':'Del '+esc(fmt(f.nov.ini))+' al '+esc(fmt(addDays(f.nov.ini,8))))+'</span><div class="row" style="margin:8px 0 0"><button class="btn" data-act="nov" data-v="'+f.nov.id+ymd(f.d)+'">Ver la novena</button></div></div>':'')+'</div></details>';
+  });
+  h+='<p class="note">Las fiestas móviles se calculan cada año. En Venezuela, Epifanía, Ascensión y Corpus Christi se celebran el domingo.</p>';
+  return h;
+}
 function viewOrar(){
+  if(state.sub.orar==='fie')return viewFiestas();
   if(state.sub.orar==='ros')return segHtml('orar')+viewRosario();
   return segHtml('orar')+'<p class="note" style="margin-top:0">Textos tradicionales de uso común. Pueden variar levemente según el país.</p>'+ORACIONES.map(o=>
     '<details><summary>'+esc(o.n)+'</summary><div class="in"><p class="prayer">'+esc(o.t)+'</p><div class="row">'+sayBtn('o_'+o.id,o.t.replace(/\n/g,' '))+'</div><div class="lbl">Qué significa</div><p>'+esc(o.m)+'</p></div></details>').join('');
@@ -1435,7 +1633,7 @@ function renderNav(){
   $('#tabs').innerHTML='<div class="in">'+TABS.map(t=>'<button data-act="tab" data-v="'+t.id+'"'+(state.tab===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>').join('')+'</div>';
 }
 const FE={corazon:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CHRIST_PANTOCRATOR-SINAI%286th_Century%29.jpg/1920px-CHRIST_PANTOCRATOR-SINAI%286th_Century%29.jpg", "«Yo soy el camino, la verdad y la vida».", "Jn 14,6", "Cristo Pantocrátor, monasterio de Santa Catalina del Sinaí (s. VI) · dominio público", 0.34],getsemani:["https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gethsemane_Carl_Bloch.jpg/1920px-Gethsemane_Carl_Bloch.jpg", "«No se haga mi voluntad, sino la tuya».", "Lc 22,42", "Carl Bloch, Getsemaní · dominio público", 0.45],resurreccion:["https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Rafael_-_ressureicaocristo01.jpg/1920px-Rafael_-_ressureicaocristo01.jpg", "«No está aquí: ha resucitado, como había dicho».", "Mt 28,6", "Rafael, La Resurrección de Cristo · dominio público", 0.08],virgen:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Vierge_en_oraison_%28Il_Sassoferrato%29.jpg/1920px-Vierge_en_oraison_%28Il_Sassoferrato%29.jpg", "«He aquí la esclava del Señor; hágase en mí según tu palabra».", "Lc 1,38", "Sassoferrato, La Virgen en oración · dominio público", 0.37],inmaculada:["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg/1920px-La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg", "«Alégrate, llena de gracia, el Señor está contigo».", "Lc 1,28", "Murillo, Inmaculada de Soult (1678) · dominio público", 0.21],pieta:["https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Michelangelo%27s_Piet%C3%A0_Saint_Peter%27s_Basilica_Vatican_City.jpg/1920px-Michelangelo%27s_Piet%C3%A0_Saint_Peter%27s_Basilica_Vatican_City.jpg", "«Junto a la cruz de Jesús estaba su madre».", "Jn 19,25", "La Piedad de Miguel Ángel, Basílica de San Pedro · foto de dominio público (CC0)", 0.25],cena:["https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg/3840px-Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg", "«Haced esto en memoria mía».", "Lc 22,19", "Leonardo da Vinci, La Última Cena · dominio público", 0.45],basilica:["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/3840px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", "«Tú eres Pedro, y sobre esta piedra edificaré mi Iglesia».", "Mt 16,18", "Basílica de San Pedro · foto: Alvesgaspar, CC BY-SA 4.0", 0.5],plaza:["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/3840px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg", "«Id por todo el mundo y anunciad el Evangelio».", "Mc 16,15", "Plaza de San Pedro · foto: Diliff, CC BY-SA 3.0", 0.5]};
-const FE_TAB={enc:['resurreccion','cena'],misa:['basilica','pieta'],orar:['inmaculada','pieta'],apr:['plaza','cena'],apo:['corazon','resurreccion'],dia:['virgen','corazon']};
+const FE_TAB=new Proxy({},{get:(o,tab)=>FE_POOL[tab]?FE_POOL[tab].filter(k=>k!==feDia(tab)):undefined});
 function feHtml(k){const f=FE[k];return '<figure class="fe" aria-label="'+esc(f[3])+'"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" loading="lazy" decoding="async"><figcaption><span class="vk"></span><p class="fe-t">'+esc(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span></figcaption><small class="fe-cr">'+esc(f[3])+'</small></figure>'}
 function storyHtml(ks){const W=t=>t.split(' ').map((w,i)=>'<span class="w" style="--i:'+i+'">'+esc(w)+'</span>').join(' ');return '<section class="story" style="height:'+(ks.length*110+60)+'vh" aria-label="Contempla"><div class="stick"><div class="hd2">Contempla</div><div class="sol"><div class="disc"></div><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\"><defs><linearGradient id=\"rg\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#FFF3C4\"/><stop offset=\"1\" stop-color=\"#E8B923\" stop-opacity=\"0\"/></linearGradient></defs><path d=\"M50 50 L98.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 98.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 97.3\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 95.1\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 91.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 86.8\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 80.9\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 74.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 66.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 58.3\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L2.0 50.0\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L2.7 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L4.9 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L8.4 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L13.2 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L19.1 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L26.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L33.6 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L41.7 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L50.0 2.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L58.3 2.7\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L66.4 4.9\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L74.0 8.4\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L80.9 13.2\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L86.8 19.1\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L91.6 26.0\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/><path d=\"M50 50 L95.1 33.6\" stroke=\"url(#rg)\" stroke-width=\"0.6\"/><path d=\"M50 50 L97.3 41.7\" stroke=\"url(#rg)\" stroke-width=\"1.2\"/></svg></div>'+ks.map((k,i)=>{const f=FE[k];return '<div class="ly"><div class="pic"><img data-fy="'+f[4]+'" src="'+f[0]+'" alt="" loading="lazy" decoding="async"></div><div class="cap"><span class="vk"></span><p class="fe-t">'+W(f[1])+'</p><span class="fe-c">'+esc(f[2])+'</span><p class="small" style="opacity:.7;margin-top:10px">'+esc(f[3])+'</p></div></div>'}).join('')+'<div class="pips">'+ks.map((k,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join('')+'</div></div></section>'}
 function decorate(){
@@ -1484,7 +1682,12 @@ function feFrame(){
 }
 const feReq=()=>{if(!feTick){feTick=true;requestAnimationFrame(feFrame)}};
 addEventListener('scroll',feReq,{passive:true});addEventListener('resize',feReq);
-const FE_HERO={"enc": ["getsemani", "Encuentro con Cristo"], "misa": ["cena", "La Santa Misa"], "orar": ["virgen", "Orar"], "apr": ["basilica", "Aprender la fe"], "apo": ["plaza", "Apóstol"], "dia": ["resurreccion", "Mi día con Dios"]};
+const FE_POOL={enc:['getsemani','corazon','resurreccion','cena'],misa:['cena','basilica','pieta'],orar:['virgen','inmaculada','pieta','corazon'],apr:['basilica','plaza','cena'],apo:['plaza','corazon','resurreccion'],dia:['resurreccion','virgen','corazon','inmaculada']};
+const FE_TIT={enc:'Encuentro con Cristo',misa:'La Santa Misa',orar:'Orar',apr:'Aprender la fe',apo:'Apóstol',dia:'Mi día con Dios'};
+const NOV_IMG={cr:'corazon',mis:'corazon',inm:'inmaculada',nav:'virgen',pen:'basilica',scj:'corazon',pastora:'virgen',coro:'virgen',asun:'inmaculada',jose:'basilica'};
+const dayN=()=>{const t=new Date();return Math.floor((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(2026,0,1))/864e5)};
+function feDia(tab){const P=FE_POOL[tab]||['basilica'];return P[((dayN()%P.length)+P.length)%P.length]}
+const FE_HERO=new Proxy({},{get:(o,tab)=>FE_TIT[tab]?[feDia(tab),FE_TIT[tab]]:undefined});
 function phHtml(k,kick,title,sub,big){const f=FE[k];return '<header class="ph'+(big?' big':'')+'"><div class="pi"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
 let LAST=null;
 function render(keepScroll){
@@ -1604,6 +1807,7 @@ document.addEventListener('click',e=>{
     const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];if(!r[k].includes('examen'))r[k].push('examen');store.set('rut',r);
     $('#examsg').textContent='Marcado en tu rutina de hoy. Que Dios te dé buen descanso.';
   }
+  else if(a==='nov'){state.nov=v||null;if(state.tab!=='orar'||state.sub.orar!=='fie'){state.tab='orar';state.sub.orar='fie';store.set('tab','orar');store.set('sub',state.sub)}render()}
   else if(a==='pray'){state.tab='enc';state.sub.enc='paso';state.ps=0;state.plist=false;store.set('tab','enc');store.set('sub',state.sub);render()}
   else if(a==='ps'){state.ps=Math.max(0,+v);render()}
   else if(a==='plist'){state.plist=v==='1';render()}
@@ -1659,7 +1863,13 @@ document.addEventListener('input',e=>{
     const D=store.get('diario',[]),i=+t.dataset.dres;if(D[i]){D[i].res=t.value;store.set('diario',D)}
   }else if(t.id==='gq'){state.gq=t.value;$('#glist').innerHTML=glosList()}
 });
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&ymd(new Date())!==state.day){state.day=ymd(new Date());state.year=new Date().getFullYear();render()}});
+function cargarHoy(){return new Promise(ok=>{const sc=document.createElement('script');sc.src='hoy.js?d='+ymd(new Date())+'-'+Date.now();sc.onload=sc.onerror=()=>{sc.remove();ok()};document.head.appendChild(sc)})}
+function hoyViejo(){const H=window.HOY;return !(H&&H.fecha===ymd(new Date()))}
+async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFullYear();state.nov=null;render();if(hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}}
+(function medianoche(){const t=new Date(),m=new Date(t.getFullYear(),t.getMonth(),t.getDate()+1,0,0,5);setTimeout(()=>{nuevoDia();medianoche()},m-t)})();
+/* Mientras el Evangelio de hoy no esté publicado, se vuelve a buscar cada 10 minutos (la actualización se hace pasada la medianoche). */
+setInterval(async()=>{if(!document.hidden&&hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}},10*60*1000);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)return;if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
 render();
 })();
 </script>
