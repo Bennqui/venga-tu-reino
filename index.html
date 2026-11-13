@@ -1,10 +1,10 @@
-<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FFFDF8"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name="color-scheme" content="light only"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FFFFFF"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name="color-scheme" content="light only"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
 <style>
 /* Diseño «Crepúsculo de Barquisimeto»: lo único llamativo es el cielo de la portada, que cambia con la hora
    y lleva el color litúrgico del día. Todo lo demás es tranquilo: fondo de cal fría, tinta índigo, oro discreto.
    Marcellus (letra de inscripción romana) para títulos; Literata (hecha para leer en pantalla) para el texto. */
-:root{--bg:#FFFDF8;--card:#FFFFFF;--ink:#2A2316;--mut:#7A6D55;--line:#EFE5CC;--soft:#F8F1DE;--gold:#9C700A;--gold-bg:#FDF4D6;--wine:#E1AE1E;--on-wine:#2A2316;--ok:#2E7A4F;--bad:#B3302F;--lit:#C9960F;--litc:#C9960F;--tint:#FBF5E6;--vy:#E8B923;--vw:#FFFFFF;--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
+:root{--bg:#FFFFFF;--card:#FFFFFF;--ink:#2A2316;--mut:#7A6D55;--line:#EFE7D6;--soft:#FAF6EC;--gold:#9C700A;--gold-bg:#FDF4D6;--wine:#E1AE1E;--on-wine:#2A2316;--ok:#2E7A4F;--bad:#B3302F;--lit:#C9960F;--litc:#C9960F;--tint:#FBF5E6;--vy:#E1AE1E;--vw:#FFFFFF;--red:#B0182A;--red-bg:#FBEDEE;--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.6;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:12px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 #app{max-width:620px;margin:0 auto}
@@ -254,8 +254,21 @@ details,.card{border-color:var(--line);box-shadow:0 1px 0 rgba(156,112,10,.04)}
 .seg button[aria-pressed="true"]{background:var(--vy);color:var(--ink);box-shadow:none;font-weight:600}
 nav.tabs button[aria-current="page"]{color:var(--ink)}
 nav.tabs button[aria-current="page"] svg{stroke:var(--gold)}
-nav.tabs{background:rgba(255,253,248,.9)}
+nav.tabs{background:rgba(255,255,255,.92)}
 .btn.ghost{border-color:var(--vy)}
+/* Oro y rojo del escudo vaticano sobre fondo blanco */
+.vk{background:linear-gradient(90deg,var(--vy) 0 50%,var(--red) 50% 100%)}
+#prog{background:linear-gradient(90deg,var(--vy) 0 50%,var(--red) 50% 100%);background-size:24px 3px}
+.sec::before{content:"";display:block;width:28px;height:3px;border-radius:2px;margin:0 0 10px;background:linear-gradient(90deg,var(--vy) 0 60%,var(--red) 60% 100%)}
+nav.tabs button[aria-current="page"]{color:var(--red)}
+nav.tabs button[aria-current="page"] svg{stroke:var(--gold)}
+details[open]>summary::after{border-color:var(--red)}
+a{text-decoration-color:var(--red)}
+.ph .kick{color:#FFE7A0}
+.fe-c{color:#FFD9A0}
+.story .pips i.on{background:var(--red);box-shadow:0 0 0 2px var(--vy)}
+.btn.ghost{border-color:color-mix(in srgb,var(--red) 35%,var(--vy))}
+.ph,.fe,.story .stick{background:#3a0f12}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
