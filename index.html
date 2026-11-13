@@ -175,6 +175,27 @@ details.mini .in{padding:0 0 8px}
 .ficha{border-top:1px solid var(--line);padding:10px 0}
 .ficha:first-child{border-top:0}
 nav.tabs button{font-size:.66rem;padding:7px 0 5px}
+/* ===== Movimiento: transiciones entre páginas, al desplazarse y al abrir tarjetas.
+   Todo se apaga si el teléfono tiene activado «Reducir movimiento». ===== */
+nav.tabs{transition:transform .32s cubic-bezier(.2,.7,.2,1)}
+nav.tabs.hide{transform:translateY(115%)}
+@media (prefers-reduced-motion:no-preference){
+#hd.go-r,#main.go-r{animation:vgr .38s cubic-bezier(.2,.7,.2,1) both}
+#hd.go-l,#main.go-l{animation:vgl .38s cubic-bezier(.2,.7,.2,1) both}
+#hd.go-f,#main.go-f{animation:vgf .34s ease-out both}
+@keyframes vgr{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes vgl{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes vgf{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .5s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.rv.up{transform:translateY(-26px) scale(.98)}
+.rv.vis{opacity:1;transform:none}
+nav.tabs button.pop svg{animation:vpop .42s cubic-bezier(.3,1.5,.5,1)}
+@keyframes vpop{0%{transform:scale(.8)}60%{transform:scale(1.2) translateY(-2px)}100%{transform:none}}
+.btn,.seg button,nav.tabs button{transition:transform .12s ease,background-color .25s,color .25s,box-shadow .25s}
+.btn:active,.seg button:active,nav.tabs button:active{transform:scale(.94)}
+summary{transition:background-color .2s}
+summary:active{background:var(--soft);border-radius:16px}
+}
 </style>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
@@ -310,7 +331,7 @@ const GLOS=[
 {t:'Solemnidad, fiesta y memoria',d:'Grados de importancia de una celebración: la solemnidad es la mayor; luego la fiesta y la memoria.'},
 {t:'Octava',d:'Ocho días de celebración continua de una gran fiesta, como la de Pascua o Navidad.'},
 {t:'Vigilia',d:'Celebración que se hace en la noche anterior a una fiesta, como la Vigilia Pascual.'},
-{t:'Credo',d:'Del latín «creo». Resume la fe de la Iglesia en la Trinidad.'}
+{t:'Credo',d:'Del latín «creo». Resume la fe de la Iglesia en la Trinidad. Hay dos credos: el Niceno-Constantinopolitano, más largo, que viene de los concilios de Nicea (325) y Constantinopla (381) y es el que se proclama en la Misa de los domingos y solemnidades; y el Símbolo de los Apóstoles, más breve y antiguo, que se reza en el Rosario y puede usarse en la Misa en su lugar, sobre todo en Cuaresma y Pascua. Los dos dicen la misma fe. Ambos están completos en Orar › Oraciones.'}
 ];
 
 /* Oraciones. Textos tradicionales de uso común; pueden variar levemente según el país. */
@@ -319,6 +340,7 @@ const ORACIONES=[
 {id:'padre',n:'Padre Nuestro',t:'Padre nuestro, que estás en el cielo,\nsantificado sea tu nombre;\nvenga a nosotros tu reino;\nhágase tu voluntad\nen la tierra como en el cielo.\nDanos hoy nuestro pan de cada día;\nperdona nuestras ofensas,\ncomo también nosotros perdonamos\na los que nos ofenden;\nno nos dejes caer en la tentación,\ny líbranos del mal. Amén.',m:'Tiene siete peticiones: las tres primeras son para Dios (su nombre, su reino, su voluntad) y las cuatro últimas para nosotros (pan, perdón, no caer, ser librados del mal). Algunas conferencias episcopales usan «no nos dejes caer en la tentación», otras «no nos induzcas»: pequeñas variantes según el país.'},
 {id:'ave',n:'Ave María',t:'Dios te salve, María, llena eres de gracia,\nel Señor es contigo;\nbendita tú eres entre todas las mujeres,\ny bendito es el fruto de tu vientre, Jesús.\nSanta María, Madre de Dios,\nruega por nosotros, pecadores,\nahora y en la hora de nuestra muerte. Amén.',m:'La primera parte une el saludo del ángel Gabriel (Lucas 1, 28) y el de Isabel (Lucas 1, 42). La segunda es la súplica de la Iglesia a María.'},
 {id:'vensp',n:'Ven, Espíritu Santo',t:'Ven, Espíritu Santo,\nllena los corazones de tus fieles\ny enciende en ellos el fuego de tu amor.\nV. Envía tu Espíritu y serán creadas todas las cosas.\nR. Y renovarás la faz de la tierra.\n\nOremos: Oh Dios, que has instruido los corazones de tus fieles con la luz del Espíritu Santo, concédenos que, guiados por el mismo Espíritu, sintamos rectamente y gocemos siempre de sus consuelos. Por Cristo, nuestro Señor. Amén.',m:'Se reza al empezar el Encuentro con Cristo, la oración personal o el estudio: pedimos al Espíritu que ilumine la mente, mueva la voluntad y encienda el corazón.'},
+{id:'actos',n:'Actos de fe, esperanza y caridad',t:'Después de invocar al Espíritu Santo, haz con tus propias palabras tres actos breves:\n\nFe: dile a Jesús que crees que está aquí y que te escucha.\nEsperanza: dile que confías en Él y en lo que te promete.\nCaridad: dile que lo amas, y en Él a los demás.\n\nPuede ser tan sencillo como:\n«Creo, Jesús, espero en ti y te amo».',m:'No es una fórmula para memorizar, sino una guía para orar de forma libre, desde el corazón. Fe, esperanza y caridad son las virtudes que nos unen directamente a Dios; por eso son un buen comienzo para toda oración. Incluso esa frase tan breve ya es una oración muy profunda.'},
 {id:'gloriah',n:'Gloria (himno de la Misa)',t:'Gloria a Dios en el cielo,\ny en la tierra paz a los hombres que ama el Señor.\nPor tu inmensa gloria te alabamos,\nte bendecimos, te adoramos,\nte glorificamos, te damos gracias,\nSeñor Dios, Rey celestial,\nDios Padre todopoderoso.\nSeñor, Hijo único, Jesucristo.\nSeñor Dios, Cordero de Dios, Hijo del Padre;\ntú que quitas el pecado del mundo,\nten piedad de nosotros;\ntú que quitas el pecado del mundo,\natiende nuestra súplica;\ntú que estás sentado a la derecha del Padre,\nten piedad de nosotros;\nporque solo tú eres Santo,\nsolo tú Señor,\nsolo tú Altísimo, Jesucristo,\ncon el Espíritu Santo\nen la gloria de Dios Padre. Amén.',m:'Se canta o se reza los domingos (salvo Adviento y Cuaresma), en solemnidades y fiestas, después del «Señor, ten piedad». Empieza con el canto de los ángeles en Belén.'},
 {id:'credon',n:'Credo de la Misa (Niceno-Constantinopolitano)',t:'Creo en un solo Dios,\nPadre todopoderoso,\nCreador del cielo y de la tierra,\nde todo lo visible y lo invisible.\nCreo en un solo Señor, Jesucristo,\nHijo único de Dios,\nnacido del Padre antes de todos los siglos:\nDios de Dios, Luz de Luz,\nDios verdadero de Dios verdadero,\nengendrado, no creado,\nde la misma naturaleza del Padre,\npor quien todo fue hecho;\nque por nosotros, los hombres,\ny por nuestra salvación bajó del cielo,\n(aquí todos se inclinan)\ny por obra del Espíritu Santo\nse encarnó de María, la Virgen,\ny se hizo hombre;\ny por nuestra causa fue crucificado\nen tiempos de Poncio Pilato;\npadeció y fue sepultado,\ny resucitó al tercer día, según las Escrituras,\ny subió al cielo,\ny está sentado a la derecha del Padre;\ny de nuevo vendrá con gloria\npara juzgar a vivos y muertos,\ny su reino no tendrá fin.\nCreo en el Espíritu Santo, Señor y dador de vida,\nque procede del Padre y del Hijo,\nque con el Padre y el Hijo\nrecibe una misma adoración y gloria,\ny que habló por los profetas.\nCreo en la Iglesia,\nque es una, santa, católica y apostólica.\nConfieso que hay un solo bautismo\npara el perdón de los pecados.\nEspero la resurrección de los muertos\ny la vida del mundo futuro. Amén.',m:'Es el Credo que se proclama de pie en la Misa de los domingos y solemnidades, después de la homilía. En algunas Misas se usa en su lugar el Símbolo de los Apóstoles.'},
 {id:'santo',n:'Santo (Sanctus)',t:'Santo, Santo, Santo es el Señor,\nDios del universo.\nLlenos están el cielo y la tierra de tu gloria.\nHosanna en el cielo.\nBendito el que viene en nombre del Señor.\nHosanna en el cielo.',m:'Se canta al terminar el prefacio, uniéndonos a los ángeles (Isaías 6, 3) y a la multitud que recibió a Jesús en Jerusalén (Mateo 21, 9).'},
@@ -919,7 +941,7 @@ function pasosHoy(H,N){
   const k=ymd(new Date()),E=H.evangelio,X=H.encuentro||{},link='https://www.ewtn.com/es/catolicismo/lecturas/'+k;
   const ver=X.ver||ENC_GEN.ver,juz=X.juzgar||ENC_GEN.juzgar,act=X.actuar||ENC_GEN.actuar;
   const P=[];
-  P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
+  P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="mut" style="margin-top:10px">Haz ahora, con tus palabras, un acto de fe, esperanza y caridad. Puede ser así de sencillo:</p><p class="prayer">Creo, Jesús, espero en ti y te amo.</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
   P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Abrir el texto bíblico</a></div>'+
     (X.frase?'<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>':'')+
     '<div class="lbl">¿Qué palabra o frase te tocó a ti?</div>'+ta('palabra','Escríbela aquí…',N.palabra,70)});
@@ -1240,7 +1262,7 @@ function viewRosario(){
 
 /* ===== APÓSTOL: para quien acompaña, hace apostolado y dirección espiritual ===== */
 const DIR_PASOS=[
-['Acogida y oración','Pon la conversación en manos del Espíritu Santo (un «Ven, Espíritu Santo» breve). Escucha antes de hablar.'],
+['Acogida y oración','Pon la conversación en manos del Espíritu Santo (un «Ven, Espíritu Santo» breve) y haz, con tus palabras, un acto de fe, esperanza y caridad: «Creo, Jesús, espero en ti y te amo». Escucha antes de hablar.'],
 ['¿Cómo llegas?','Una pregunta abierta: «¿Cómo has estado desde la última vez?». Deja que la persona marque el tema.'],
 ['Revisión de vida','Repasa con calma dos o tres áreas (abajo). No todas cada vez.'],
 ['Discernir','Ayuda a distinguir lo que viene de Dios de lo que no: consolación y desolación.'],
@@ -1338,14 +1360,80 @@ const VIEWS={hoy:viewHoy,enc:viewEnc,misa:viewMisa,orar:viewOrar,apr:viewApr,apo
 function renderNav(){
   $('#tabs').innerHTML='<div class="in">'+TABS.map(t=>'<button data-act="tab" data-v="'+t.id+'"'+(state.tab===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>').join('')+'</div>';
 }
+let LAST=null;
 function render(keepScroll){
   stopSpeak();
   const y=window.scrollY;state.say={};
+  const sub=t=>{const L=SUBS[t]||[];return Math.max(0,L.findIndex(x=>x[0]===state.sub[t]))};
+  const key=state.tab+'|'+sub(state.tab);
+  let cls='';
+  if(!LAST)cls='go-f';
+  else if(!keepScroll){
+    const ti=t=>TABS.findIndex(x=>x.id===t);
+    if(LAST.tab!==state.tab)cls=ti(state.tab)>ti(LAST.tab)?'go-r':'go-l';
+    else if(LAST.key!==key)cls=sub(state.tab)>LAST.sub?'go-r':'go-l';
+  }
+  const tabChanged=!LAST||LAST.tab!==state.tab;
+  LAST={tab:state.tab,key,sub:sub(state.tab)};
   $('#hd').innerHTML=viewHd();
   $('#main').innerHTML=VIEWS[state.tab]();
   renderNav();
+  if(tabChanged){const c=$('#tabs [aria-current="page"]');if(c)c.classList.add('pop')}
   window.scrollTo(0,keepScroll?y:0);
+  if(cls)['#hd','#main'].forEach(q=>{const el=$(q);el.classList.remove('go-r','go-l','go-f');void el.offsetWidth;el.classList.add(cls)});
+  $('#tabs').classList.remove('hide');
+  reveal();
 }
+
+/* ===== MOVIMIENTO ===== */
+const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+document.addEventListener('animationend',e=>{if(e.target.id==='main'||e.target.id==='hd')e.target.classList.remove('go-r','go-l','go-f')});
+/* Al desplazarse, cada tarjeta aparece suavemente: desde abajo al bajar y desde arriba al subir. */
+const IO=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(en=>{
+  const el=en.target;
+  if(en.isIntersecting&&(en.intersectionRatio>=.12||en.boundingClientRect.height>innerHeight*.8)){el.classList.add('vis')}
+  else if(!en.isIntersecting){el.classList.remove('vis');el.classList.toggle('up',en.boundingClientRect.top<0)}
+}),{threshold:[0,.12]}):null;
+function reveal(){
+  if(!IO||RM())return;
+  IO.disconnect();
+  const mark=par=>{for(const el of par.children){
+    if(el.matches('.seg,script,style,[hidden]'))continue;
+    const r=el.getBoundingClientRect();
+    if(r.height>innerHeight*.9&&el.children.length>1&&!el.matches('details')){mark(el);continue}
+    if(r.top<innerHeight&&r.bottom>0)continue;
+    el.classList.add('rv');if(r.bottom<=0)el.classList.add('up');IO.observe(el);
+  }};
+  mark($('#main'));
+}
+/* Las tarjetas desplegables se abren y se cierran con suavidad. */
+document.addEventListener('click',e=>{
+  const s=e.target.closest('summary');if(!s||RM())return;
+  const d=s.parentElement;if(!d||d.tagName!=='DETAILS'||!d.animate)return;
+  e.preventDefault();
+  if(d._a){d._a.cancel()}
+  const opening=!d.open||d._closing;
+  const from=d.offsetHeight;
+  d._closing=false;d.style.overflow='hidden';
+  let to;
+  if(opening){d.open=true;d.style.height='auto';to=d.offsetHeight}
+  else{to=s.offsetHeight+(d.offsetHeight-d.clientHeight);d._closing=true}
+  const a=d.animate({height:[from+'px',to+'px']},{duration:opening?300:240,easing:'cubic-bezier(.2,.7,.2,1)'});
+  const inn=d.querySelector(':scope>.in');
+  if(opening&&inn&&inn.animate)inn.animate({opacity:[0,1],transform:['translateY(-6px)','none']},{duration:300,easing:'ease-out'});
+  d._a=a;
+  a.onfinish=()=>{if(d._closing){d.open=false;d._closing=false}d.style.overflow='';d.style.height='';d._a=null};
+  a.oncancel=()=>{d.style.overflow='';d.style.height=''};
+});
+/* La barra de abajo se esconde al bajar y vuelve al subir o al llegar al final. */
+let lastY=window.scrollY;
+addEventListener('scroll',()=>{
+  const y=window.scrollY,t=$('#tabs');if(!t)return;
+  const atEnd=innerHeight+y>=document.documentElement.scrollHeight-40;
+  if(y>lastY+8&&y>140&&!atEnd)t.classList.add('hide');
+  else if(y<lastY-8||atEnd||y<60)t.classList.remove('hide');
+  if(Math.abs(y-lastY)>8)lastY=y;
+},{passive:true});
 
 /* ===== VOZ ===== */
 function stopSpeak(){
