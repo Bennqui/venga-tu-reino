@@ -316,6 +316,8 @@ a{text-decoration-color:var(--red)}
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
+<script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
+(function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
 (function(){
 'use strict';
@@ -1471,7 +1473,7 @@ function guiaPasos(){
 /* Lo propio de hoy para cada parte */
 function hoyBox(p,D){
   const box=(t,b)=>'<div class="hoyb"><b>'+t+'</b>'+b+'</div>';
-  const lec=(l,tit)=>l?box(tit,'<div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'):(D.ok?'':box(tit,'<p class="small mut" style="margin:0">Las lecturas de hoy aparecen cada mañana a las 9:00. <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Verlas ahora</a></p>'));
+  const lec=(l,tit)=>l?box(tit,'<div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'):(D.ok?'':box(tit,'<p class="small mut" style="margin:0">Las lecturas de hoy aún no se han cargado. <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Verlas ahora</a></p>'));
   switch(p.n){
     case 'Primera lectura':return lec(D.l1,'Hoy se lee');
     case 'Segunda lectura':return lec(D.l2,'Hoy se lee');
@@ -1991,14 +1993,25 @@ document.addEventListener('input',e=>{
     const D=store.get('diario',[]),i=+t.dataset.dres;if(D[i]){D[i].res=t.value;store.set('diario',D)}
   }else if(t.id==='gq'){state.gq=t.value;$('#glist').innerHTML=glosList()}
 });
-function cargarHoy(){return new Promise(ok=>{const sc=document.createElement('script');sc.src='hoy.js?d='+ymd(new Date())+'-'+Date.now();sc.onload=sc.onerror=()=>{sc.remove();ok()};document.head.appendChild(sc)})}
+function cargaJS(src){return new Promise(ok=>{const sc=document.createElement('script');sc.src=src;sc.onload=sc.onerror=()=>{sc.remove();ok()};document.head.appendChild(sc)})}
+/* El día de hoy se busca primero entre los días preparados por adelantado (dias/AAAA-MM-DD.js) y, si no está, en hoy.js. */
+async function cargarHoy(){const d=ymd(new Date());await cargaJS('dias/'+d+'.js?t='+Date.now());if(hoyViejo())await cargaJS('hoy.js?d='+d+'-'+Date.now())}
 function hoyViejo(){const H=window.HOY;return !(H&&H.fecha===ymd(new Date()))}
-async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFullYear();state.nov=null;render();if(hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}}
+/* Guarda en el teléfono los próximos días ya preparados, para que la app cambie de día aunque no haya internet. */
+let diasT=0;
+async function guardarDias(){
+  if(Date.now()-diasT<36e5||!('caches' in window)||!navigator.serviceWorker||!navigator.serviceWorker.controller)return;
+  diasT=Date.now();const t=new Date();
+  for(let i=1;i<=8;i++){const u='dias/'+ymd(addDays(t,i))+'.js';try{if(!(await caches.match(u)))await fetch(u)}catch(e){}}
+}
+async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFullYear();state.nov=null;render();if(hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}diasT=0;guardarDias()}
 (function medianoche(){const t=new Date(),m=new Date(t.getFullYear(),t.getMonth(),t.getDate()+1,0,0,5);setTimeout(()=>{nuevoDia();medianoche()},m-t)})();
-/* Mientras el Evangelio de hoy no esté publicado, se vuelve a buscar cada 10 minutos (la actualización se hace pasada la medianoche). */
+/* Si el día de hoy todavía no está (ni preparado ni en hoy.js), se vuelve a buscar cada 10 minutos. */
 setInterval(async()=>{if(!document.hidden&&hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}},10*60*1000);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)return;if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)return;guardarDias();if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
 render();
+if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)});
+setTimeout(guardarDias,6000);
 })();
 </script>
 
