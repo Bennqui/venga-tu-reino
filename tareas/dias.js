@@ -7,6 +7,7 @@
    node tareas/dias.js completar FECHA archivo.json       agrega o reemplaza secciones de un día que ya existe (p. ej. {"conoce":{…}})
    node tareas/dias.js validar   dias/FECHA.js            revisa que el archivo de un día esté completo y bien formado
    node tareas/dias.js temas                              personas y hechos que ya salieron (para no repetir)
+   node tareas/dias.js catecismo FECHA                    qué números del Catecismo tocan esa fecha (plan «el Catecismo en un año»)
    node tareas/dias.js hoy       AAAA-MM-DD               copia dias/AAAA-MM-DD.js a hoy.js (solo si es válido)
 
    En estado, faltan y hoy, AAAA-MM-DD es siempre la fecha de HOY en Venezuela (America/Caracas). */
@@ -40,6 +41,16 @@ const RANGOS = ['Solemnidad', 'Fiesta', 'Memoria', 'Memoria libre', 'Feria', 'Do
 const COLORES = ['verde', 'morado', 'blanco', 'rojo', 'rosa'];
 const TIPOS = ['Primera lectura', 'Salmo responsorial', 'Segunda lectura', 'Evangelio'];
 const RELATOS = ['Parábola', 'Milagro', 'Enseñanza', 'Encuentro', 'Escena'];
+
+/* «El Catecismo en un año»: los 2865 números repartidos en 365 días, empezando el 2026-11-15.
+   La app usa exactamente la misma cuenta (catPlan en index.html). Antes de esa fecha no se pide la sección. */
+const CAT_INICIO = '2026-11-15', CAT_TOTAL = 2865, CAT_DIAS = 365;
+function catPlan(f) {
+  const n = Math.round((aFecha(f) - aFecha(CAT_INICIO)) / 864e5);
+  if (n < 0) return null;
+  const k = n % CAT_DIAS;
+  return { dia: k + 1, desde: Math.floor(k * CAT_TOTAL / CAT_DIAS) + 1, hasta: Math.floor((k + 1) * CAT_TOTAL / CAT_DIAS) };
+}
 
 function preparados() {
   if (!fs.existsSync(DIAS)) return [];
@@ -185,6 +196,29 @@ function validarCodigo(codigo, fechaEsperada) {
     }
     if (C.persona && C.hecho && txt(C.persona.nombre) && txt(C.hecho.nombre)) pide(llano(C.persona.nombre) !== llano(C.hecho.nombre), 'conoce: la persona y el hecho no pueden ser lo mismo');
   }
+
+  /* El Catecismo en un año: los números que tocan ese día, explicados con sencillez */
+  const P = esFecha(H.fecha) ? catPlan(H.fecha) : null;
+  if (P) {
+    const K = H.catecismo, p = 'catecismo';
+    if (!K || typeof K !== 'object') E.push(p + ': falta la sección del Catecismo (números ' + P.desde + '–' + P.hasta + '; mira «node tareas/dias.js catecismo ' + H.fecha + '»)');
+    else {
+      const kp = (ok, msg) => { if (!ok) E.push(p + msg); };
+      kp(K.desde === P.desde && K.hasta === P.hasta, ': este día tocan los números ' + P.desde + ' a ' + P.hasta + ' (desde y hasta deben ser esos números)');
+      kp(txt(K.tema, 5), '.tema falta');
+      kp(Array.isArray(K.explicacion) && K.explicacion.length >= 2 && K.explicacion.every(s => txt(s, 120)), '.explicacion debe tener al menos 2 párrafos de 120 caracteres o más');
+      const lk = (Array.isArray(K.explicacion) ? K.explicacion : []).filter(s => typeof s === 'string').join(' ').length;
+      kp(lk >= 500 && lk <= 2500, '.explicacion debe sumar entre 500 y 2500 caracteres (tiene ' + lk + ')');
+      kp(txt(K.clave, 20), '.clave falta (una idea para recordar)');
+      kp(txt(K.pregunta, 10), '.pregunta falta');
+      kp(txt(K.url) && /^https:\/\/www\.vatican\.va\/archive\/catechism_sp\/\S+$/.test(K.url), '.url debe ser la página de vatican.va/archive/catechism_sp/ donde están esos números');
+      if ('cita' in K) {
+        const c = K.cita || {};
+        kp(txt(c.texto, 10) && Number.isInteger(c.num), '.cita incompleta (texto y num); si no la copiaste textual de vatican.va, omítela');
+        if (txt(c.texto)) kp(!/[«»]/.test(c.texto) && c.texto.length <= 220, '.cita.texto sin « » y de 220 caracteres como máximo');
+      }
+    }
+  }
   return E;
 }
 function validar(archivo, fechaEsperada) {
@@ -195,15 +229,18 @@ function validar(archivo, fechaEsperada) {
 
 const erroresDia = f => fs.existsSync(rutaDia(f)) ? validar(rutaDia(f), f) : null;
 const diaBien = f => { const E = erroresDia(f); return !!E && E.length === 0; };
-/* 'completo' | 'sin-conoce' (Evangelio y Misa bien; falta o falla solo «Conoce tu Iglesia») | 'mal' | 'falta' */
-const nivel = f => { const E = erroresDia(f); if (E === null) return 'falta'; if (!E.length) return 'completo'; return E.every(e => /^conoce/.test(e)) ? 'sin-conoce' : 'mal'; };
+/* Secciones que se pueden agregar a un día ya escrito con «completar»: Conoce tu Iglesia y el Catecismo */
+const SECC = /^(conoce|catecismo)/;
+const seccionesMal = E => [...new Set(E.map(e => (SECC.exec(e) || [])[1]).filter(Boolean))];
+/* 'completo' | 'sin-conoce' (Evangelio y Misa bien; falta o falla solo alguna sección completable) | 'mal' | 'falta' */
+const nivel = f => { const E = erroresDia(f); if (E === null) return 'falta'; if (!E.length) return 'completo'; return E.every(e => SECC.test(e)) ? 'sin-conoce' : 'mal'; };
 /* [{fecha, que:'nuevo'|'completar'|'rehacer', errores}] */
 function faltan(hoy, n) {
   const out = [];
   for (let i = 0; i <= n; i++) {
     const f = suma(hoy, i), E = erroresDia(f);
     if (E === null) out.push({ fecha: f, que: 'nuevo', errores: [] });
-    else if (E.length) out.push({ fecha: f, que: E.every(e => /^conoce/.test(e)) ? 'completar' : 'rehacer', errores: E });
+    else if (E.length) out.push({ fecha: f, que: E.every(e => SECC.test(e)) ? 'completar' : 'rehacer', errores: E });
   }
   return out;
 }
@@ -221,13 +258,13 @@ function guardar(fecha, H) {
   if (E.length) { console.log('NO VÁLIDO ' + fecha + ' (no se guardó nada):\n- ' + E.join('\n- ')); process.exit(1); }
   fs.mkdirSync(DIAS, { recursive: true });
   fs.writeFileSync(rutaDia(fecha), codigo);
-  console.log('OK dias/' + fecha + '.js · ' + H.titulo + ' · ' + H.evangelio.cita + ' · persona: ' + H.conoce.persona.nombre + ' · hecho: ' + H.conoce.hecho.nombre);
+  console.log('OK dias/' + fecha + '.js · ' + H.titulo + ' · ' + H.evangelio.cita + ' · persona: ' + H.conoce.persona.nombre + ' · hecho: ' + H.conoce.hecho.nombre + (H.catecismo ? ' · Catecismo ' + H.catecismo.desde + '–' + H.catecismo.hasta : ''));
 }
 
 const [, , cmd, a, b] = process.argv;
 function uso(msg) {
   if (msg) console.error(msg);
-  console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n] · escribir|completar FECHA archivo.json · validar dias/FECHA.js · temas');
+  console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n] · escribir|completar FECHA archivo.json · validar dias/FECHA.js · temas · catecismo FECHA');
   process.exit(2);
 }
 
@@ -254,6 +291,10 @@ if (cmd === 'validar') {
   const extra = leerJSON(b);
   if ('fecha' in extra && extra.fecha !== a) { console.log('El JSON es de otra fecha (' + extra.fecha + ')'); process.exit(1); }
   guardar(a, Object.assign({}, H, extra));
+} else if (cmd === 'catecismo') {
+  if (!esFecha(a)) uso('Uso: node tareas/dias.js catecismo FECHA');
+  const P = catPlan(a);
+  console.log(P ? 'Día ' + P.dia + ' de 365 · números ' + P.desde + ' a ' + P.hasta + ' del Catecismo de la Iglesia Católica (escribe "desde":' + P.desde + ',"hasta":' + P.hasta + ')' : 'NINGUNO: el plan del Catecismo empieza el ' + CAT_INICIO);
 } else if (cmd === 'temas') {
   const T = temas().filter(t => t.persona || t.hecho);
   console.log(T.length ? T.map(t => t.fecha + ' | persona: ' + t.persona + ' | hecho: ' + t.hecho).join('\n') : 'NINGUNO');
@@ -261,8 +302,8 @@ if (cmd === 'validar') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const n = b === undefined ? 7 : Math.max(0, Math.min(30, parseInt(b, 10) || 0));
   const F = faltan(a, n);
-  const nota = { nuevo: 'NUEVO: no existe; prepara el día completo y usa «escribir»', completar: 'COMPLETAR: ya existe y solo le falta o le falla la sección conoce; usa «completar»', rehacer: 'REHACER: existe pero tiene errores; corrígelo con «completar» o «escribir»' };
-  console.log(F.length ? F.map(x => x.fecha + '  ' + nota[x.que] + (x.que === 'rehacer' ? '\n   - ' + x.errores.slice(0, 6).join('\n   - ') : '')).join('\n') : 'NADA');
+  const nota = { nuevo: 'NUEVO: no existe; prepara el día completo y usa «escribir»', completar: 'COMPLETAR: ya existe; solo le falta o le falla: ', rehacer: 'REHACER: existe pero tiene errores; corrígelo con «completar» o «escribir»' };
+  console.log(F.length ? F.map(x => x.fecha + '  ' + nota[x.que] + (x.que === 'completar' ? seccionesMal(x.errores).join(' y ') + '. Escribe un JSON solo con esa(s) sección(es) ({"' + seccionesMal(x.errores).join('":{…},"') + '":{…}}) y usa «completar»' : '') + (x.que === 'rehacer' ? '\n   - ' + x.errores.slice(0, 6).join('\n   - ') : '')).join('\n') : 'NADA');
 } else if (cmd === 'hoy') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const origen = rutaDia(a);
@@ -271,7 +312,7 @@ if (cmd === 'validar') {
   if (nv === 'mal') { console.log('NO VÁLIDO dias/' + a + '.js: no se cambió hoy.js\n- ' + E.join('\n- ')); process.exit(1); }
   const destino = path.join(RAIZ, 'hoy.js');
   const nuevo = fs.readFileSync(origen);
-  const aviso = nv === 'sin-conoce' ? ' (AVISO: al día de hoy le falta la sección conoce)' : '';
+  const aviso = nv === 'sin-conoce' ? ' (AVISO: al día de hoy le falta: ' + seccionesMal(E).join(' y ') + ')' : '';
   if (fs.existsSync(destino) && fs.readFileSync(destino).equals(nuevo)) console.log('IGUAL hoy.js ya es el del ' + a + aviso);
   else { fs.writeFileSync(destino, nuevo); console.log('COPIADO dias/' + a + '.js → hoy.js' + aviso); }
 } else if (cmd === 'estado') {
@@ -279,7 +320,7 @@ if (cmd === 'validar') {
   const fh = fechaHoyJs();
   console.log('hoy.js: ' + fh + (fh === a ? ' (al día)' : ' (VIEJO)'));
   const nv = nivel(a);
-  console.log('día de hoy (dias/' + a + '.js): ' + ({ completo: 'listo', 'sin-conoce': 'listo, pero le falta la sección conoce', mal: 'TIENE ERRORES', falta: 'FALTA' })[nv]);
+  console.log('día de hoy (dias/' + a + '.js): ' + ({ completo: 'listo', 'sin-conoce': 'listo, pero le falta: ' + seccionesMal(erroresDia(a) || []).join(' y '), mal: 'TIENE ERRORES', falta: 'FALTA' })[nv]);
   let seguidos = 0; while (seguidos < 60 && diaBien(suma(a, seguidos + 1))) seguidos++;
   console.log('días completos por delante (seguidos): ' + seguidos + (seguidos ? ' (hasta ' + suma(a, seguidos) + ')' : ''));
   const F = faltan(a, 7);

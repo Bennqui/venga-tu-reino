@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FFFFFF"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name="color-scheme" content="light only"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Venga tu Reino"><meta name="theme-color" content="#FFFFFF"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png"><title>Venga tu Reino</title><meta charset=utf8><meta name="color-scheme" content="light dark"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
 <style>
 /* Diseño «Crepúsculo de Barquisimeto»: lo único llamativo es el cielo de la portada, que cambia con la hora
@@ -320,6 +320,36 @@ a{text-decoration-color:var(--red)}
 .cono .quote{margin:20px 0 12px}
 details.fi .cono{border:0;box-shadow:none;padding:6px 0 0;margin:8px 0 0;border-top:1px solid var(--line);border-radius:0}
 .colwhy{background:var(--tint);border-radius:12px;padding:8px 12px;margin:8px 0}
+/* ===== Mejoras de noviembre 2026: letra ajustable, modo oscuro, cabecera compacta, 5 pestañas ===== */
+html{font-size:calc(16px*var(--fz,1))}
+body{font-size:calc(17px*var(--fz,1))}
+.ph.mini{height:min(24vh,190px);min-height:150px}
+.ph.mini h1{font-size:1.7rem;margin:4px 0 2px}
+.ph.mini .pt{padding-bottom:16px}
+.ph.mini .vk{display:none}
+.ph.mini .fe-cr{top:16px;bottom:auto;left:max(16px,calc(50vw - 300px));right:70px;font-size:.58rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aa{position:absolute;top:12px;right:14px;z-index:3;width:42px;height:42px;border-radius:50%;border:0;background:rgba(20,12,4,.32);color:#fff;font-family:var(--fd);font-size:1.02rem;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.grp{display:flex;gap:8px;margin:10px 0 0}
+.grp button{flex:1;min-height:46px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--mut);font-family:var(--fd);font-size:1.05rem}
+.grp button[aria-pressed="true"]{border-color:var(--vy);background:var(--gold-bg);color:var(--ink)}
+nav.tabs button{font-size:.76rem}
+.seg.more{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.week span{font-size:.68rem}
+.fzrow{display:flex;align-items:center;gap:10px;margin:10px 0}
+.fzrow .btn{min-width:64px;font-family:var(--fd);font-size:1.1rem}
+.fzrow .v{flex:1;text-align:center;color:var(--mut);font-size:.9rem}
+.opts3{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.opts3 button{flex:1;min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.opts3 button[aria-pressed="true"]{border-color:var(--vy);background:var(--gold-bg);font-weight:600}
+.intc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin:8px 0}
+.intc p{margin:0 0 4px}
+.intc .row{margin:8px 0 0}
+.intc .btn{min-height:40px;padding:6px 14px;font-size:.92rem}
+.catn{display:flex;gap:8px;margin:10px 0}
+.catn .btn{flex:1}
+/* Modo oscuro: sigue al iPhone (o lo que se elija en Ajustes) */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#15120D;--card:#1E1A13;--ink:#F2EADB;--mut:#B9AC92;--line:#3A3224;--soft:#272115;--gold:#E3B852;--gold-bg:#2F2614;--wine:#E1AE1E;--on-wine:#1A1407;--ok:#6CC08F;--bad:#EC7B78;--lit:#E1AE1E;--tint:#231D13;--vy:#E1AE1E;--red:#EE8A93;--red-bg:#3A1C20}:root:not([data-theme="light"]) body{background:var(--bg)}:root:not([data-theme="light"]) nav.tabs{background:rgba(24,20,14,.94)}:root:not([data-theme="light"]) .novnow{background:linear-gradient(135deg,#2A2213,#1E1A13)}:root:not([data-theme="light"]) .seg button[aria-pressed="true"],:root:not([data-theme="light"]) .week span.on,:root:not([data-theme="light"]) .nvd.on .num,:root:not([data-theme="light"]) .ahora,:root:not([data-theme="light"]) .nvd.done .num{color:#1A1407}:root:not([data-theme="light"]) .aa{background:rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#15120D;--card:#1E1A13;--ink:#F2EADB;--mut:#B9AC92;--line:#3A3224;--soft:#272115;--gold:#E3B852;--gold-bg:#2F2614;--wine:#E1AE1E;--on-wine:#1A1407;--ok:#6CC08F;--bad:#EC7B78;--lit:#E1AE1E;--tint:#231D13;--vy:#E1AE1E;--red:#EE8A93;--red-bg:#3A1C20}:root[data-theme="dark"] body{background:var(--bg)}:root[data-theme="dark"] nav.tabs{background:rgba(24,20,14,.94)}:root[data-theme="dark"] .novnow{background:linear-gradient(135deg,#2A2213,#1E1A13)}:root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .week span.on,:root[data-theme="dark"] .nvd.on .num,:root[data-theme="dark"] .ahora,:root[data-theme="dark"] .nvd.done .num{color:#1A1407}:root[data-theme="dark"] .aa{background:rgba(0,0,0,.4)}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -733,13 +763,17 @@ const TABS=[
   {id:'apo',n:'Apóstol',ic:'<path d="M12 3c1.8 2.6 3.6 4.4 3.6 7a3.6 3.6 0 0 1-7.2 0c0-1.6.8-2.7 1.8-3.6.1 1.6.8 2.5 1.8 2.6-.2-1.8-.8-3.6 0-6z"/><path d="M7 21h10M12 17v4"/>'},
   {id:'dia',n:'Mi día',ic:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>'}
 ];
+/* La barra de abajo muestra 5 botones; Encuentro incluye Apóstol y Orar incluye Mi día. */
+const NAV=[{id:'hoy'},{id:'enc',g:['enc','apo']},{id:'misa'},{id:'orar',g:['orar','dia']},{id:'apr'}];
+const GN={enc:'Encuentro',apo:'Apóstol',orar:'Orar',dia:'Mi día'};
+const navDe=t=>(NAV.find(n=>n.id===t||(n.g&&n.g.includes(t)))||NAV[0]);
 const SUBS={
   enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
-  orar:[['ora','Oraciones'],['ros','Rosario'],['hor','Liturgia de las Horas'],['seo','Libro SEO'],['fie','Fiestas y novenas']],
-  apr:[['anio','Año litúrgico'],['con','Personas y hechos'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
-  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
+  orar:[['ora','Oraciones'],['ros','Rosario'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO'],['fie','Fiestas y novenas']],
+  apr:[['anio','Año litúrgico'],['con','Personas y hechos'],['cat','Catecismo'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
+  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno'],['aj','Ajustes y copia']]
 };
 const segHtml=tab=>'<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+'</div>';
 const sayBtn=(id,text)=>{if(!TTS)return '';state.say[id]=text;return '<button class="btn ghost" data-act="speak" data-v="'+id+'">Escuchar</button>'};
@@ -781,7 +815,7 @@ function heroSVG(lit,h){
 function oreDays(){return store.get('ore',{})}
 function rachaN(){const o=oreDays();let n=0,d=new Date();if(!o[ymd(d)])d=addDays(d,-1);while(o[ymd(d)]){n++;d=addDays(d,-1)}return n}
 function semanaHtml(){
-  const t=new Date(),o=oreDays(),mon=addDays(t,-((t.getDay()+6)%7)),L=['L','M','M','J','V','S','D'];
+  const t=new Date(),o=oreDays(),mon=addDays(t,-((t.getDay()+6)%7)),L=['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
   let s='<div class="week" aria-label="Días que oraste esta semana">';
   for(let i=0;i<7;i++){const d=addDays(mon,i),k=ymd(d);s+='<span class="'+(o[k]?'on ':'')+(k===ymd(t)?'today':'')+'" title="'+esc(cap(fmt(d)))+'">'+L[i]+'</span>'}
   return s+'</div>';
@@ -793,7 +827,8 @@ function viewHd(){
   const MH=misaHoy();document.documentElement.style.setProperty('--litc',litColor(MH.color));
   if(state.tab==='hoy')return '';
   const hh=FE_HERO[state.tab]||['basilica',''];
-  return phHtml(hh[0],'<i class="dot"></i>'+esc(MH.titulo),esc(hh[1]),esc(cap(fmt(t))));
+  const n=navDe(state.tab);
+  return phHtml(hh[0],'<i class="dot"></i>'+esc(MH.titulo),esc(hh[1]),esc(cap(fmt(t))),false,true)+(n.g?'<div class="grp" role="group" aria-label="Elegir sección">'+n.g.map(g=>'<button data-act="tab2" data-v="'+g+'" aria-pressed="'+(state.tab===g)+'">'+esc(GN[g])+'</button>').join('')+'</div>':'');
 }
 function misDia(t,L){
   let k=MIS_DIA[t.getDay()];
@@ -819,6 +854,7 @@ function viewHoy(){
    if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
    {const C=conoHoy();if(C&&(C.persona||C.hecho))h+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
   }
+  {const P=catPlan(t);if(P){const K=catDe(window.HOY,ymd(t)),leido=!!store.get('catl',{})[ymd(t)];h+='<div class="conk">El Catecismo en un año · día '+P.dia+'</div><div class="nextf"><button data-act="go" data-v="apr" data-s="cat"><span class="fd ci">'+ic(leido?'check':'book','sm')+'</span><span><span class="small mut">Números '+P.desde+' a '+P.hasta+(leido?' · leído':'')+'</span><br><b>'+esc(K?K.tema:'Leer los números de hoy')+'</b></span></button></div>'}}
   if(L.especial)h+='<div class="card tint"><b>'+esc(L.especial.n)+'</b> · <span class="mut">'+esc(L.especial.g)+'</span><p>'+esc(L.especial.d)+'</p></div>';
   else if(L.nota)h+='<div class="card tint"><p style="margin:0">'+esc(L.nota)+'</p></div>';
   if(viejo)h+='<div class="nota"><b>Evangelio guardado del '+esc(fmt(new Date(H.fecha+'T12:00:00')))+'</b>No se pudo cargar el de hoy (sin conexión o aún sin actualizar). Con internet, toca «Leer las lecturas de hoy».<div class="row" style="margin:8px 0 0"><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div></div>';
@@ -1230,6 +1266,7 @@ function viewFiestas(){
   return h;
 }
 function viewOrar(){
+  if(state.sub.orar==='int')return segHtml('orar')+viewIntenciones();
   if(state.sub.orar==='fie')return viewFiestas();
   if(state.sub.orar==='hor')return viewHoras();
   if(state.sub.orar==='seo')return viewSEO();
@@ -1261,7 +1298,101 @@ const GESTOS=[
 ['Genuflexión','Rodilla derecha al suelo ante el sagrario donde está el Santísimo.'],
 ['Postura de rodillas','En la consagración, donde se acostumbre.']
 ];
+
+/* ===== El Catecismo en un año: los 2865 números en 365 días desde el 15-11-2026 (misma cuenta que tareas/dias.js) ===== */
+const CAT_INI=new Date(2026,10,15),CAT_INDICE='https://www.vatican.va/archive/catechism_sp/index_sp.html';
+function catPlan(d){const n=diff(d,CAT_INI);if(n<0)return null;const k=n%365;return {dia:k+1,desde:Math.floor(k*2865/365)+1,hasta:Math.floor((k+1)*2865/365)}}
+function catDe(H,f){return (H&&H.fecha===f&&H.catecismo)||null}
+const DIAH={};
+function diaCarga(f){
+  if(f in DIAH)return Promise.resolve(DIAH[f]);
+  if(window.HOY&&window.HOY.fecha===f)return Promise.resolve(DIAH[f]=window.HOY);
+  return fetch('dias/'+f+'.js').then(r=>r.ok?r.text():'').then(t=>{let H=null;try{H=JSON.parse(t.replace(/^\s*window\.HOY\s*=\s*/,'').replace(/;\s*$/,''))}catch(e){}return DIAH[f]=(H&&H.fecha===f)?H:null}).catch(()=>null);
+}
+function catHtml(K,P,f){
+  if(!K)return '<div class="card"><p style="margin-top:0">La explicación de este día todavía no está preparada (se preparan con una semana de adelanto). Mientras tanto, puedes leer los números directamente en el Catecismo.</p><div class="row" style="margin-bottom:0"><a class="btn ghost" href="'+CAT_INDICE+'" target="_blank" rel="noopener noreferrer">Abrir el Catecismo</a></div></div>';
+  let h='<article class="cono"><div class="kk">Catecismo de la Iglesia Católica · números '+P.desde+' a '+P.hasta+'</div><h2>'+esc(K.tema)+'</h2>';
+  h+='<div class="reading">'+(K.explicacion||[]).map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>';
+  if(K.cita&&K.cita.texto)h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(K.cita.texto)+'</blockquote><figcaption><b>Catecismo</b> · número '+esc(String(K.cita.num))+'</figcaption></figure>';
+  if(K.clave)h+='<div class="say"><b>Para recordar</b>'+esc(K.clave)+'</div>';
+  if(K.pregunta)h+='<div class="hoyb par"><b>Para pensar</b><p>'+esc(K.pregunta)+'</p></div>';
+  const u=/^https:\/\/www\.vatican\.va\//.test(K.url||'')?K.url:CAT_INDICE;
+  return h+'<div class="row" style="margin-bottom:0"><a class="btn ghost" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">Leer el texto en el Catecismo</a></div></article>';
+}
+function viewCatecismo(){
+  const t=new Date(),d=addDays(t,state.catoff||0),f=ymd(d),P=catPlan(d),L=store.get('catl',{}),nl=Object.keys(L).length;
+  let h=segHtml('apr')+'<div class="card tint"><p style="margin:0">Cada día, unos pocos números del <b>Catecismo de la Iglesia Católica</b>, explicados con sencillez. En un año lo recorres entero.</p></div>';
+  h+='<div class="lbl">Tu avance</div><div class="bar"><i style="width:'+Math.min(100,Math.round(nl/365*100))+'%"></i></div><p class="small mut" style="margin:2px 0 0">'+nl+' de 365 días leídos</p>';
+  if(!P)return h+'<div class="card"><p style="margin:0">El plan empieza el <b>domingo 15 de noviembre de 2026</b> con los números 1 a 7. ¡Mañana comienzas!</p></div><div class="catn"><button class="btn ghost" data-act="catnav" data-v="1">Ver el primer día ›</button></div>';
+  const esHoy=!state.catoff,leido=!!L[f];
+  h+='<h2 class="sec">'+(esHoy?'Hoy':esc(cap(fmt(d))))+' · día '+P.dia+' de 365</h2><p class="mut" style="margin:0 2px">Números '+P.desde+' a '+P.hasta+'</p>';
+  h+='<div id="catbody">'+(diaCargado(f)?catHtml(catDe(DIAH[f],f),P,f):'<p class="mut">Cargando…</p>')+'</div>';
+  h+='<div class="row"><button class="btn'+(leido?' ghost':'')+'" data-act="catok" data-v="'+f+'">'+(leido?'Leído ✓ (tocar para desmarcar)':'Marcar como leído')+'</button></div>';
+  const prev=catPlan(addDays(d,-1));
+  h+='<div class="catn"><button class="btn ghost" data-act="catnav" data-v="-1"'+(prev?'':' disabled')+'>‹ Día anterior</button>'+(esHoy?'':'<button class="btn ghost" data-act="cathoy">Hoy</button>')+'<button class="btn ghost" data-act="catnav" data-v="1"'+((state.catoff||0)>=7?' disabled':'')+'>Día siguiente ›</button></div>';
+  h+='<p class="note">Las explicaciones se preparan automáticamente a partir del texto oficial del Catecismo en vatican.va. Si algo no queda claro, lee el texto original con el botón «Leer el texto en el Catecismo».</p>';
+  if(!diaCargado(f))diaCarga(f).then(H=>{const el=$('#catbody');if(el&&state.sub.apr==='cat'&&ymd(addDays(new Date(),state.catoff||0))===f)el.innerHTML=catHtml(catDe(H,f),P,f)});
+  return h;
+}
+function diaCargado(f){return (f in DIAH)||(window.HOY&&window.HOY.fecha===f&&(DIAH[f]=window.HOY))}
+
+/* ===== Mis intenciones ===== */
+function viewIntenciones(){
+  const I=store.get('intenc',[]),t=new Date(),A=I.filter(x=>!x.r),R=I.filter(x=>x.r);
+  const desde=f=>{const n=diff(t,new Date(f+'T12:00'));return n<=0?'desde hoy':n===1?'desde ayer':'desde hace '+n+' días'};
+  const fc=f=>{const d=new Date(f+'T12:00');return d.getDate()+' de '+MESES[d.getMonth()]+' de '+d.getFullYear()};
+  let h='<div class="card tint"><p style="margin:0">Escribe aquí por qué y por quién quieres orar. Preséntalo a Dios cada día, sin desanimarte, y cuando sientas que Él respondió, márcalo: con el tiempo verás su fidelidad. Se guarda solo en este dispositivo.</p></div>';
+  h+='<div class="card"><h3>Nueva intención</h3><textarea id="itx" placeholder="Por ejemplo: por la salud de mi tía; por mi trabajo; por Venezuela" aria-label="Nueva intención"></textarea><div class="row"><button class="btn" data-act="iadd">Agregar intención</button></div><p class="note" id="imsg" style="margin:4px 0 0"></p></div>';
+  h+='<h2 class="sec">Estoy pidiendo'+(A.length?' ('+A.length+')':'')+'</h2>';
+  h+=A.length?A.map(x=>'<div class="intc"><p>'+esc(x.t)+'</p><span class="small mut">'+esc(cap(desde(x.f)))+'</span><div class="row"><button class="btn" data-act="iresp" data-v="'+x.id+'">Dios respondió</button><button class="btn ghost" data-act="idel" data-v="'+x.id+'">Quitar</button></div></div>').join(''):'<p class="mut" style="margin:6px 2px">Todavía no tienes intenciones en la lista.</p>';
+  if(R.length)h+='<h2 class="sec">Dios respondió ('+R.length+')</h2>'+R.map(x=>'<details><summary>'+ic('check','sm')+'<span>'+esc(x.t)+'</span></summary><div class="in"><p class="small mut" style="margin-top:0">Pedida desde el '+esc(fc(x.f))+' · respondida el '+esc(fc(x.r))+'</p><div class="lbl">¿Cómo respondió Dios?</div><textarea data-inota="'+x.id+'" style="min-height:60px">'+esc(x.nota||'')+'</textarea><div class="row"><button class="btn ghost" data-act="iback" data-v="'+x.id+'">Seguir pidiendo</button><button class="btn ghost" data-act="idel" data-v="'+x.id+'">Quitar</button></div></div></details>').join('');
+  return h;
+}
+
+/* ===== Ajustes: letra, tema y copia de seguridad ===== */
+const FZ=[.9,1,1.1,1.2,1.32,1.45];
+function aplicarPrefs(){
+  const r=document.documentElement,fz=store.get('fz',1),tm=store.get('tema','auto');
+  r.style.setProperty('--fz',fz);
+  if(tm==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',tm);
+  let dk=tm==='dark';if(tm==='auto')try{dk=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',dk?'#15120D':'#FFFFFF');
+}
+function viewAjustes(){
+  const fz=store.get('fz',1),tm=store.get('tema','auto'),bk=store.get('bkfecha',null),i=FZ.indexOf(fz);
+  let h='<div class="card"><h3>Tamaño de letra</h3><div class="fzrow"><button class="btn ghost" data-act="fz" data-v="-1" aria-label="Letra más pequeña"'+(i<=0?' disabled':'')+'>A−</button><span class="v">'+(fz===1?'Normal':Math.round(fz*100)+' %')+'</span><button class="btn ghost" data-act="fz" data-v="1" aria-label="Letra más grande"'+(i>=FZ.length-1?' disabled':'')+'>A+</button></div><p class="prayer" style="margin:0">Es necesario orar siempre sin desanimarse.</p></div>';
+  h+='<div class="card"><h3>Apariencia</h3><div class="opts3" role="group" aria-label="Tema">'+[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([v,n])=>'<button data-act="tema" data-v="'+v+'" aria-pressed="'+(tm===v)+'">'+n+'</button>').join('')+'</div><p class="note" style="margin:4px 0 0">Automático usa el modo claro u oscuro de tu iPhone.</p></div>';
+  const dd=bk?diff(new Date(),new Date(bk)):null;
+  h+='<div class="card"><h3>Copia de seguridad</h3><p style="margin-top:0">Tu cuaderno, tus Encuentros, tus intenciones, tu examen y tu avance se guardan <b>solo en este teléfono</b>. Guarda una copia de vez en cuando (por ejemplo en Archivos o en iCloud Drive) para no perderlos si cambias de teléfono o se borran los datos.</p><p class="small '+(dd===null||dd>30?'':'mut')+'" style="margin:6px 0">'+(dd===null?'Aún no has guardado ninguna copia.':'Tu última copia: '+(dd<=0?'hoy':dd===1?'ayer':'hace '+dd+' días')+'.')+'</p><div class="row"><button class="btn" data-act="bk">Guardar copia</button><label class="btn ghost" for="bkfile">Recuperar una copia</label><input type="file" id="bkfile" accept=".json,application/json" hidden></div><p class="note" id="bkmsg" style="margin:4px 0 0"></p></div>';
+  return h;
+}
+async function guardarCopia(){
+  const D={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('elm:')===0)D[k]=localStorage.getItem(k)}}catch(e){}
+  const n=Object.keys(D).length,msg=$('#bkmsg');
+  if(!n){if(msg)msg.textContent='No encontré datos guardados en este teléfono.';return}
+  const txt=JSON.stringify({app:'Venga tu Reino',version:1,fecha:new Date().toISOString(),datos:D});
+  const nombre='venga-tu-reino-copia-'+ymd(new Date())+'.json';
+  let ok=false;
+  try{const file=new File([txt],nombre,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Copia de Venga tu Reino'});ok=true}}catch(e){if(e&&e.name==='AbortError'){if(msg)msg.textContent='No se guardó la copia.';return}}
+  if(!ok){try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);ok=true}catch(e){}}
+  if(ok){store.set('bkfecha',ymd(new Date()));render(true);const m2=$('#bkmsg');if(m2)m2.textContent='Listo: copia «'+nombre+'». Guárdala en Archivos o en iCloud Drive.'}
+  else if(msg)msg.textContent='No se pudo crear la copia en este navegador.';
+}
+function recuperarCopia(file){
+  const msg=$('#bkmsg'),r=new FileReader();
+  r.onload=()=>{
+    let o=null;try{o=JSON.parse(r.result)}catch(e){}
+    if(!o||o.app!=='Venga tu Reino'||!o.datos||typeof o.datos!=='object'){if(msg)msg.textContent='Ese archivo no es una copia de Venga tu Reino.';return}
+    const K=Object.keys(o.datos).filter(k=>k.indexOf('elm:')===0&&typeof o.datos[k]==='string');
+    const cuando=o.fecha?new Date(o.fecha):null;
+    if(!confirm('Vas a recuperar la copia'+(cuando?' del '+cuando.getDate()+' de '+MESES[cuando.getMonth()]+' de '+cuando.getFullYear():'')+'. Lo que tengas ahora en el teléfono se reemplazará por lo de la copia. ¿Continuar?'))return;
+    try{K.forEach(k=>localStorage.setItem(k,o.datos[k]))}catch(e){if(msg)msg.textContent='No se pudo recuperar: el teléfono no dejó guardar los datos.';return}
+    location.reload();
+  };
+  r.readAsText(file);
+}
 function viewApr(){
+  if(state.sub.apr==='cat')return viewCatecismo();
   if(state.sub.apr==='ens')return viewEnsayos();
   if(state.sub.apr==='con')return viewConoce();
   const s=state.sub.apr;
@@ -1297,6 +1428,7 @@ function streak(){
 }
 function viewDia(){
   const s=state.sub.dia,t=new Date(),k=ymd(t);
+  if(s==='aj')return segHtml('dia')+viewAjustes();
   if(s==='exa'){
     const e=(store.get('exa',{})[k])||{};
     return segHtml('dia')+'<div class="card tint"><p style="margin:0">Dedica 5 minutos antes de dormir. Reza un momento, responde despacio y termina con el acto de contrición. Lo que escribas se guarda <b>solo en tu dispositivo</b>.</p></div>'+
@@ -1818,7 +1950,8 @@ function viewApo(){
 /* ===== RENDER ===== */
 const VIEWS={hoy:viewHoy,enc:viewEnc,misa:viewMisa,orar:viewOrar,apr:viewApr,apo:viewApo,dia:viewDia};
 function renderNav(){
-  $('#tabs').innerHTML='<div class="in">'+TABS.map(t=>'<button data-act="tab" data-v="'+t.id+'"'+(state.tab===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>').join('')+'</div>';
+  const cur=navDe(state.tab).id;
+  $('#tabs').innerHTML='<div class="in">'+NAV.map(n=>{const t=TABS.find(x=>x.id===n.id);return '<button data-act="tab" data-v="'+t.id+'"'+(cur===t.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24" aria-hidden="true">'+t.ic+'</svg>'+t.n+'</button>'}).join('')+'</div>';
 }
 const FE={corazon:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CHRIST_PANTOCRATOR-SINAI%286th_Century%29.jpg/1920px-CHRIST_PANTOCRATOR-SINAI%286th_Century%29.jpg", "«Yo soy el camino, la verdad y la vida».", "Jn 14,6", "Cristo Pantocrátor, monasterio de Santa Catalina del Sinaí (s. VI) · dominio público", 0.34],getsemani:["https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Gethsemane_Carl_Bloch.jpg/1920px-Gethsemane_Carl_Bloch.jpg", "«No se haga mi voluntad, sino la tuya».", "Lc 22,42", "Carl Bloch, Getsemaní · dominio público", 0.45],resurreccion:["https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Rafael_-_ressureicaocristo01.jpg/1920px-Rafael_-_ressureicaocristo01.jpg", "«No está aquí: ha resucitado, como había dicho».", "Mt 28,6", "Rafael, La Resurrección de Cristo · dominio público", 0.08],virgen:["https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Vierge_en_oraison_%28Il_Sassoferrato%29.jpg/1920px-Vierge_en_oraison_%28Il_Sassoferrato%29.jpg", "«He aquí la esclava del Señor; hágase en mí según tu palabra».", "Lc 1,38", "Sassoferrato, La Virgen en oración · dominio público", 0.37],inmaculada:["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg/1920px-La_Inmaculada_de_Soult%2C_1678%2C_Bartolom%C3%A9_E._Murillo.jpg", "«Alégrate, llena de gracia, el Señor está contigo».", "Lc 1,28", "Murillo, Inmaculada de Soult (1678) · dominio público", 0.21],pieta:["https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Michelangelo%27s_Piet%C3%A0_Saint_Peter%27s_Basilica_Vatican_City.jpg/1920px-Michelangelo%27s_Piet%C3%A0_Saint_Peter%27s_Basilica_Vatican_City.jpg", "«Junto a la cruz de Jesús estaba su madre».", "Jn 19,25", "La Piedad de Miguel Ángel, Basílica de San Pedro · foto de dominio público (CC0)", 0.25],cena:["https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg/3840px-Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg", "«Haced esto en memoria mía».", "Lc 22,19", "Leonardo da Vinci, La Última Cena · dominio público", 0.45],basilica:["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/3840px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", "«Tú eres Pedro, y sobre esta piedra edificaré mi Iglesia».", "Mt 16,18", "Basílica de San Pedro · foto: Alvesgaspar, CC BY-SA 4.0", 0.5],plaza:["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/3840px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg", "«Id por todo el mundo y anunciad el Evangelio».", "Mc 16,15", "Plaza de San Pedro · foto: Diliff, CC BY-SA 3.0", 0.5]};
 const FE_TAB=new Proxy({},{get:(o,tab)=>FE_POOL[tab]?FE_POOL[tab].filter(k=>k!==feDia(tab)):undefined});
@@ -1876,7 +2009,7 @@ const NOV_IMG={cr:'corazon',mis:'corazon',inm:'inmaculada',nav:'virgen',pen:'bas
 const dayN=()=>{const t=new Date();return Math.floor((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(2026,0,1))/864e5)};
 function feDia(tab){const P=FE_POOL[tab]||['basilica'];return P[((dayN()%P.length)+P.length)%P.length]}
 const FE_HERO=new Proxy({},{get:(o,tab)=>FE_TIT[tab]?[feDia(tab),FE_TIT[tab]]:undefined});
-function phHtml(k,kick,title,sub,big){const f=FE[k];return '<header class="ph'+(big?' big':'')+'"><div class="pi"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
+function phHtml(k,kick,title,sub,big,mini){const f=FE[k];return '<header class="ph'+(big?' big':'')+(mini?' mini':'')+'"><button class="aa" data-act="aa" aria-label="Tamaño de letra, tema y copia de seguridad">Aa</button><div class="pi"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
 let LAST=null;
 function render(keepScroll){
   stopSpeak();
@@ -1892,6 +2025,7 @@ function render(keepScroll){
   }
   const tabChanged=!LAST||LAST.tab!==state.tab;
   LAST={tab:state.tab,key,sub:sub(state.tab)};
+  {const n=navDe(state.tab);if(n.g)store.set('g_'+n.id,state.tab)}
   $('#hd').innerHTML=viewHd();
   $('#main').innerHTML=VIEWS[state.tab]();
   renderNav();
@@ -1902,7 +2036,10 @@ function render(keepScroll){
   decorate();
   reveal();
   feReq();
+  segFade();
 }
+/* Los botones de arriba que no caben se desvanecen en el borde, para que se note que se pueden deslizar. */
+function segFade(){document.querySelectorAll('.seg').forEach(s=>{const u=()=>s.classList.toggle('more',s.scrollLeft+s.clientWidth<s.scrollWidth-4);const a=s.querySelector('[aria-pressed="true"]');if(a&&a.offsetLeft+a.offsetWidth>s.clientWidth-30)s.scrollLeft=a.offsetLeft-24;u();s.addEventListener('scroll',u,{passive:true})})}
 
 /* ===== MOVIMIENTO ===== */
 const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
@@ -1976,7 +2113,19 @@ function speak(id,btn){
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act,v=b.dataset.v;
-  if(a==='tab'){state.tab=v;store.set('tab',v);render()}
+  if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
+  else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
+  else if(a==='aa'){state.tab='dia';state.sub.dia='aj';store.set('tab','dia');store.set('sub',state.sub);render()}
+  else if(a==='fz'){const L=FZ,i=Math.max(0,Math.min(L.length-1,L.indexOf(store.get('fz',1))+(+v)));store.set('fz',L[i]);aplicarPrefs();render(true)}
+  else if(a==='tema'){store.set('tema',v);aplicarPrefs();render(true)}
+  else if(a==='bk')guardarCopia();
+  else if(a==='iadd'){const ta=$('#itx'),x=(ta&&ta.value||'').trim();if(!x){$('#imsg').textContent='Escribe primero por qué o por quién quieres orar.';return}const I=store.get('intenc',[]);I.unshift({id:Date.now(),t:x,f:ymd(new Date()),r:null,nota:''});store.set('intenc',I);render(true)}
+  else if(a==='iresp'){const I=store.get('intenc',[]),x=I.find(y=>y.id===+v);if(x){x.r=ymd(new Date());store.set('intenc',I);render(true)}}
+  else if(a==='iback'){const I=store.get('intenc',[]),x=I.find(y=>y.id===+v);if(x){x.r=null;store.set('intenc',I);render(true)}}
+  else if(a==='idel'){if(!confirm('¿Quitar esta intención de tu lista?'))return;store.set('intenc',store.get('intenc',[]).filter(y=>y.id!==+v));render(true)}
+  else if(a==='catnav'){state.catoff=(state.catoff||0)+(+v);render(true)}
+  else if(a==='cathoy'){state.catoff=0;render(true)}
+  else if(a==='catok'){const c=store.get('catl',{});if(c[v])delete c[v];else c[v]=ymd(new Date());store.set('catl',c);render(true)}
   else if(a==='sub'){state.sub[state.tab]=v;store.set('sub',state.sub);render()}
   else if(a==='go'){state.tab=v;if(b.dataset.s){state.sub[v]=b.dataset.s;store.set('sub',state.sub)}store.set('tab',v);render()}
   else if(a==='qf'){state.qf=v;state.q=null;render(true)}
@@ -2024,6 +2173,7 @@ document.addEventListener('click',e=>{
   }
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='bkfile'){const f=e.target.files&&e.target.files[0];if(f)recuperarCopia(f);e.target.value='';return}
   if(e.target.id==='gsel'){state.gdir=1;state.gi=+e.target.value;state.gskip=false;render();state.gskip=true;return}
   const b=e.target.closest('input[type="checkbox"][data-act]');if(!b)return;
   if(b.dataset.act==='rut'){
@@ -2050,6 +2200,7 @@ document.addEventListener('input',e=>{
   }else if(t.matches('textarea[data-dres]')){
     const D=store.get('diario',[]),i=+t.dataset.dres;if(D[i]){D[i].res=t.value;store.set('diario',D)}
   }else if(t.id==='gq'){state.gq=t.value;$('#glist').innerHTML=glosList()}
+  else if(t.matches('textarea[data-inota]')){const I=store.get('intenc',[]),x=I.find(y=>y.id===+t.dataset.inota);if(x){x.nota=t.value;store.set('intenc',I)}}
 });
 function cargaJS(src){return new Promise(ok=>{const sc=document.createElement('script');sc.src=src;sc.onload=sc.onerror=()=>{sc.remove();ok()};document.head.appendChild(sc)})}
 /* El día de hoy se busca primero entre los días preparados por adelantado (dias/AAAA-MM-DD.js) y, si no está, en hoy.js. */
@@ -2067,6 +2218,8 @@ async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFul
 /* Si el día de hoy todavía no está (ni preparado ni en hoy.js), se vuelve a buscar cada 10 minutos. */
 setInterval(async()=>{if(!document.hidden&&hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}},10*60*1000);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)return;guardarDias();if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
+aplicarPrefs();
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',aplicarPrefs)}catch(e){}
 render();
 if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)});
 setTimeout(guardarDias,6000);

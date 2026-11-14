@@ -1,6 +1,6 @@
 # Guía para preparar un día de «Venga tu Reino»
 
-Esta guía la usan las tareas programadas de Claude que mantienen la app al día. Cada día es un archivo `dias/AAAA-MM-DD.js` con todo lo propio de esa fecha: el Evangelio y su comentario, el paso a paso del Encuentro con Cristo, los datos de la Misa (celebración, rango, color, Gloria, Credo, salmo) y la sección «Conoce tu Iglesia» (una persona y un hecho). La app carga sola el archivo de la fecha del teléfono, así que los días se preparan **por adelantado**, siempre una semana completa.
+Esta guía la usan las tareas programadas de Claude que mantienen la app al día. Cada día es un archivo `dias/AAAA-MM-DD.js` con todo lo propio de esa fecha: el Evangelio y su comentario, el paso a paso del Encuentro con Cristo, los datos de la Misa (celebración, rango, color, Gloria, Credo, salmo) la sección «Conoce tu Iglesia» (una persona y un hecho) y, desde el 15 de noviembre de 2026, la sección «El Catecismo en un año». La app carga sola el archivo de la fecha del teléfono, así que los días se preparan **por adelantado**, siempre una semana completa.
 
 Lo demás que cambia cada día (tiempo litúrgico, semana, ciclo, novenas, fiestas próximas, misterios del Rosario, semana del salterio, imágenes, frase del día) lo calcula la app con la fecha: no hay que escribirlo.
 
@@ -88,7 +88,20 @@ Cada día lleva **dos reseñas**: `conoce.persona` (alguien importante para la I
 
 Cada reseña debe sumar entre 1.500 y 4.500 caracteres (resumen + historia + impacto + enseñanza): unas 300 a 500 palabras.
 
-## 6. Forma del archivo y cómo guardarlo
+## 6. El Catecismo en un año (`catecismo`)
+
+Desde el 15 de noviembre de 2026, cada día lleva unos pocos números del Catecismo de la Iglesia Católica, para que Cesar lo recorra entero en un año (los 2865 números en 365 días; al terminar, el plan vuelve a empezar). Los números de cada fecha **no se eligen**: los da el comando
+
+```
+node tareas/dias.js catecismo AAAA-MM-DD
+```
+
+- Lee esos números en el texto oficial en español: `https://www.vatican.va/archive/catechism_sp/index_sp.html` y sus páginas (por ejemplo `prologue_sp.html`, `p1s1c1_sp.html`, `p1s1c2a1_sp.html`). Si WebFetch a vatican.va falla, pídeselo al agente web-fetch. No escribas la sección de memoria: si no pudiste leer los números, no la escribas y dilo en el mensaje final.
+- Explica con tus palabras, de forma sencilla y fiel, lo que dicen esos números, en orden, sin añadir opiniones propias. No copies párrafos del Catecismo.
+- Campos: `desde` y `hasta` (los números que dio el comando, como números), `tema` (título corto), `explicacion` (2 o 3 párrafos, entre 500 y 2500 caracteres en total), `clave` (una idea para recordar, en una frase), `pregunta` (una pregunta personal), `url` (la página de vatican.va/archive/catechism_sp/ donde están esos números) y, opcional, `cita` `{texto, num}`: una frase breve copiada textual de un número que la tenga (máximo 220 caracteres, sin « »), solo si la viste en vatican.va.
+- Si el día ya existe y solo le falta esta sección, escribe `{"catecismo":{…}}` y usa `completar`.
+
+## 7. Forma del archivo y cómo guardarlo
 
 Escribe el día como **JSON** en un archivo temporal (por ejemplo `/tmp/2026-11-18.json`) y guárdalo con el comando; no escribas el `.js` a mano.
 
@@ -101,6 +114,7 @@ Escribe el día como **JSON** en un archivo temporal (por ejemplo `/tmp/2026-11-
  "conoce":{
   "persona":{"nombre":"…","tipo":"…","fechas":"…","lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]},
   "hecho":{"nombre":"…","tipo":"…","fechas":"…","lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]}},
+ "catecismo":{"desde":0,"hasta":0,"tema":"…","explicacion":["…","…"],"clave":"…","pregunta":"…","url":"https://www.vatican.va/archive/catechism_sp/…"},
  "actualizado":"AAAA-MM-DD"}
 ```
 
@@ -115,7 +129,7 @@ Escribe el día como **JSON** en un archivo temporal (por ejemplo `/tmp/2026-11-
 node tareas/dias.js escribir AAAA-MM-DD /tmp/AAAA-MM-DD.json
 ```
 
-**Día que ya existe y solo necesita una sección** (por ejemplo le falta `conoce`): escribe un JSON solo con esa sección, `{"conoce":{"persona":{…},"hecho":{…}}}`, y no toques lo demás:
+**Día que ya existe y solo necesita una o dos secciones** (le falta `conoce`, `catecismo` o ambas; «faltan» dice cuáles): escribe un JSON solo con esas secciones, por ejemplo `{"conoce":{"persona":{…},"hecho":{…}},"catecismo":{…}}`, y no toques lo demás:
 
 ```
 node tareas/dias.js completar AAAA-MM-DD /tmp/AAAA-MM-DD-conoce.json
