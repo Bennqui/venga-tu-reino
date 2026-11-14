@@ -328,6 +328,7 @@ body{font-size:calc(17px*var(--fz,1))}
 .ph.mini .pt{padding-bottom:16px}
 .ph.mini .vk{display:none}
 .ph.mini .fe-cr{top:16px;bottom:auto;left:max(16px,calc(50vw - 300px));right:70px;font-size:.58rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aa.tm{right:64px;font-family:var(--fb);font-size:1.1rem}
 .aa{position:absolute;top:12px;right:14px;z-index:3;width:42px;height:42px;border-radius:50%;border:0;background:rgba(20,12,4,.32);color:#fff;font-family:var(--fd);font-size:1.02rem;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .grp{display:flex;gap:8px;margin:10px 0 0}
 .grp button{flex:1;min-height:46px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--mut);font-family:var(--fd);font-size:1.05rem}
@@ -348,7 +349,7 @@ nav.tabs button{font-size:.76rem}
 .catn{display:flex;gap:8px;margin:10px 0}
 .catn .btn{flex:1}
 /* Modo oscuro: sigue al iPhone (o lo que se elija en Ajustes) */
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#15120D;--card:#1E1A13;--ink:#F2EADB;--mut:#B9AC92;--line:#3A3224;--soft:#272115;--gold:#E3B852;--gold-bg:#2F2614;--wine:#E1AE1E;--on-wine:#1A1407;--ok:#6CC08F;--bad:#EC7B78;--lit:#E1AE1E;--tint:#231D13;--vy:#E1AE1E;--red:#EE8A93;--red-bg:#3A1C20}:root:not([data-theme="light"]) body{background:var(--bg)}:root:not([data-theme="light"]) nav.tabs{background:rgba(24,20,14,.94)}:root:not([data-theme="light"]) .novnow{background:linear-gradient(135deg,#2A2213,#1E1A13)}:root:not([data-theme="light"]) .seg button[aria-pressed="true"],:root:not([data-theme="light"]) .week span.on,:root:not([data-theme="light"]) .nvd.on .num,:root:not([data-theme="light"]) .ahora,:root:not([data-theme="light"]) .nvd.done .num{color:#1A1407}:root:not([data-theme="light"]) .aa{background:rgba(0,0,0,.4)}}
+@media (prefers-color-scheme:dark){:root[data-theme="auto"]{color-scheme:dark;--bg:#15120D;--card:#1E1A13;--ink:#F2EADB;--mut:#B9AC92;--line:#3A3224;--soft:#272115;--gold:#E3B852;--gold-bg:#2F2614;--wine:#E1AE1E;--on-wine:#1A1407;--ok:#6CC08F;--bad:#EC7B78;--lit:#E1AE1E;--tint:#231D13;--vy:#E1AE1E;--red:#EE8A93;--red-bg:#3A1C20}:root[data-theme="auto"] body{background:var(--bg)}:root[data-theme="auto"] nav.tabs{background:rgba(24,20,14,.94)}:root[data-theme="auto"] .novnow{background:linear-gradient(135deg,#2A2213,#1E1A13)}:root[data-theme="auto"] .seg button[aria-pressed="true"],:root[data-theme="auto"] .week span.on,:root[data-theme="auto"] .nvd.on .num,:root[data-theme="auto"] .ahora,:root[data-theme="auto"] .nvd.done .num{color:#1A1407}:root[data-theme="auto"] .aa{background:rgba(0,0,0,.4)}}
 :root[data-theme="dark"]{color-scheme:dark;--bg:#15120D;--card:#1E1A13;--ink:#F2EADB;--mut:#B9AC92;--line:#3A3224;--soft:#272115;--gold:#E3B852;--gold-bg:#2F2614;--wine:#E1AE1E;--on-wine:#1A1407;--ok:#6CC08F;--bad:#EC7B78;--lit:#E1AE1E;--tint:#231D13;--vy:#E1AE1E;--red:#EE8A93;--red-bg:#3A1C20}:root[data-theme="dark"] body{background:var(--bg)}:root[data-theme="dark"] nav.tabs{background:rgba(24,20,14,.94)}:root[data-theme="dark"] .novnow{background:linear-gradient(135deg,#2A2213,#1E1A13)}:root[data-theme="dark"] .seg button[aria-pressed="true"],:root[data-theme="dark"] .week span.on,:root[data-theme="dark"] .nvd.on .num,:root[data-theme="dark"] .ahora,:root[data-theme="dark"] .nvd.done .num{color:#1A1407}:root[data-theme="dark"] .aa{background:rgba(0,0,0,.4)}
 </style>
 <div id="prog" aria-hidden="true"></div>
@@ -1351,17 +1352,18 @@ function viewIntenciones(){
 
 /* ===== Ajustes: letra, tema y copia de seguridad ===== */
 const FZ=[.9,1,1.1,1.2,1.32,1.45];
+function temaOscuro(){const tm=store.get('tema','light');if(tm==='auto')try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}return tm==='dark'}
 function aplicarPrefs(){
-  const r=document.documentElement,fz=store.get('fz',1),tm=store.get('tema','auto');
+  const r=document.documentElement,fz=store.get('fz',1),tm=store.get('tema','light');
   r.style.setProperty('--fz',fz);
-  if(tm==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',tm);
-  let dk=tm==='dark';if(tm==='auto')try{dk=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}
+  r.setAttribute('data-theme',tm);
+  const dk=temaOscuro();
   const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',dk?'#15120D':'#FFFFFF');
 }
 function viewAjustes(){
-  const fz=store.get('fz',1),tm=store.get('tema','auto'),bk=store.get('bkfecha',null),i=FZ.indexOf(fz);
+  const fz=store.get('fz',1),tm=store.get('tema','light'),bk=store.get('bkfecha',null),i=FZ.indexOf(fz);
   let h='<div class="card"><h3>Tamaño de letra</h3><div class="fzrow"><button class="btn ghost" data-act="fz" data-v="-1" aria-label="Letra más pequeña"'+(i<=0?' disabled':'')+'>A−</button><span class="v">'+(fz===1?'Normal':Math.round(fz*100)+' %')+'</span><button class="btn ghost" data-act="fz" data-v="1" aria-label="Letra más grande"'+(i>=FZ.length-1?' disabled':'')+'>A+</button></div><p class="prayer" style="margin:0">Es necesario orar siempre sin desanimarse.</p></div>';
-  h+='<div class="card"><h3>Apariencia</h3><div class="opts3" role="group" aria-label="Tema">'+[['auto','Automático'],['light','Claro'],['dark','Oscuro']].map(([v,n])=>'<button data-act="tema" data-v="'+v+'" aria-pressed="'+(tm===v)+'">'+n+'</button>').join('')+'</div><p class="note" style="margin:4px 0 0">Automático usa el modo claro u oscuro de tu iPhone.</p></div>';
+  h+='<div class="card"><h3>Apariencia</h3><div class="opts3" role="group" aria-label="Tema">'+[['light','Claro'],['dark','Oscuro'],['auto','Como el iPhone']].map(([v,n])=>'<button data-act="tema" data-v="'+v+'" aria-pressed="'+(tm===v)+'">'+n+'</button>').join('')+'</div><p class="note" style="margin:4px 0 0">También puedes cambiarlo en cualquier momento con el botón ☾ / ☀ de arriba. «Como el iPhone» sigue el modo claro u oscuro del teléfono.</p></div>';
   const dd=bk?diff(new Date(),new Date(bk)):null;
   h+='<div class="card"><h3>Copia de seguridad</h3><p style="margin-top:0">Tu cuaderno, tus Encuentros, tus intenciones, tu examen y tu avance se guardan <b>solo en este teléfono</b>. Guarda una copia de vez en cuando (por ejemplo en Archivos o en iCloud Drive) para no perderlos si cambias de teléfono o se borran los datos.</p><p class="small '+(dd===null||dd>30?'':'mut')+'" style="margin:6px 0">'+(dd===null?'Aún no has guardado ninguna copia.':'Tu última copia: '+(dd<=0?'hoy':dd===1?'ayer':'hace '+dd+' días')+'.')+'</p><div class="row"><button class="btn" data-act="bk">Guardar copia</button><label class="btn ghost" for="bkfile">Recuperar una copia</label><input type="file" id="bkfile" accept=".json,application/json" hidden></div><p class="note" id="bkmsg" style="margin:4px 0 0"></p></div>';
   return h;
@@ -2009,7 +2011,7 @@ const NOV_IMG={cr:'corazon',mis:'corazon',inm:'inmaculada',nav:'virgen',pen:'bas
 const dayN=()=>{const t=new Date();return Math.floor((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(2026,0,1))/864e5)};
 function feDia(tab){const P=FE_POOL[tab]||['basilica'];return P[((dayN()%P.length)+P.length)%P.length]}
 const FE_HERO=new Proxy({},{get:(o,tab)=>FE_TIT[tab]?[feDia(tab),FE_TIT[tab]]:undefined});
-function phHtml(k,kick,title,sub,big,mini){const f=FE[k];return '<header class="ph'+(big?' big':'')+(mini?' mini':'')+'"><button class="aa" data-act="aa" aria-label="Tamaño de letra, tema y copia de seguridad">Aa</button><div class="pi"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
+function phHtml(k,kick,title,sub,big,mini){const f=FE[k];return '<header class="ph'+(big?' big':'')+(mini?' mini':'')+'"><button class="aa" data-act="aa" aria-label="Tamaño de letra, tema y copia de seguridad">Aa</button><button class="aa tm" data-act="tmq" aria-label="Cambiar entre modo claro y oscuro">'+(temaOscuro()?'☀':'☾')+'</button><div class="pi"><img style="object-position:50% '+(f[4]*100)+'%" src="'+f[0]+'" alt="" decoding="async" fetchpriority="high"></div><div class="glow"></div><div class="pt"><span class="vk"></span><div class="kick">'+kick+'</div><h1>'+title+'</h1>'+(sub?'<div class="sub">'+sub+'</div>':'')+'</div><small class="fe-cr">'+esc(f[3])+'</small></header>'}
 let LAST=null;
 function render(keepScroll){
   stopSpeak();
@@ -2117,6 +2119,7 @@ document.addEventListener('click',e=>{
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
   else if(a==='aa'){state.tab='dia';state.sub.dia='aj';store.set('tab','dia');store.set('sub',state.sub);render()}
   else if(a==='fz'){const L=FZ,i=Math.max(0,Math.min(L.length-1,L.indexOf(store.get('fz',1))+(+v)));store.set('fz',L[i]);aplicarPrefs();render(true)}
+  else if(a==='tmq'){store.set('tema',temaOscuro()?'light':'dark');aplicarPrefs();render(true)}
   else if(a==='tema'){store.set('tema',v);aplicarPrefs();render(true)}
   else if(a==='bk')guardarCopia();
   else if(a==='iadd'){const ta=$('#itx'),x=(ta&&ta.value||'').trim();if(!x){$('#imsg').textContent='Escribe primero por qué o por quién quieres orar.';return}const I=store.get('intenc',[]);I.unshift({id:Date.now(),t:x,f:ymd(new Date()),r:null,nota:''});store.set('intenc',I);render(true)}
