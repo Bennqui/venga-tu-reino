@@ -328,6 +328,15 @@ body{font-size:calc(17px*var(--fz,1))}
 .ph.mini .pt{padding-bottom:16px}
 .ph.mini .vk{display:none}
 .ph.mini .fe-cr{top:16px;bottom:auto;left:max(16px,calc(50vw - 300px));right:70px;font-size:.58rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.noscroll,.noscroll body{overflow:hidden}
+#sheet{position:fixed;inset:0;z-index:30}
+#sheet .sb{position:absolute;inset:0;background:rgba(20,14,4,.45)}
+#sheet .sp{position:absolute;left:0;right:0;bottom:0;max-width:620px;margin:0 auto;max-height:88vh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:24px 24px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+#sheet .sp::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 8px}
+#sheet .sh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px}
+#sheet .sh b{font-family:var(--fd);font-weight:400;font-size:1.4rem}
+#sheet .sh .btn{min-height:42px;padding:6px 18px}
+@media (prefers-reduced-motion:no-preference){#sheet:not([hidden]) .sp{animation:shup .3s cubic-bezier(.2,.7,.2,1)}#sheet:not([hidden]) .sb{animation:shfd .25s ease-out}@keyframes shup{from{transform:translateY(100%)}to{transform:none}}@keyframes shfd{from{opacity:0}to{opacity:1}}}
 .aa.tm{right:64px;font-family:var(--fb);font-size:1.1rem}
 .aa{position:absolute;top:12px;right:14px;z-index:3;width:42px;height:42px;border-radius:50%;border:0;background:rgba(20,12,4,.32);color:#fff;font-family:var(--fd);font-size:1.02rem;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .grp{display:flex;gap:8px;margin:10px 0 0}
@@ -753,6 +762,7 @@ const state={
   rv:'paso',rs:0,rc:0,rk:'',
   gi:0,ps:0,plist:false,q:null,qf:'all',gq:'',year:new Date().getFullYear(),day:ymd(new Date()),say:{},speaking:null
 };
+if(state.sub.dia==='aj')state.sub.dia='rutina';
 if(!store.get('misaV3',false)){state.sub.misa='chu';store.set('sub',state.sub);store.set('misaV3',true)}
 {const r=store.get('ros',null);if(r&&r.d===ymd(new Date())){state.rs=r.rs||0;state.rc=r.rc||0;state.rk=r.rk||''}}
 const TABS=[
@@ -774,7 +784,7 @@ const SUBS={
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO'],['fie','Fiestas y novenas']],
   apr:[['anio','Año litúrgico'],['con','Personas y hechos'],['cat','Catecismo'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
-  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno'],['aj','Ajustes y copia']]
+  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
 };
 const segHtml=tab=>'<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+'</div>';
 const sayBtn=(id,text)=>{if(!TTS)return '';state.say[id]=text;return '<button class="btn ghost" data-act="speak" data-v="'+id+'">Escuchar</button>'};
@@ -1352,6 +1362,15 @@ function viewIntenciones(){
 
 /* ===== Ajustes: letra, tema y copia de seguridad ===== */
 const FZ=[.9,1,1.1,1.2,1.32,1.45];
+const ajAbierto=()=>{const e=$('#sheet');return !!e&&!e.hidden};
+function abrirAjustes(){
+  let e=$('#sheet');
+  if(!e){document.body.insertAdjacentHTML('beforeend','<div id="sheet" hidden><div class="sb" data-act="shx"></div><div class="sp" role="dialog" aria-modal="true" aria-labelledby="sht"><div class="sh"><b id="sht">Ajustes</b><button class="btn ghost" data-act="shx">Listo</button></div><div id="shc"></div></div></div>');e=$('#sheet')}
+  $('#shc').innerHTML=viewAjustes();e.hidden=false;document.documentElement.classList.add('noscroll');
+  const b=e.querySelector('.sh .btn');if(b)b.focus({preventScroll:true});
+}
+function cerrarAjustes(){const e=$('#sheet');if(e)e.hidden=true;document.documentElement.classList.remove('noscroll')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ajAbierto())cerrarAjustes()});
 function temaOscuro(){const tm=store.get('tema','light');if(tm==='auto')try{return matchMedia('(prefers-color-scheme: dark)').matches}catch(e){return false}return tm==='dark'}
 function aplicarPrefs(){
   const r=document.documentElement,fz=store.get('fz',1),tm=store.get('tema','light');
@@ -1377,7 +1396,7 @@ async function guardarCopia(){
   let ok=false;
   try{const file=new File([txt],nombre,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Copia de Venga tu Reino'});ok=true}}catch(e){if(e&&e.name==='AbortError'){if(msg)msg.textContent='No se guardó la copia.';return}}
   if(!ok){try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);ok=true}catch(e){}}
-  if(ok){store.set('bkfecha',ymd(new Date()));render(true);const m2=$('#bkmsg');if(m2)m2.textContent='Listo: copia «'+nombre+'». Guárdala en Archivos o en iCloud Drive.'}
+  if(ok){store.set('bkfecha',ymd(new Date()));if(ajAbierto())$('#shc').innerHTML=viewAjustes();const m2=$('#bkmsg');if(m2)m2.textContent='Listo: copia «'+nombre+'». Guárdala en Archivos o en iCloud Drive.'}
   else if(msg)msg.textContent='No se pudo crear la copia en este navegador.';
 }
 function recuperarCopia(file){
@@ -1430,7 +1449,6 @@ function streak(){
 }
 function viewDia(){
   const s=state.sub.dia,t=new Date(),k=ymd(t);
-  if(s==='aj')return segHtml('dia')+viewAjustes();
   if(s==='exa'){
     const e=(store.get('exa',{})[k])||{};
     return segHtml('dia')+'<div class="card tint"><p style="margin:0">Dedica 5 minutos antes de dormir. Reza un momento, responde despacio y termina con el acto de contrición. Lo que escribas se guarda <b>solo en tu dispositivo</b>.</p></div>'+
@@ -2039,6 +2057,7 @@ function render(keepScroll){
   reveal();
   feReq();
   segFade();
+  if(ajAbierto())$('#shc').innerHTML=viewAjustes();
 }
 /* Los botones de arriba que no caben se desvanecen en el borde, para que se note que se pueden deslizar. */
 function segFade(){document.querySelectorAll('.seg').forEach(s=>{const u=()=>s.classList.toggle('more',s.scrollLeft+s.clientWidth<s.scrollWidth-4);const a=s.querySelector('[aria-pressed="true"]');if(a&&a.offsetLeft+a.offsetWidth>s.clientWidth-30)s.scrollLeft=a.offsetLeft-24;u();s.addEventListener('scroll',u,{passive:true})})}
@@ -2117,7 +2136,8 @@ document.addEventListener('click',e=>{
   const a=b.dataset.act,v=b.dataset.v;
   if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
-  else if(a==='aa'){state.tab='dia';state.sub.dia='aj';store.set('tab','dia');store.set('sub',state.sub);render()}
+  else if(a==='aa')abrirAjustes();
+  else if(a==='shx')cerrarAjustes();
   else if(a==='fz'){const L=FZ,i=Math.max(0,Math.min(L.length-1,L.indexOf(store.get('fz',1))+(+v)));store.set('fz',L[i]);aplicarPrefs();render(true)}
   else if(a==='tmq'){store.set('tema',temaOscuro()?'light':'dark');aplicarPrefs();render(true)}
   else if(a==='tema'){store.set('tema',v);aplicarPrefs();render(true)}
