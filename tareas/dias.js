@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 /* Venga tu Reino — utilidades para los días preparados por adelantado (carpeta dias/).
 
-   node tareas/dias.js estado  AAAA-MM-DD          resumen: hoy.js, día de hoy y hasta qué fecha hay días preparados
-   node tareas/dias.js faltan  AAAA-MM-DD [n]      fechas que faltan (o están mal) desde hoy hasta hoy+n (n = 7 por defecto)
-   node tareas/dias.js validar dias/AAAA-MM-DD.js  revisa que el archivo de un día esté completo y bien formado
-   node tareas/dias.js hoy     AAAA-MM-DD          copia dias/AAAA-MM-DD.js a hoy.js (solo si es válido)
+   node tareas/dias.js estado    AAAA-MM-DD               resumen: hoy.js, día de hoy y hasta qué fecha hay días preparados
+   node tareas/dias.js faltan    AAAA-MM-DD [n]           fechas por preparar desde hoy hasta hoy+n (n = 7 por defecto) y qué hacer con cada una
+   node tareas/dias.js escribir  FECHA archivo.json       crea dias/FECHA.js a partir de un JSON completo (solo si pasa la validación)
+   node tareas/dias.js completar FECHA archivo.json       agrega o reemplaza secciones de un día que ya existe (p. ej. {"conoce":{…}})
+   node tareas/dias.js validar   dias/FECHA.js            revisa que el archivo de un día esté completo y bien formado
+   node tareas/dias.js temas                              personas y hechos que ya salieron (para no repetir)
+   node tareas/dias.js hoy       AAAA-MM-DD               copia dias/AAAA-MM-DD.js a hoy.js (solo si es válido)
 
-   AAAA-MM-DD es siempre la fecha de HOY en Venezuela (America/Caracas). */
+   En estado, faltan y hoy, AAAA-MM-DD es siempre la fecha de HOY en Venezuela (America/Caracas). */
 'use strict';
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const RAIZ = path.resolve(__dirname, '..');
@@ -18,12 +21,19 @@ const aTexto = d => d.toISOString().slice(0, 10);
 const suma = (s, n) => { const d = aFecha(s); d.setUTCDate(d.getUTCDate() + n); return aTexto(d); };
 const esFecha = s => RE_FECHA.test(s || '') && aTexto(aFecha(s)) === s;
 const rutaDia = f => path.join(DIAS, f + '.js');
+const hoyCaracas = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Caracas' });
+const serializar = H => 'window.HOY=' + JSON.stringify(H) + ';\n';
 
-function leer(archivo) {
-  const codigo = fs.readFileSync(archivo, 'utf8');
+function evaluar(codigo) {
   const caja = { window: {} };
   vm.runInNewContext(codigo, caja, { timeout: 2000 });
-  return { codigo, HOY: caja.window.HOY, extra: Object.keys(caja.window).filter(k => k !== 'HOY') };
+  return { HOY: caja.window.HOY, extra: Object.keys(caja.window).filter(k => k !== 'HOY') };
+}
+/* La app lee los días anteriores con JSON.parse: el archivo debe ser exactamente window.HOY= + JSON + ; */
+function esFormaJSON(codigo) {
+  const m = /^\s*window\.HOY\s*=\s*([\s\S]*?);?\s*$/.exec(codigo);
+  if (!m) return false;
+  try { JSON.parse(m[1]); return true; } catch (e) { return false; }
 }
 
 const RANGOS = ['Solemnidad', 'Fiesta', 'Memoria', 'Memoria libre', 'Feria', 'Domingo'];
@@ -31,16 +41,31 @@ const COLORES = ['verde', 'morado', 'blanco', 'rojo', 'rosa'];
 const TIPOS = ['Primera lectura', 'Salmo responsorial', 'Segunda lectura', 'Evangelio'];
 const RELATOS = ['Parábola', 'Milagro', 'Enseñanza', 'Encuentro', 'Escena'];
 
-/* Devuelve la lista de errores de un archivo de día (vacía si está bien). */
-function validar(archivo, fechaEsperada) {
+function preparados() {
+  if (!fs.existsSync(DIAS)) return [];
+  return fs.readdirSync(DIAS).filter(f => /^\d{4}-\d{2}-\d{2}\.js$/.test(f)).map(f => f.slice(0, 10)).sort();
+}
+/* Personas y hechos ya usados: [{fecha, persona, hecho}] */
+function temas() {
+  return preparados().map(f => {
+    try { const C = (evaluar(fs.readFileSync(rutaDia(f), 'utf8')).HOY || {}).conoce || {}; return { fecha: f, persona: (C.persona || {}).nombre || '', hecho: (C.hecho || {}).nombre || '' }; }
+    catch (e) { return { fecha: f, persona: '', hecho: '' }; }
+  });
+}
+const llano = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
+/* Devuelve la lista de errores del contenido de un día (vacía si está bien). Los errores de la sección
+   «Conoce tu Iglesia» empiezan por «conoce», para saber cuándo un día solo necesita esa sección. */
+function validarCodigo(codigo, fechaEsperada) {
   const E = [];
   let r;
-  try { r = leer(archivo); } catch (e) { return ['no se puede leer o tiene un error de JavaScript: ' + e.message]; }
+  try { r = evaluar(codigo); } catch (e) { return ['tiene un error de JavaScript: ' + e.message]; }
   const H = r.HOY;
-  if (!/^\s*window\.HOY\s*=\s*\{/.test(r.codigo)) E.push('el archivo debe empezar con window.HOY={');
+  if (!/^\s*window\.HOY\s*=\s*\{/.test(codigo)) E.push('el archivo debe empezar con window.HOY={');
   if (r.extra.length) E.push('solo debe definir window.HOY (sobra: ' + r.extra.join(', ') + ')');
   if (!H || typeof H !== 'object') return E.concat('no define window.HOY');
-  if (/AAAA-MM-DD/.test(r.codigo)) E.push('quedó el texto de plantilla AAAA-MM-DD');
+  if (!esFormaJSON(codigo)) E.push('no está en la forma que escribe «node tareas/dias.js escribir»: no escribas el .js a mano, usa escribir o completar');
+  if (/AAAA-MM-DD/.test(codigo)) E.push('quedó el texto de plantilla AAAA-MM-DD');
 
   const txt = (v, min) => typeof v === 'string' && v.trim().length >= (min || 1) && v.trim() !== '…';
   const pide = (ok, msg) => { if (!ok) E.push(msg); };
@@ -123,25 +148,88 @@ function validar(archivo, fechaEsperada) {
       pide(M.rango !== 'Domingo', 'no es domingo: misa.rango no puede ser Domingo');
     }
   }
+
+  /* Conoce tu Iglesia: una persona y un hecho por día */
+  const C = H.conoce;
+  if (!C || typeof C !== 'object') E.push('conoce: falta la sección «Conoce tu Iglesia» (persona y hecho del día)');
+  else {
+    const usados = temas().filter(t => t.fecha !== H.fecha);
+    for (const k of ['persona', 'hecho']) {
+      const x = C[k], p = 'conoce.' + k;
+      if (!x || typeof x !== 'object') { E.push(p + ': falta'); continue; }
+      const cp = (ok, msg) => { if (!ok) E.push(p + msg); };
+      cp(txt(x.nombre, 3), '.nombre falta');
+      cp(txt(x.tipo, 3) && x.tipo.length <= 80, '.tipo falta o pasa de 80 caracteres');
+      cp(txt(x.fechas, 2), '.fechas falta');
+      if ('lugar' in x) cp(txt(x.lugar, 2), '.lugar está vacío (omítelo si no aplica)');
+      cp(txt(x.resumen, 80), '.resumen es muy corto');
+      cp(Array.isArray(x.historia) && x.historia.length >= 3 && x.historia.every(s => txt(s, 150)), '.historia debe tener al menos 3 párrafos de 150 caracteres o más');
+      cp(txt(x.impacto, 150), '.impacto es muy corto');
+      cp(lista(x.claves, 3, 8), '.claves debe tener al menos 3 fechas o datos');
+      cp(txt(x.ensenanza, 60), '.ensenanza es muy corta');
+      const largo = [x.resumen, x.impacto, x.ensenanza].concat(Array.isArray(x.historia) ? x.historia : []).filter(s => typeof s === 'string').join(' ').length;
+      cp(largo >= 1500, ': la reseña es muy corta (' + largo + ' caracteres; mínimo 1500): cuéntala con detalle');
+      cp(largo <= 4500, ': la reseña es demasiado larga (' + largo + ' caracteres; máximo 4500)');
+      if (k === 'hecho' || 'estado' in x) cp(txt(x.estado, 40), '.estado falta: di qué dice la Iglesia (reconocimiento oficial)');
+      if ('frase' in x) {
+        const fr = x.frase || {};
+        cp(txt(fr.texto, 10) && txt(fr.fuente, 3), '.frase incompleta (texto y fuente); si no hay frase verificada, omítela');
+        if (txt(fr.texto)) cp(!/[«»]/.test(fr.texto), '.frase.texto no lleva « »');
+      }
+      if ('fiesta' in x) cp(txt(x.fiesta, 3), '.fiesta está vacío (omítelo si no aplica)');
+      cp(Array.isArray(x.fuentes) && x.fuentes.length >= 1 && x.fuentes.every(f => f && txt(f.n, 2) && /^https:\/\/\S+$/.test(f.url || '')), '.fuentes: al menos una {n,url} con un enlace https que hayas visto');
+      if (txt(x.nombre)) {
+        const rep = usados.find(t => llano(t[k]) === llano(x.nombre));
+        cp(!rep, ': «' + x.nombre + '» ya salió el ' + (rep && rep.fecha) + '; elige otro (mira «node tareas/dias.js temas»)');
+      }
+    }
+    if (C.persona && C.hecho && txt(C.persona.nombre) && txt(C.hecho.nombre)) pide(llano(C.persona.nombre) !== llano(C.hecho.nombre), 'conoce: la persona y el hecho no pueden ser lo mismo');
+  }
   return E;
 }
-
-function preparados() {
-  if (!fs.existsSync(DIAS)) return [];
-  return fs.readdirSync(DIAS).filter(f => /^\d{4}-\d{2}-\d{2}\.js$/.test(f)).map(f => f.slice(0, 10)).sort();
+function validar(archivo, fechaEsperada) {
+  let codigo;
+  try { codigo = fs.readFileSync(archivo, 'utf8'); } catch (e) { return ['no se puede leer: ' + e.message]; }
+  return validarCodigo(codigo, fechaEsperada);
 }
-const diaBien = f => fs.existsSync(rutaDia(f)) && validar(rutaDia(f), f).length === 0;
+
+const erroresDia = f => fs.existsSync(rutaDia(f)) ? validar(rutaDia(f), f) : null;
+const diaBien = f => { const E = erroresDia(f); return !!E && E.length === 0; };
+/* 'completo' | 'sin-conoce' (Evangelio y Misa bien; falta o falla solo «Conoce tu Iglesia») | 'mal' | 'falta' */
+const nivel = f => { const E = erroresDia(f); if (E === null) return 'falta'; if (!E.length) return 'completo'; return E.every(e => /^conoce/.test(e)) ? 'sin-conoce' : 'mal'; };
+/* [{fecha, que:'nuevo'|'completar'|'rehacer', errores}] */
 function faltan(hoy, n) {
   const out = [];
-  for (let i = 0; i <= n; i++) { const f = suma(hoy, i); if (!diaBien(f)) out.push(f); }
+  for (let i = 0; i <= n; i++) {
+    const f = suma(hoy, i), E = erroresDia(f);
+    if (E === null) out.push({ fecha: f, que: 'nuevo', errores: [] });
+    else if (E.length) out.push({ fecha: f, que: E.every(e => /^conoce/.test(e)) ? 'completar' : 'rehacer', errores: E });
+  }
   return out;
 }
 function fechaHoyJs() {
-  try { const H = leer(path.join(RAIZ, 'hoy.js')).HOY; return (H && H.fecha) || '(sin fecha)'; } catch (e) { return '(no se puede leer)'; }
+  try { const H = evaluar(fs.readFileSync(path.join(RAIZ, 'hoy.js'), 'utf8')).HOY; return (H && H.fecha) || '(sin fecha)'; } catch (e) { return '(no se puede leer)'; }
+}
+function leerJSON(archivo) {
+  let t;
+  try { t = fs.readFileSync(path.resolve(archivo), 'utf8'); } catch (e) { console.log('NO SE PUEDE LEER ' + archivo + ': ' + e.message); process.exit(1); }
+  try { const o = JSON.parse(t); if (!o || typeof o !== 'object' || Array.isArray(o)) throw new Error('debe ser un objeto { … }'); return o; }
+  catch (e) { console.log('JSON NO VÁLIDO en ' + archivo + ': ' + e.message); process.exit(1); }
+}
+function guardar(fecha, H) {
+  const codigo = serializar(H), E = validarCodigo(codigo, fecha);
+  if (E.length) { console.log('NO VÁLIDO ' + fecha + ' (no se guardó nada):\n- ' + E.join('\n- ')); process.exit(1); }
+  fs.mkdirSync(DIAS, { recursive: true });
+  fs.writeFileSync(rutaDia(fecha), codigo);
+  console.log('OK dias/' + fecha + '.js · ' + H.titulo + ' · ' + H.evangelio.cita + ' · persona: ' + H.conoce.persona.nombre + ' · hecho: ' + H.conoce.hecho.nombre);
 }
 
 const [, , cmd, a, b] = process.argv;
-function uso(msg) { if (msg) console.error(msg); console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n]  ·  node tareas/dias.js validar dias/AAAA-MM-DD.js'); process.exit(2); }
+function uso(msg) {
+  if (msg) console.error(msg);
+  console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n] · escribir|completar FECHA archivo.json · validar dias/FECHA.js · temas');
+  process.exit(2);
+}
 
 if (cmd === 'validar') {
   if (!a) uso();
@@ -149,32 +237,51 @@ if (cmd === 'validar') {
   if (!esFecha(nombre)) uso('El archivo debe llamarse AAAA-MM-DD.js');
   const E = validar(archivo, nombre);
   if (E.length) { console.log('NO VÁLIDO ' + nombre + ':\n- ' + E.join('\n- ')); process.exit(1); }
-  const H = leer(archivo).HOY;
-  console.log('OK ' + nombre + ' · ' + H.titulo + ' · ' + H.evangelio.cita);
+  const H = evaluar(fs.readFileSync(archivo, 'utf8')).HOY;
+  console.log('OK ' + nombre + ' · ' + H.titulo + ' · ' + H.evangelio.cita + ' · persona: ' + H.conoce.persona.nombre + ' · hecho: ' + H.conoce.hecho.nombre);
+} else if (cmd === 'escribir') {
+  if (!esFecha(a) || !b) uso('Uso: node tareas/dias.js escribir FECHA archivo.json');
+  const H = leerJSON(b);
+  if (!H.fecha) H.fecha = a;
+  if (!H.actualizado) H.actualizado = hoyCaracas();
+  guardar(a, H);
+} else if (cmd === 'completar') {
+  if (!esFecha(a) || !b) uso('Uso: node tareas/dias.js completar FECHA archivo.json');
+  if (!fs.existsSync(rutaDia(a))) { console.log('FALTA dias/' + a + '.js: usa «escribir» con el día completo'); process.exit(1); }
+  let H;
+  try { H = evaluar(fs.readFileSync(rutaDia(a), 'utf8')).HOY; } catch (e) { H = null; }
+  if (!H || typeof H !== 'object') { console.log('dias/' + a + '.js no se puede leer: usa «escribir» con el día completo'); process.exit(1); }
+  const extra = leerJSON(b);
+  if ('fecha' in extra && extra.fecha !== a) { console.log('El JSON es de otra fecha (' + extra.fecha + ')'); process.exit(1); }
+  guardar(a, Object.assign({}, H, extra));
+} else if (cmd === 'temas') {
+  const T = temas().filter(t => t.persona || t.hecho);
+  console.log(T.length ? T.map(t => t.fecha + ' | persona: ' + t.persona + ' | hecho: ' + t.hecho).join('\n') : 'NINGUNO');
 } else if (cmd === 'faltan') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const n = b === undefined ? 7 : Math.max(0, Math.min(30, parseInt(b, 10) || 0));
   const F = faltan(a, n);
-  console.log(F.length ? F.join('\n') : 'NADA');
+  const nota = { nuevo: 'NUEVO: no existe; prepara el día completo y usa «escribir»', completar: 'COMPLETAR: ya existe y solo le falta o le falla la sección conoce; usa «completar»', rehacer: 'REHACER: existe pero tiene errores; corrígelo con «completar» o «escribir»' };
+  console.log(F.length ? F.map(x => x.fecha + '  ' + nota[x.que] + (x.que === 'rehacer' ? '\n   - ' + x.errores.slice(0, 6).join('\n   - ') : '')).join('\n') : 'NADA');
 } else if (cmd === 'hoy') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const origen = rutaDia(a);
   if (!fs.existsSync(origen)) { console.log('FALTA dias/' + a + '.js: no se cambió hoy.js'); process.exit(1); }
-  const E = validar(origen, a);
-  if (E.length) { console.log('NO VÁLIDO dias/' + a + '.js: no se cambió hoy.js\n- ' + E.join('\n- ')); process.exit(1); }
+  const E = validar(origen, a), nv = nivel(a);
+  if (nv === 'mal') { console.log('NO VÁLIDO dias/' + a + '.js: no se cambió hoy.js\n- ' + E.join('\n- ')); process.exit(1); }
   const destino = path.join(RAIZ, 'hoy.js');
   const nuevo = fs.readFileSync(origen);
-  if (fs.existsSync(destino) && fs.readFileSync(destino).equals(nuevo)) console.log('IGUAL hoy.js ya es el del ' + a);
-  else { fs.writeFileSync(destino, nuevo); console.log('COPIADO dias/' + a + '.js → hoy.js'); }
+  const aviso = nv === 'sin-conoce' ? ' (AVISO: al día de hoy le falta la sección conoce)' : '';
+  if (fs.existsSync(destino) && fs.readFileSync(destino).equals(nuevo)) console.log('IGUAL hoy.js ya es el del ' + a + aviso);
+  else { fs.writeFileSync(destino, nuevo); console.log('COPIADO dias/' + a + '.js → hoy.js' + aviso); }
 } else if (cmd === 'estado') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const fh = fechaHoyJs();
   console.log('hoy.js: ' + fh + (fh === a ? ' (al día)' : ' (VIEJO)'));
-  console.log('día de hoy (dias/' + a + '.js): ' + (diaBien(a) ? 'listo' : 'FALTA'));
+  const nv = nivel(a);
+  console.log('día de hoy (dias/' + a + '.js): ' + ({ completo: 'listo', 'sin-conoce': 'listo, pero le falta la sección conoce', mal: 'TIENE ERRORES', falta: 'FALTA' })[nv]);
   let seguidos = 0; while (seguidos < 60 && diaBien(suma(a, seguidos + 1))) seguidos++;
-  console.log('días preparados por delante (seguidos): ' + seguidos + (seguidos ? ' (hasta ' + suma(a, seguidos) + ')' : ''));
+  console.log('días completos por delante (seguidos): ' + seguidos + (seguidos ? ' (hasta ' + suma(a, seguidos) + ')' : ''));
   const F = faltan(a, 7);
-  console.log('faltan en la ventana de 7 días: ' + (F.length ? F.join(', ') : 'ninguno'));
-  const malos = preparados().filter(f => f >= a && validar(rutaDia(f), f).length);
-  if (malos.length) console.log('con errores: ' + malos.join(', '));
+  console.log('por preparar en la ventana de 7 días: ' + (F.length ? F.map(x => x.fecha + ' (' + x.que + ')').join(', ') : 'ninguno'));
 } else uso();

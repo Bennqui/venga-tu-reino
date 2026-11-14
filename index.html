@@ -310,6 +310,15 @@ a{text-decoration-color:var(--red)}
 .ens b{font-family:var(--fd);font-weight:400;font-size:1.2rem;display:block;margin:2px 0}
 .colhoy{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border-radius:16px;padding:12px 14px;margin:12px 0}
 .colhoy .dot{margin-top:6px;flex:none}
+.conk{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600;margin:20px 2px 0}
+.fd.ci{border-top-color:var(--vy);color:var(--gold)}
+.cono{border:1px solid var(--line);border-radius:20px;padding:18px 18px 14px;margin:16px 0;background:var(--card);box-shadow:0 6px 20px -14px rgba(156,112,10,.35)}
+.cono .kk{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.cono h2{font-size:1.55rem;margin:4px 0 0}
+.cono h3{font-size:1.08rem;margin:18px 0 4px;color:var(--gold)}
+.cono .lead{font-family:var(--fd);font-size:1.14rem;line-height:1.5;margin:10px 0 4px}
+.cono .quote{margin:20px 0 12px}
+details.fi .cono{border:0;box-shadow:none;padding:6px 0 0;margin:8px 0 0;border-top:1px solid var(--line);border-radius:0}
 .colwhy{background:var(--tint);border-radius:12px;padding:8px 12px;margin:8px 0}
 </style>
 <div id="prog" aria-hidden="true"></div>
@@ -729,7 +738,7 @@ const SUBS={
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['hor','Liturgia de las Horas'],['seo','Libro SEO'],['fie','Fiestas y novenas']],
-  apr:[['anio','Año litúrgico'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
+  apr:[['anio','Año litúrgico'],['con','Personas y hechos'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
   dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
 };
 const segHtml=tab=>'<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+'</div>';
@@ -804,10 +813,11 @@ function viewHoy(){
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
   {const nh=novenaHoy(t),fr=fraseDia(t);
    if(nh){const x=novDia(nh.f,nh.k);h+='<div class="novnow" data-act="nov" data-v="'+nh.f.nov.id+ymd(nh.f.d)+'"><span class="vk"></span><div class="kk">'+esc((NOV_INFO[nh.f.nov.id]||{}).n||'Novena')+' · día '+(nh.k+1)+' de 9</div><b>'+esc(x.t)+'</b>'+(x.cita?'<p class="small" style="margin:2px 0 0">'+esc(x.cita)+'</p>':'')+'<span class="small">Rezar el día de hoy ›</span></div>'}
-   {const MH=misaHoy(),cw=colorPor(MH.color,MH.titulo);if(cw)h+='<div class="colhoy"><i class="dot" style="background:'+esc(litColor(MH.color))+'"></i><span><b>Color de hoy: '+esc(MH.color)+'</b><br><span class="small">'+esc(cw)+'</span></span></div>'}
+   {const MH=misaHoy(),cw=colorPor(MH.color,MH.titulo);if(cw)h+='<div class="colhoy"><i class="dot" style="background:'+esc(litColor(MH.color))+'"></i><span><b>Color de hoy: '+esc(MH.color)+'</b><br><span class="small">'+esc(cw)+'</span><br><span class="small mut">'+esc(L.tiempo+(L.semana?' · semana '+L.semana:'')+' · domingos: ciclo '+cicloDom(t)+(L.tiempo==='Tiempo Ordinario'?' · entre semana: año '+cicloSem(t):''))+'</span></span></div>'}
    h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
    const nx=proximas(t,3).filter(f=>!nh||f!==nh.f).slice(0,2);
    if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
+   {const C=conoHoy();if(C&&(C.persona||C.hecho))h+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
   }
   if(L.especial)h+='<div class="card tint"><b>'+esc(L.especial.n)+'</b> · <span class="mut">'+esc(L.especial.g)+'</span><p>'+esc(L.especial.d)+'</p></div>';
   else if(L.nota)h+='<div class="card tint"><p style="margin:0">'+esc(L.nota)+'</p></div>';
@@ -939,6 +949,53 @@ function colorPor(c,cel){
 }
 function L_TIEMPO_ORD(){try{return liturgia(new Date()).tiempo==='Tiempo Ordinario'}catch(e){return false}}
 
+/* ===== CONOCE TU IGLESIA: cada día, una persona y un hecho de la historia de la Iglesia (vienen en el archivo del día) ===== */
+function conoHoy(){const H=window.HOY;return (H&&H.fecha===ymd(new Date())&&H.conoce)||null}
+function conoSay(x){return [x.nombre+'.',x.tipo||'',x.resumen||''].concat(x.historia||[],[x.impacto?'Por qué importa. '+x.impacto:'',x.estado?'Qué dice la Iglesia. '+x.estado:'',x.ensenanza?'Qué nos enseña hoy. '+x.ensenanza:'']).filter(Boolean).join(' ')}
+function conoHtml(x,kind,id){
+  if(!x)return '';
+  const per=kind==='persona',hoy=id==='hoy';
+  let h='<article class="cono"><span class="vk"></span><div class="kk">'+(per?'Persona':'Hecho')+(hoy?' del día':'')+'</div><h2>'+esc(x.nombre)+'</h2><p class="mut small" style="margin:2px 0 0">'+[x.tipo,x.fechas,x.lugar].filter(Boolean).map(esc).join(' · ')+'</p>';
+  const sb=sayBtn('cono-'+kind+'-'+id,conoSay(x));if(sb)h+='<div class="row">'+sb+'</div>';
+  if(x.resumen)h+='<p class="lead">'+esc(x.resumen)+'</p>';
+  h+='<h3>'+(per?'Su vida':'Qué pasó')+'</h3><div class="reading">'+(x.historia||[]).map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>';
+  if(x.impacto)h+='<h3>'+(per?'Cómo marcó a la Iglesia':'Por qué importa')+'</h3><p>'+esc(x.impacto)+'</p>';
+  if(x.claves&&x.claves.length)h+='<h3>Fechas y datos clave</h3><ul class="tight">'+x.claves.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ul>';
+  if(x.frase&&x.frase.texto)h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(x.frase.texto)+'</blockquote><figcaption>'+(per?'<b>'+esc(x.nombre)+'</b> · ':'')+esc(x.frase.fuente||'')+'</figcaption></figure>';
+  if(x.estado)h+='<div class="hoyb par"><b>Qué dice la Iglesia</b><p>'+esc(x.estado)+'</p></div>';
+  if(x.ensenanza)h+='<div class="say"><b>Qué nos enseña hoy</b>'+esc(x.ensenanza)+'</div>';
+  if(x.fiesta)h+='<p class="small mut">'+(per?'Su fiesta':'Se celebra')+': '+esc(x.fiesta)+'</p>';
+  const F=(x.fuentes||[]).filter(f=>f&&/^https:\/\//.test(f.url||''));
+  if(F.length)h+='<p class="small mut">Para saber más: '+F.map(f=>'<a href="'+esc(f.url)+'" target="_blank" rel="noopener noreferrer">'+esc(f.n||'fuente')+'</a>').join(' · ')+'</p>';
+  return h+'</article>';
+}
+/* Días anteriores: se leen de dias/AAAA-MM-DD.js (ya guardados en el teléfono) sin tocar el día de hoy. */
+const CONO={};
+function conoCarga(f){
+  if(f in CONO)return Promise.resolve(CONO[f]);
+  return fetch('dias/'+f+'.js').then(r=>r.ok?r.text():'').then(t=>{
+    let H=null;try{H=JSON.parse(t.replace(/^\s*window\.HOY\s*=\s*/,'').replace(/;\s*$/,''))}catch(e){}
+    return CONO[f]=(H&&H.fecha===f&&H.conoce)||null;
+  }).catch(()=>null);
+}
+function conoPrev(){
+  const t=new Date(),F=[];for(let i=1;i<=10;i++)F.push(addDays(t,-i));
+  Promise.all(F.map(d=>conoCarga(ymd(d)))).then(R=>{
+    const el=$('#conoprev');if(!el)return;
+    const h=R.map((c,i)=>{if(!c||!(c.persona||c.hecho))return '';const d=F[i],k=ymd(d);
+      return '<details class="fi"><summary><span class="fd"><b>'+d.getDate()+'</b><i>'+esc(MESES[d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(c.persona?c.persona.nombre:'')+'</b><br><span class="small mut">'+esc(c.hecho?c.hecho.nombre:'')+'</span></span></summary><div class="in">'+conoHtml(c.persona,'persona',k)+conoHtml(c.hecho,'hecho',k)+'</div></details>'}).join('');
+    el.innerHTML=h?'<h2 class="sec">Días anteriores</h2>'+h:'';
+  });
+}
+function viewConoce(){
+  const C=conoHoy(),t=new Date();
+  let h=segHtml('apr')+'<p class="mut" style="margin:10px 2px 0">'+esc(cap(fmt(t)))+'. Cada día, una persona que marcó a la Iglesia y un hecho de su historia.</p>';
+  if(C)h+=conoHtml(C.persona,'persona','hoy')+conoHtml(C.hecho,'hecho','hoy');
+  else h+='<div class="card"><p style="margin:0">La persona y el hecho de hoy se preparan junto con el Evangelio. Si aún no aparecen, vuelve a abrir la app con internet.</p></div>';
+  h+='<div id="conoprev"></div><p class="note">Estas reseñas se preparan automáticamente a partir de fuentes católicas y pueden tener imprecisiones. Para confirmar un dato o profundizar, usa los enlaces de «Para saber más».</p>';
+  setTimeout(conoPrev,0);
+  return h;
+}
 /* ===== LITURGIA DE LAS HORAS ===== */
 function semanaSalterio(d){
   const L=liturgia(d),y=d.getFullYear(),E=easter(y),k=diff(d,E),ash=addDays(E,-46);
@@ -1206,14 +1263,15 @@ const GESTOS=[
 ];
 function viewApr(){
   if(state.sub.apr==='ens')return viewEnsayos();
+  if(state.sub.apr==='con')return viewConoce();
   const s=state.sub.apr;
   if(s==='glos'){
     return segHtml('apr')+'<label class="small mut" for="gq">Buscar un término</label><input id="gq" data-act="gq" type="search" value="'+esc(state.gq)+'" placeholder="Por ejemplo: altar, Amén, cáliz" style="width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);color:var(--ink);font:inherit;margin:6px 0 8px"><div id="glist">'+glosList()+'</div>';
   }
   if(s==='euc')return segHtml('apr')+EUC.map((x,i)=>'<details'+(i===0?' open':'')+'><summary>'+esc(x[0])+'</summary><div class="in"><p>'+esc(x[1])+'</p></div></details>').join('');
   if(s==='part')return segHtml('apr')+PART.map(x=>'<div class="card"><h3>'+esc(x[0])+'</h3><ul class="tight">'+x[1].map(y=>'<li>'+esc(y)+'</li>').join('')+'</ul></div>').join('')+'<h2 class="sec">Gestos</h2><div class="card">'+GESTOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
-  const t=new Date(),L=liturgia(t),y=state.year;
-  let h=segHtml('apr')+'<div class="card tint"><div class="lbl">Hoy</div><p style="margin:0"><b>'+esc(L.titulo)+'</b>. Color <b>'+esc(L.color)+'</b>. Domingos: ciclo <b>'+cicloDom(t)+'</b>; entre semana: año <b>'+cicloSem(t)+'</b>.</p></div>';
+  const t=new Date(),L=liturgia(t),y=state.year,MH=misaHoy();
+  let h=segHtml('apr')+'<div class="card tint"><div class="lbl">Hoy</div><p style="margin:0"><b>'+esc(MH.titulo)+'</b>'+(MH.rango?' ('+esc(MH.rango.toLowerCase())+')':'')+'. '+esc(L.tiempo)+(L.semana?', semana '+L.semana:'')+'. Color <b>'+esc(MH.color)+'</b>. Domingos: ciclo <b>'+cicloDom(t)+'</b>; entre semana: año <b>'+cicloSem(t)+'</b>.</p></div>';
   h+='<h2 class="sec">Fechas del año</h2><div class="row" style="align-items:center"><button class="btn ghost" data-act="yr" data-v="-1" aria-label="Año anterior">‹</button><b style="font-family:var(--fd);font-size:1.2rem;min-width:64px;text-align:center">'+y+'</b><button class="btn ghost" data-act="yr" data-v="1" aria-label="Año siguiente">›</button></div>';
   h+='<div class="card"><table class="dates"><tbody>'+fechasAnio(y).map(f=>'<tr><td>'+esc(fmtCorto(f[0]))+'</td><td><b>'+esc(f[1])+'</b><br><span class="small mut">'+esc(f[2])+'</span></td></tr>').join('')+'</tbody></table></div>';
   h+='<p class="note">Las fechas móviles se calculan a partir de la Pascua de cada año. Algunas fiestas (Epifanía, Ascensión, Corpus Christi) cambian de día según el país, y las fiestas locales (patronos, advocaciones) las indica el calendario de tu diócesis.</p>';
