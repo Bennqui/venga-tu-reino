@@ -51,6 +51,13 @@ Parafrasea con tus palabras. No copies el texto bíblico: como máximo una frase
 - `fieles`: "Te rogamos, óyenos."
 - `aviso` (opcional): 1 frase si el día tiene algo especial (color distinto, memoria libre, novena, fiesta local). Si no aplica, omítelo.
 
+## 4b. Santo del día (`santo`)
+
+Cada día lleva `santo`: `{nombre, nota}`. Es el santo o la celebración que el santoral recuerda ese día, aunque en la Misa sea feria o domingo.
+
+- `nombre`: como se le conoce («San Alberto Magno», «Dedicación de las basílicas de San Pedro y San Pablo»). Si hay dos memorias libres, pon las dos.
+- `nota`: una sola frase (15 a 260 caracteres): quién fue y, si aplica, qué pasa hoy en la Misa («Hoy, por ser domingo, su memoria no se celebra»). Solo datos que hayas visto en una fuente.
+
 ## 5. Conoce tu Iglesia (`conoce`): una persona y un hecho, con detalle
 
 Cada día lleva **dos reseñas**: `conoce.persona` (alguien importante para la Iglesia católica, que la haya marcado, renovado o impactado) y `conoce.hecho` (un acontecimiento de su historia). Cesar quiere aprender de verdad: cuéntalo con detalle, como una buena historia, no como una ficha.
@@ -75,6 +82,7 @@ Cada día lleva **dos reseñas**: `conoce.persona` (alguien importante para la I
 - `nombre`: cómo se le conoce («Santa Teresa de Jesús», «Las apariciones de Fátima»).
 - `tipo`: etiqueta corta, máximo 80 caracteres («Santa, doctora de la Iglesia», «Aparición mariana aprobada», «Concilio ecuménico»).
 - `fechas`: años o fechas («1515–1582», «13 de mayo a 13 de octubre de 1917»).
+- `anio`: un número entero con el año principal, para ordenarlo en la línea del tiempo de la app: el año de nacimiento de la persona o el año en que ocurrió el hecho (negativo si es antes de Cristo; si solo se conoce el siglo, el año central, por ejemplo 250 para el siglo III).
 - `lugar` (opcional): dónde vivió o dónde ocurrió.
 - `resumen`: 2 o 3 frases: quién fue o qué pasó, y por qué importa.
 - `historia`: **4 párrafos** (mínimo 3) de unas 60 a 100 palabras cada uno, en orden, con hechos concretos: fechas, lugares, nombres, dificultades y cómo se resolvieron.
@@ -111,9 +119,10 @@ Escribe el día como **JSON** en un archivo temporal (por ejemplo `/tmp/2026-11-
  "evangelio":{"cita":"…","resumen":["…","…","…"],"contexto":"…","significado":"…","hoy":["…","…","…"],"pregunta":"…","oracion":"…"},
  "misa":{"celebracion":"…","rango":"…","color":"…","gloria":false,"credo":false,"segunda":false,"salmo":{"cita":"…","respuesta":"…"},"evangelioIntro":"Lectura del santo Evangelio según san …","relato":{"tipo":"…","titulo":"…","resumen":"…","ensenanza":"…"},"homilia":"…","fieles":"Te rogamos, óyenos.","aviso":"…"},
  "encuentro":{"frase":{"texto":"…","cita":"…"},"luces":["…","…","…"],"conexion":{"cita":"…","idea":"…"},"ver":["…","…","…"],"juzgar":["…","…","…"],"actuar":["Conversión: …","Apostolado: …"],"compartir":"…"},
+ "santo":{"nombre":"…","nota":"…"},
  "conoce":{
-  "persona":{"nombre":"…","tipo":"…","fechas":"…","lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]},
-  "hecho":{"nombre":"…","tipo":"…","fechas":"…","lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]}},
+  "persona":{"nombre":"…","tipo":"…","fechas":"…","anio":0,"lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]},
+  "hecho":{"nombre":"…","tipo":"…","fechas":"…","anio":0,"lugar":"…","resumen":"…","historia":["…","…","…","…"],"impacto":"…","claves":["…","…","…","…"],"estado":"…","ensenanza":"…","fiesta":"…","fuentes":[{"n":"…","url":"https://…"}]}},
  "catecismo":{"desde":0,"hasta":0,"tema":"…","explicacion":["…","…"],"clave":"…","pregunta":"…","url":"https://www.vatican.va/archive/catechism_sp/…"},
  "actualizado":"AAAA-MM-DD"}
 ```

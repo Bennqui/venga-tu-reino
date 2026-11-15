@@ -313,6 +313,33 @@ a{text-decoration-color:var(--red)}
 .ens b{font-family:var(--fd);font-weight:400;font-size:1.2rem;display:block;margin:2px 0}
 .colhoy{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border-radius:16px;padding:12px 14px;margin:12px 0}
 .colhoy .dot{margin-top:6px;flex:none}
+.estado{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.8rem;color:var(--mut);margin:18px 2px 6px;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.estado i{width:8px;height:8px;border-radius:50%;flex:none}
+.estado .ev{margin-left:auto;opacity:.7}
+.repi{display:block;width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);color:var(--ink);font:inherit;margin:6px 0 10px}
+.tl{margin:8px 0 0;padding-left:16px;border-left:2px solid var(--line)}
+.tls{font-family:var(--fd);font-size:1.1rem;color:var(--gold);margin:22px 0 6px}
+.tli{position:relative;margin:8px 0}
+.tli::before{content:"";position:absolute;left:-24px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--vy);box-shadow:0 0 0 3px var(--bg)}
+.tli.h::before{background:var(--red)}
+.tli summary{display:flex;align-items:center;gap:12px}
+.tli .ty{flex:none;min-width:58px;font-family:var(--fd);font-size:1.05rem;color:var(--ink)}
+.tli .cono{border:0;box-shadow:none;padding:0;margin:0;background:none}
+.tli summary .small,.nvd summary .small{font-weight:400}
+.adv{border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin:14px 0;background:var(--card)}
+.adv .kk{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.adv h2{margin:4px 0 8px}
+.velas{display:flex;gap:20px;justify-content:center;align-items:flex-end;height:88px;margin:8px 0 12px}
+.vela{position:relative;width:16px;height:54px;border-radius:5px 5px 3px 3px;background:#6B4C8F;opacity:.4}
+.vela.rosa{background:#D98BA3}
+.vela.on{opacity:1}
+.vela i{position:absolute;left:50%;top:-19px;width:10px;height:17px;margin-left:-5px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;background:radial-gradient(circle at 50% 68%,#FFF1BF,#F2B632 58%,rgba(242,182,50,0) 74%);opacity:0}
+.vela.on i{opacity:1}
+.advl{list-style:none;margin:10px 0 0;padding:0}
+.advl li{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.advl .fdm{flex:none;min-width:54px;color:var(--mut);font-size:.86rem;padding-top:2px}
+.advl li.hoy{font-weight:600}
+.advl li.ok span:last-child{color:var(--mut);text-decoration:line-through}
 .conk{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600;margin:20px 2px 0}
 .fd.ci{border-top-color:var(--vy);color:var(--gold)}
 .cono{border:1px solid var(--line);border-radius:20px;padding:18px 18px 14px;margin:16px 0;background:var(--card);box-shadow:0 6px 20px -14px rgba(156,112,10,.35)}
@@ -795,11 +822,12 @@ function litColor(c){
 /* ===== ESTADO ===== */
 const state={
   tab:store.get('tab','hoy'),
-  sub:Object.assign({enc:'paso',misa:'chu',orar:'ora',apr:'anio',dia:'rutina',apo:'med'},store.get('sub',{})),
+  sub:Object.assign({enc:'paso',misa:'chu',orar:'ora',apr:'con',dia:'rutina',apo:'med'},store.get('sub',{})),
   rv:'paso',rs:0,rc:0,rk:'',
   gi:0,ps:0,plist:false,q:null,qf:'all',gq:'',year:new Date().getFullYear(),day:ymd(new Date()),say:{},speaking:null
 };
 if(state.sub.dia==='aj')state.sub.dia='rutina';
+if(state.sub.apr==='part')state.sub.apr='euc';
 if(!store.get('misaV3',false)){state.sub.misa='chu';store.set('sub',state.sub);store.set('misaV3',true)}
 {const r=store.get('ros',null);if(r&&r.d===ymd(new Date())){state.rs=r.rs||0;state.rc=r.rc||0;state.rk=r.rk||''}}
 const TABS=[
@@ -819,8 +847,8 @@ const SUBS={
   enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
-  orar:[['ora','Oraciones'],['ros','Rosario'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO'],['fie','Fiestas y novenas']],
-  apr:[['anio','Año litúrgico'],['con','Personas y hechos'],['cat','Catecismo'],['glos','Glosario'],['euc','Eucaristía'],['part','Participar'],['ens','Ensayos RC']],
+  orar:[['ora','Oraciones'],['ros','Rosario'],['fie','Novenas y fiestas'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO']],
+  apr:[['con','Personas y hechos'],['cat','Catecismo'],['anio','Año litúrgico'],['euc','Eucaristía y Misa'],['glos','Glosario'],['ens','Ensayos RC']],
   dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
 };
 const segHtml=tab=>'<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+'</div>';
@@ -894,18 +922,16 @@ function viewHoy(){
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button></div>';
-  {const nh=novenaHoy(t),fr=fraseDia(t);
+  const nh=novenaHoy(t),fr=fraseDia(t);
+  /* 1. Lo que se reza hoy: novena en curso y Adviento */
    if(nh){const x=novDia(nh.f,nh.k);h+='<div class="novnow" data-act="nov" data-v="'+nh.f.nov.id+ymd(nh.f.d)+'"><span class="vk"></span><div class="kk">'+esc((NOV_INFO[nh.f.nov.id]||{}).n||'Novena')+' · día '+(nh.k+1)+' de 9</div><b>'+esc(x.t)+'</b>'+(x.cita?'<p class="small" style="margin:2px 0 0">'+esc(x.cita)+'</p>':'')+'<span class="small">Rezar el día de hoy ›</span></div>'}
-   {const MH=misaHoy(),cw=colorPor(MH.color,MH.titulo);if(cw)h+='<div class="colhoy"><i class="dot" style="background:'+esc(litColor(MH.color))+'"></i><span><b>Color de hoy: '+esc(MH.color)+'</b><br><span class="small">'+esc(cw)+'</span><br><span class="small mut">'+esc(L.tiempo+(L.semana?' · semana '+L.semana:'')+' · domingos: ciclo '+cicloDom(t)+(L.tiempo==='Tiempo Ordinario'?' · entre semana: año '+cicloSem(t):''))+'</span></span></div>'}
-   h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
-   const nx=proximas(t,3).filter(f=>!nh||f!==nh.f).slice(0,2);
-   if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
-   {const C=conoHoy();if(C&&(C.persona||C.hecho))h+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
-  }
-  {const P=catPlan(t);if(P){const K=catDe(window.HOY,ymd(t)),leido=!!store.get('catl',{})[ymd(t)];h+='<div class="conk">El Catecismo en un año · día '+P.dia+'</div><div class="nextf"><button data-act="go" data-v="apr" data-s="cat"><span class="fd ci">'+ic(leido?'check':'book','sm')+'</span><span><span class="small mut">Números '+P.desde+' a '+P.hasta+(leido?' · leído':'')+'</span><br><b>'+esc(K?K.tema:'Leer los números de hoy')+'</b></span></button></div>'}}
+  {const A=advHoy(t);if(A){const hecho=!!store.get('advh',{})[ymd(t)];h+='<div class="novnow" style="cursor:default"><span class="vk"></span><div class="kk">Adviento · '+esc(A.S.n.toLowerCase())+' · '+esc(A.S.tema.toLowerCase())+'</div><b>'+esc(A.gesto)+'</b><div class="row" style="margin:8px 0 0"><button class="btn'+(hecho?' ghost':'')+'" data-act="advok">'+(hecho?'Hecho ✓':'Lo hice')+'</button><button class="btn ghost" data-act="go" data-v="orar" data-s="fie">Corona y calendario</button></div></div>'}}
+  /* 2. Hoy en la Iglesia: color, tiempo litúrgico y santo del día */
+  {const MH=misaHoy(),cw=colorPor(MH.color,MH.titulo),SH=santoHoy(t);h+='<div class="colhoy"><i class="dot" style="background:'+esc(litColor(MH.color))+'"></i><span><b>Color de hoy: '+esc(MH.color)+'</b>'+(cw?'<br><span class="small">'+esc(cw)+'</span>':'')+'<br><span class="small mut">'+esc(L.tiempo+(L.semana?' · semana '+L.semana:'')+' · domingos: ciclo '+cicloDom(t)+(L.tiempo==='Tiempo Ordinario'?' · entre semana: año '+cicloSem(t):''))+'</span>'+(SH?'<br><span class="small"><b>Santo del día:</b> '+esc(SH.nombre)+(SH.nota?'. '+esc(SH.nota):'')+'</span>':'')+'</span></div>'}
   if(L.especial)h+='<div class="card tint"><b>'+esc(L.especial.n)+'</b> · <span class="mut">'+esc(L.especial.g)+'</span><p>'+esc(L.especial.d)+'</p></div>';
   else if(L.nota)h+='<div class="card tint"><p style="margin:0">'+esc(L.nota)+'</p></div>';
   if(viejo)h+='<div class="nota"><b>Evangelio guardado del '+esc(fmt(new Date(H.fecha+'T12:00:00')))+'</b>No se pudo cargar el de hoy (sin conexión o aún sin actualizar). Con internet, toca «Leer las lecturas de hoy».<div class="row" style="margin:8px 0 0"><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div></div>';
+  /* 3. El Evangelio */
   if(ok){
     const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
     h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Leer el texto bíblico</a></div>'+
@@ -919,6 +945,15 @@ function viewHoy(){
   }else{
     h+='<div class="card"><p style="margin-top:0">El comentario de hoy se publica cada día pasada la medianoche. Si aún no aparece, vuelve a abrir la página en un momento.</p><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
   }
+  /* 4. Para aprender hoy */
+   {const C=conoHoy();if(C&&(C.persona||C.hecho))h+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
+  {const P=catPlan(t);if(P){const K=catDe(window.HOY,ymd(t)),leido=!!store.get('catl',{})[ymd(t)];h+='<div class="conk">El Catecismo en un año · día '+P.dia+'</div><div class="nextf"><button data-act="go" data-v="apr" data-s="cat"><span class="fd ci">'+ic(leido?'check':'book','sm')+'</span><span><span class="small mut">Números '+P.desde+' a '+P.hasta+(leido?' · leído':'')+'</span><br><b>'+esc(K?K.tema:'Leer los números de hoy')+'</b></span></button></div>'}}
+  /* 5. Intención del Papa, frase del día y próximas fiestas */
+  {const P=papaMes(t);if(P)h+='<div class="conk">Intención del Papa · '+esc(MESES[t.getMonth()])+'</div><div class="card tint" style="margin-top:8px"><b>'+esc(P[0])+'</b><p class="small" style="margin:4px 0 0">'+esc(P[1])+'</p><p class="small mut" style="margin:6px 0 0"><a href="https://www.popesprayer.va/" target="_blank" rel="noopener noreferrer">Red Mundial de Oración del Papa</a></p></div>'}
+   h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
+   const nx=proximas(t,3).filter(f=>!nh||f!==nh.f).slice(0,2);
+   if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
+  /* 6. Para tu día */
   const m=misDia(t,L),ob=OBRAS[(Math.floor((t-new Date(t.getFullYear(),0,0))/864e5))%OBRAS.length];
   h+='<h2 class="sec">Para tu día</h2><div class="tiles">'+
    '<button class="tile" data-act="go" data-v="orar" data-s="ros">'+ic('rosary','sm')+'<b>Rosario</b><span class="mut">Misterios '+esc(m.n.toLowerCase())+'</span></button>'+
@@ -926,6 +961,7 @@ function viewHoy(){
    '<button class="tile" data-act="go" data-v="dia" data-s="rutina">'+ic('heart','sm')+'<b>Obra del día</b><span class="mut">'+esc(ob[1])+'</span></button></div>';
   h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Examen de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
   h+='<p class="note">El comentario es una paráfrasis para ayudarte a comprender y orar; no reemplaza el texto bíblico.</p>';
+  h+=estadoHtml();
   return h;
 }
 function viewMisa(){
@@ -1072,14 +1108,127 @@ function conoPrev(){
   });
 }
 function viewConoce(){
-  const C=conoHoy(),t=new Date();
-  let h=segHtml('apr')+'<p class="mut" style="margin:10px 2px 0">'+esc(cap(fmt(t)))+'. Cada día, una persona que marcó a la Iglesia y un hecho de su historia.</p>';
+  const C=conoHoy(),t=new Date(),v=store.get('conv','hoy');
+  let h=segHtml('apr')+'<div class="opts3" role="group" aria-label="Vista"><button data-act="conv" data-v="hoy" aria-pressed="'+(v!=='linea')+'">Hoy</button><button data-act="conv" data-v="linea" aria-pressed="'+(v==='linea')+'">Línea del tiempo</button></div>';
+  const nota='<p class="note">Estas reseñas se preparan automáticamente a partir de fuentes católicas y pueden tener imprecisiones. Para confirmar un dato o profundizar, usa los enlaces de «Para saber más».</p>';
+  if(v==='linea')return h+viewLinea()+nota;
+  h+='<p class="mut" style="margin:10px 2px 0">'+esc(cap(fmt(t)))+'. Cada día, una persona que marcó a la Iglesia y un hecho de su historia.</p>';
   if(C)h+=conoHtml(C.persona,'persona','hoy')+conoHtml(C.hecho,'hecho','hoy');
   else h+='<div class="card"><p style="margin:0">La persona y el hecho de hoy se preparan junto con el Evangelio. Si aún no aparecen, vuelve a abrir la app con internet.</p></div>';
-  h+='<div id="conoprev"></div><p class="note">Estas reseñas se preparan automáticamente a partir de fuentes católicas y pueden tener imprecisiones. Para confirmar un dato o profundizar, usa los enlaces de «Para saber más».</p>';
+  h+='<div id="conoprev"></div>'+nota;
   setTimeout(conoPrev,0);
   return h;
 }
+/* ===== SANTO DEL DÍA E INTENCIÓN DEL PAPA ===== */
+function santoHoy(t){const H=window.HOY;if(H&&H.fecha===ymd(t)&&H.santo&&H.santo.nombre)return H.santo;const S=SANTOS.find(x=>x[0]===t.getMonth()+1&&x[1]===t.getDate());return S?{nombre:S[2],nota:''}:null}
+/* Tema de cada mes según la Red Mundial de Oración del Papa; la explicación es un resumen de la app. */
+const PAPA={
+'2026-11':['Por el buen uso de la riqueza','Pedimos saber usar bien el dinero y los bienes: compartirlos y ponerlos a trabajar por los demás, sobre todo por quienes menos tienen.'],
+'2026-12':['Por las familias monoparentales','Pedimos por las familias donde falta el padre o la madre: que la Iglesia las acompañe y la fe las sostenga en los momentos difíciles.'],
+'2027-01':['Por el descubrimiento de la fuerza de la oración','Que todos en la Iglesia volvamos a descubrir la oración como un encuentro con Dios que nos cambia a nosotros y al mundo.'],
+'2027-02':['Por el cuidado de quienes cuidan','Por médicos, enfermeros y familiares que atienden a los enfermos: que no les falten apoyo, paciencia ni esperanza.'],
+'2027-03':['Por el respeto de la dignidad de la vida humana','Que sepamos ver el valor de cada persona, no por lo que produce, sino por lo que es.'],
+'2027-04':['Por el arte como don que humaniza','Que el arte se reciba como un regalo que eleva el espíritu y nos deja asomarnos a la belleza de Dios.'],
+'2027-05':['Por las oportunidades laborales para todos','Que la tecnología sirva para crear trabajo digno y que jóvenes y mayores construyan juntos el bien común.'],
+'2027-06':['Por un buen uso de la inteligencia artificial','Que la inteligencia artificial se use con prudencia y siempre al servicio del bien de las personas.'],
+'2027-07':['Por los abuelos y ancianos','Que la Iglesia valore la sabiduría de los mayores y aprenda de lo que han vivido.'],
+'2027-08':['Por la vocación de los jóvenes','Que los jóvenes que buscan su camino encuentren en Jesús a alguien con quien hablar y a quien seguir.'],
+'2027-09':['Por una conversión ecológica integral','Que aprendamos a cuidar la creación con justicia y gratitud, como casa de todos.'],
+'2027-10':['Por las comunidades cristianas','Que cada parroquia y cada grupo sea misionero y forme nuevos discípulos de Jesús.'],
+'2027-11':['Por la integración de los migrantes','Que quienes han tenido que dejar su tierra encuentren comunidades que los reciban con respeto y los integren de verdad.'],
+'2027-12':['Por la vocación cristiana de la familia','Que las familias creyentes den testimonio del Evangelio y sean hogares donde se vive la fe.']
+};
+function papaMes(t){return PAPA[t.getFullYear()+'-'+pad(t.getMonth()+1)]||null}
+
+/* ===== ADVIENTO: corona semanal y un gesto para cada día (textos de la app) ===== */
+const ADV=[
+ {n:'Primera semana',tema:'Esperanza',vela:'morada',cita:'Isaías 9, 1',ora:'Señor Jesús, al encender esta primera vela te pedimos que despiertes nuestro corazón. Tú eres la luz que viene a un mundo cansado. Enséñanos a esperarte despiertos, con las manos ocupadas en el bien. Ven, Señor Jesús.'},
+ {n:'Segunda semana',tema:'Paz',vela:'morada',cita:'Isaías 40, 3',ora:'Señor, al encender la segunda vela te pedimos que allanes nuestros caminos. Quita de nosotros el rencor y la prisa, y haz de esta casa un lugar de paz donde puedas quedarte. Ven, Señor Jesús.'},
+ {n:'Tercera semana',tema:'Alegría',vela:'rosada',cita:'Filipenses 4, 4-5',ora:'Señor, encendemos la vela rosada porque ya estás cerca. Danos la alegría que no depende de lo que tenemos, sino de saber que vienes a nosotros. Que la contagiemos a quien esté triste. Ven, Señor Jesús.'},
+ {n:'Cuarta semana',tema:'Amor',vela:'morada',cita:'Lucas 1, 38',ora:'Señor, con las cuatro velas encendidas miramos a María, que te esperó como nadie. Danos su disponibilidad para decirte que sí y un corazón sencillo donde puedas nacer. Ven, Señor Jesús.'}
+];
+const ADV_G=[
+ ['Enciende la primera vela y reza en familia la oración de la semana.','Apaga el teléfono diez minutos y quédate en silencio con Dios.','Piensa qué esperas de este Adviento y llévalo a tu Encuentro.','Escribe a alguien con quien hace tiempo no hablas.','Visita a Jesús en el sagrario, aunque sean cinco minutos.','Renuncia hoy a un gusto y ofrécelo por alguien que sufre.','Reza un misterio del Rosario por tu familia.'],
+ ['Enciende la segunda vela y pide perdón a alguien de tu casa.','Ordena un rincón de tu casa pensando en preparar el corazón.','Pon fecha para confesarte antes de Navidad.','Habla bien hoy de alguien que te cuesta.','Lee despacio Isaías 40, 1-5.','Da una limosna concreta, aunque sea pequeña.','Reza por la paz de Venezuela.'],
+ ['Enciende la tercera vela, la rosada: es el domingo de la alegría.','Da gracias en voz alta por tres cosas del día.','Lleva una palabra de ánimo a alguien desanimado.','Canta o escucha un aguinaldo con los tuyos.','Arma el pesebre en tu casa.','Comparte comida con alguien que la necesite.','Invita a alguien a una Misa de aguinaldo o a la del domingo.'],
+ ['Enciende la cuarta vela y reza el Ángelus mirando a María.','Haz un favor sin que nadie se entere.','Da el primer paso para reconciliarte con alguien.','Lee Lucas 1, 26-38 y repite el sí de María.','Visita o llama a un enfermo o a una persona mayor.','Prepara tu confesión, si aún no la hiciste.','Deja un lugar en tu mesa y en tu corazón para Jesús.']
+];
+const ADV_NB='Nochebuena: reza ante el pesebre con los tuyos antes de la cena.';
+function advGesto(d,w){return (d.getMonth()===11&&d.getDate()===24)?ADV_NB:ADV_G[w][d.getDay()]}
+function advHoy(t){const y=t.getFullYear(),a=adventStart(y),fin=new Date(y,11,24),k=diff(t,a);if(k<0||diff(fin,t)<0)return null;const w=Math.min(3,Math.floor(k/7));return {w,k,ini:a,fin,S:ADV[w],gesto:advGesto(t,w)}}
+/* Se muestra durante el Adviento y desde tres semanas antes, para prepararlo. */
+function coronaHtml(t){
+  const y=t.getFullYear(),a=adventStart(y),fin=new Date(y,11,24);
+  if(diff(a,t)>21||diff(t,fin)>0)return '';
+  const A=advHoy(t),w=A?A.w:-1,done=store.get('advh',{});
+  let h='<div class="adv"><div class="kk">Adviento '+y+'</div><h2>Corona de Adviento</h2><div class="velas" aria-hidden="true">'+[0,1,2,3].map(i=>'<span class="vela'+(i===2?' rosa':'')+(i<=w?' on':'')+'"><i></i></span>').join('')+'</div>';
+  if(A)h+='<p style="margin-bottom:6px"><b>'+esc(A.S.n)+' · '+esc(A.S.tema)+'</b><br><span class="small mut">Vela '+esc(A.S.vela)+' · '+esc(A.S.cita)+'</span></p><p class="prayer">'+esc(A.S.ora)+'</p><div class="row" style="margin-bottom:0">'+sayBtn('adv',A.S.ora)+'</div>';
+  else h+='<p style="margin-bottom:0">El Adviento empieza el <b>'+esc(fmt(a))+'</b>, '+esc(enDias(diff(a,t)).toLowerCase())+'. Prepara una corona con cuatro velas: tres moradas y una rosada. Cada domingo se enciende una más y se reza la oración de la semana.</p>';
+  h+='</div><h2 class="sec">Calendario de Adviento</h2><p class="mut small" style="margin:0 2px 6px">Un gesto sencillo para cada día, hasta la Nochebuena.</p>'+ADV.map((S,i)=>{
+    const d0=addDays(a,i*7);if(diff(d0,fin)>0)return '';
+    return '<details class="nvd'+(i===w?' on':'')+'"'+((i===w||(!A&&i===0))?' open':'')+'><summary><span class="num">'+(i+1)+'</span><span><b>'+esc(S.tema)+'</b><br><span class="mut small">Desde el '+esc(fmt(d0))+' · vela '+esc(S.vela)+'</span></span></summary><div class="in"><p class="prayer">'+esc(S.ora)+'</p><ul class="advl">'+[0,1,2,3,4,5,6].map(j=>{
+      const d=addDays(d0,j);if(diff(d,fin)>0)return '';
+      return '<li class="'+(ymd(d)===ymd(t)?'hoy':'')+(done[ymd(d)]?' ok':'')+'"><span class="fdm">'+esc(DIAS[d.getDay()].slice(0,3))+' '+d.getDate()+'</span><span>'+esc(advGesto(d,i))+'</span></li>'}).join('')+'</ul></div></details>'}).join('');
+  return h;
+}
+
+/* ===== ESTADO DE LA APP Y REPORTE DE ERRORES (el reporte se abre manteniendo presionada la línea de estado) ===== */
+const VERSION='15 nov 2026';
+let ESTADO=null,ESTADO_T=0,LINEA=null,LINEA_T=0;
+function lineaCarga(){
+  if(LINEA&&Date.now()-LINEA_T<6e5)return Promise.resolve(LINEA);
+  return fetch('dias/linea.json').then(r=>r.ok?r.json():null).then(j=>{if(j&&j.items){LINEA=j;LINEA_T=Date.now()}return LINEA}).catch(()=>LINEA);
+}
+function estadoHtml(){
+  const t=new Date(),ok=!hoyViejo(),E=ESTADO,n=E?(E.nube!==null?E.nube:E.tel):null;
+  const col=!ok?'#B0343C':(n!==null&&n<3?'#C98A00':'#3F7D4E');
+  let tx=ok?'Al día':'El día de hoy aún no se ha cargado';
+  if(E){if(E.nube!==null)tx+=' · '+(E.nube>0?'preparado hasta el '+fmtCorto(addDays(t,E.nube)):'sin días preparados por delante');tx+=' · '+E.tel+(E.tel===1?' día guardado':' días guardados')+' en el teléfono'}
+  return '<div class="estado"><i style="background:'+col+'"></i><span>'+esc(tx)+'</span><span class="ev">v. '+esc(VERSION)+'</span></div>';
+}
+async function estadoCarga(){
+  if(!document.querySelector('.estado'))return;
+  if(!ESTADO||Date.now()-ESTADO_T>6e4){
+    const t=new Date();let tel=0,nube=null;
+    try{if('caches' in window){for(let i=1;i<=10;i++){if(await caches.match('dias/'+ymd(addDays(t,i))+'.js'))tel++;else break}}}catch(e){}
+    try{const L=await lineaCarga();if(L&&L.dias){let n=0;while(n<30&&L.dias.includes(ymd(addDays(t,n+1))))n++;nube=n}}catch(e){}
+    ESTADO={tel,nube};ESTADO_T=Date.now();
+  }
+  document.querySelectorAll('.estado').forEach(e=>{e.outerHTML=estadoHtml()});
+}
+function repDonde(){const n=(TABS.find(x=>x.id===state.tab)||{}).n||state.tab,S=(SUBS[state.tab]||[]).find(x=>x[0]===state.sub[state.tab]);return n+(S?' › '+S[1]:'')}
+function repTexto(){const q=($('#repq')||{}).value||'';return 'Error en Venga tu Reino\nFecha: '+ymd(new Date())+'\nDía del contenido: '+((window.HOY&&window.HOY.fecha)||'-')+'\nSección: '+repDonde()+'\nVersión: '+VERSION+'\n\nQué está mal:\n'+q.trim()+'\n'}
+function viewReporte(){
+  return '<div class="card"><p style="margin-top:0">Escribe qué está mal. Se abrirá tu correo con el mensaje listo para enviártelo.</p><p class="small mut">Sección: '+esc(repDonde())+' · día '+esc((window.HOY&&window.HOY.fecha)||'-')+'</p>'+
+    '<label class="small mut" for="repq">¿Qué está mal?</label><textarea id="repq" rows="5" class="repi" placeholder="Por ejemplo: la respuesta del salmo no coincide con la de la Misa"></textarea>'+
+    '<label class="small mut" for="repm">Tu correo (se guarda solo en este teléfono)</label><input id="repm" type="email" inputmode="email" autocomplete="email" class="repi" value="'+esc(store.get('repmail',''))+'" placeholder="tucorreo@ejemplo.com">'+
+    '<div class="row"><button class="btn" data-act="repsend">Enviar por correo</button><button class="btn ghost" data-act="repcopy">Copiar</button></div><p class="note" id="repmsg" style="margin:4px 0 0"></p></div>';
+}
+function abrirReporte(){abrirAjustes();state.shv='rep';state.shT=Date.now();$('#sht').textContent='Reportar un error';$('#shc').innerHTML=viewReporte()}
+{let rt=null;const fin=()=>{clearTimeout(rt);rt=null};
+ document.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('.estado');if(!el)return;fin();rt=setTimeout(()=>{rt=null;abrirReporte()},1300)});
+ ['pointerup','pointercancel','pointerleave','scroll'].forEach(n=>document.addEventListener(n,fin,true));
+ document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('.estado'))e.preventDefault()});}
+
+/* ===== LÍNEA DEL TIEMPO: crece cada día con la persona y el hecho de ese día ===== */
+const ROMN=n=>{let s='';for(const [v,r] of [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]){while(n>=v){s+=r;n-=v}}return s};
+function sigloDe(a){return a===null||a===undefined?'Fecha incierta':a<=0?'Antes de Cristo':'Siglo '+ROMN(Math.floor(a/100)+1)}
+function lineaHtml(L){
+  const hoy=ymd(new Date()),I=((L&&L.items)||[]).filter(x=>x.f<=hoy).sort((a,b)=>((a.a===null)-(b.a===null))||(a.a-b.a)||(a.f<b.f?-1:1));
+  if(!I.length)return '<div class="card"><p style="margin:0">La línea del tiempo se llena sola: cada día se suman la persona y el hecho de ese día. Ábrela con internet para cargarla.</p></div>';
+  const np=I.filter(x=>x.k==='persona').length,nh=I.length-np;
+  let h='<p class="mut" style="margin:10px 2px 0">'+np+(np===1?' persona':' personas')+' y '+nh+(nh===1?' hecho':' hechos')+' hasta hoy. Cada día se suman dos más. Toca uno para leerlo.</p><div class="tl">',s='';
+  I.forEach(x=>{const g=sigloDe(x.a);if(g!==s){s=g;h+='<div class="tls">'+esc(g)+'</div>'}
+    h+='<details class="tli '+(x.k==='persona'?'p':'h')+'" data-lf="'+esc(x.f)+'" data-lk="'+x.k+'"><summary><span class="ty">'+(x.a===null?'s. f.':x.a<0?Math.abs(x.a)+' a. C.':x.a)+'</span><span><b>'+esc(x.n)+'</b><br><span class="small mut">'+(x.k==='persona'?'Persona':'Hecho')+(x.t?' · '+esc(x.t):'')+'</span></span></summary><div class="in"><p class="mut small">Cargando…</p></div></details>'});
+  return h+'</div>';
+}
+function viewLinea(){
+  setTimeout(()=>lineaCarga().then(L=>{const el=$('#linea');if(el)el.innerHTML=lineaHtml(L)}),0);
+  return '<div id="linea">'+(LINEA?lineaHtml(LINEA):'<p class="mut" style="margin:10px 2px">Cargando la línea del tiempo…</p>')+'</div>';
+}
+document.addEventListener('toggle',e=>{const d=e.target;if(!d||!d.matches||!d.matches('details.tli')||!d.open||d.dataset.ok)return;d.dataset.ok='1';
+  conoCarga(d.dataset.lf).then(c=>{const x=c&&c[d.dataset.lk],el=d.querySelector('.in');if(!el)return;el.innerHTML=x?conoHtml(x,d.dataset.lk,d.dataset.lf):'<p class="mut small">No se pudo cargar. Ábrelo de nuevo con internet.</p>';if(!x)delete d.dataset.ok})},true);
+
 /* ===== LITURGIA DE LAS HORAS ===== */
 function semanaSalterio(d){
   const L=liturgia(d),y=d.getFullYear(),E=easter(y),k=diff(d,E),ash=addDays(E,-46);
@@ -1316,6 +1465,7 @@ function viewFiestas(){
   if(state.nov){const f=proximas(t).concat(fiestas(t.getFullYear())).find(x=>x.nov&&x.nov.id+ymd(x.d)===state.nov);
     if(f)return segHtml('orar')+'<button class="btn ghost" data-act="nov" data-v="">‹ Todas las fiestas</button>'+novenaHtml(f,diff(t,f.nov.ini)>=0&&diff(t,f.nov.ini)<9?diff(t,f.nov.ini):-1)}
   let h=segHtml('orar');
+  h+=coronaHtml(t);
   if(nh)h+='<div class="novnow" data-act="nov" data-v="'+nh.f.nov.id+ymd(nh.f.d)+'"><span class="vk"></span><div class="kk">Novena en curso · día '+(nh.k+1)+' de 9</div><b>'+esc((NOV_INFO[nh.f.nov.id]||{}).n||'Novena')+'</b><p>'+esc(novDia(nh.f,nh.k).t)+'</p><span class="small">Abrir la novena ›</span></div>';
   h+='<h2 class="sec">Próximas fiestas</h2>';
   let mes=-1;
@@ -1439,7 +1589,7 @@ const ajAbierto=()=>{const e=$('#sheet');return !!e&&!e.hidden};
 function abrirAjustes(){
   let e=$('#sheet');
   if(!e){document.body.insertAdjacentHTML('beforeend','<div id="sheet" hidden><div class="sb" data-act="shx"></div><div class="sp" role="dialog" aria-modal="true" aria-labelledby="sht"><div class="sh"><b id="sht">Ajustes</b><button class="btn ghost" data-act="shx">Listo</button></div><div id="shc"></div></div></div>');e=$('#sheet')}
-  $('#shc').innerHTML=viewAjustes();e.hidden=false;document.documentElement.classList.add('noscroll');
+  state.shv=null;$('#sht').textContent='Ajustes';$('#shc').innerHTML=viewAjustes();e.hidden=false;document.documentElement.classList.add('noscroll');
   const b=e.querySelector('.sh .btn');if(b)b.focus({preventScroll:true});
 }
 function cerrarAjustes(){const e=$('#sheet');if(e)e.hidden=true;document.documentElement.classList.remove('noscroll')}
@@ -1458,6 +1608,7 @@ function viewAjustes(){
   h+='<div class="card"><h3>Apariencia</h3><div class="opts3" role="group" aria-label="Tema">'+[['light','Claro'],['dark','Oscuro'],['auto','Como el iPhone']].map(([v,n])=>'<button data-act="tema" data-v="'+v+'" aria-pressed="'+(tm===v)+'">'+n+'</button>').join('')+'</div><p class="note" style="margin:4px 0 0">También puedes cambiarlo en cualquier momento con el botón ☾ / ☀ de arriba. «Como el iPhone» sigue el modo claro u oscuro del teléfono.</p></div>';
   const dd=bk?diff(new Date(),new Date(bk)):null;
   h+='<div class="card"><h3>Copia de seguridad</h3><p style="margin-top:0">Tu cuaderno, tus Encuentros, tus intenciones, tu examen y tu avance se guardan <b>solo en este teléfono</b>. Guarda una copia de vez en cuando (por ejemplo en Archivos o en iCloud Drive) para no perderlos si cambias de teléfono o se borran los datos.</p><p class="small '+(dd===null||dd>30?'':'mut')+'" style="margin:6px 0">'+(dd===null?'Aún no has guardado ninguna copia.':'Tu última copia: '+(dd<=0?'hoy':dd===1?'ayer':'hace '+dd+' días')+'.')+'</p><div class="row"><button class="btn" data-act="bk">Guardar copia</button><label class="btn ghost" for="bkfile">Recuperar una copia</label><input type="file" id="bkfile" accept=".json,application/json" hidden></div><p class="note" id="bkmsg" style="margin:4px 0 0"></p></div>';
+  h+=estadoHtml();setTimeout(estadoCarga,0);
   return h;
 }
 async function guardarCopia(){
@@ -1493,8 +1644,7 @@ function viewApr(){
   if(s==='glos'){
     return segHtml('apr')+'<label class="small mut" for="gq">Buscar un término</label><input id="gq" data-act="gq" type="search" value="'+esc(state.gq)+'" placeholder="Por ejemplo: altar, Amén, cáliz" style="width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);color:var(--ink);font:inherit;margin:6px 0 8px"><div id="glist">'+glosList()+'</div>';
   }
-  if(s==='euc')return segHtml('apr')+EUC.map((x,i)=>'<details'+(i===0?' open':'')+'><summary>'+esc(x[0])+'</summary><div class="in"><p>'+esc(x[1])+'</p></div></details>').join('');
-  if(s==='part')return segHtml('apr')+PART.map(x=>'<div class="card"><h3>'+esc(x[0])+'</h3><ul class="tight">'+x[1].map(y=>'<li>'+esc(y)+'</li>').join('')+'</ul></div>').join('')+'<h2 class="sec">Gestos</h2><div class="card">'+GESTOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
+  if(s==='euc')return segHtml('apr')+EUC.map((x,i)=>'<details'+(i===0?' open':'')+'><summary>'+esc(x[0])+'</summary><div class="in"><p>'+esc(x[1])+'</p></div></details>').join('')+'<h2 class="sec">Cómo participar en la Misa</h2>'+PART.map(x=>'<div class="card"><h3>'+esc(x[0])+'</h3><ul class="tight">'+x[1].map(y=>'<li>'+esc(y)+'</li>').join('')+'</ul></div>').join('')+'<h2 class="sec">Gestos</h2><div class="card">'+GESTOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
   const t=new Date(),L=liturgia(t),y=state.year,MH=misaHoy();
   let h=segHtml('apr')+'<div class="card tint"><div class="lbl">Hoy</div><p style="margin:0"><b>'+esc(MH.titulo)+'</b>'+(MH.rango?' ('+esc(MH.rango.toLowerCase())+')':'')+'. '+esc(L.tiempo)+(L.semana?', semana '+L.semana:'')+'. Color <b>'+esc(MH.color)+'</b>. Domingos: ciclo <b>'+cicloDom(t)+'</b>; entre semana: año <b>'+cicloSem(t)+'</b>.</p></div>';
   h+='<h2 class="sec">Fechas del año</h2><div class="row" style="align-items:center"><button class="btn ghost" data-act="yr" data-v="-1" aria-label="Año anterior">‹</button><b style="font-family:var(--fd);font-size:1.2rem;min-width:64px;text-align:center">'+y+'</b><button class="btn ghost" data-act="yr" data-v="1" aria-label="Año siguiente">›</button></div>';
@@ -2145,7 +2295,8 @@ function render(keepScroll){
   reveal();
   feReq();
   segFade();
-  if(ajAbierto())$('#shc').innerHTML=viewAjustes();
+  if(ajAbierto()&&state.shv!=='rep')$('#shc').innerHTML=viewAjustes();
+  estadoCarga();
 }
 /* Los botones de arriba que no caben se desvanecen en el borde, para que se note que se pueden deslizar. */
 function segFade(){document.querySelectorAll('.seg').forEach(s=>{const u=()=>s.classList.toggle('more',s.scrollLeft+s.clientWidth<s.scrollWidth-4);const a=s.querySelector('[aria-pressed="true"]');if(a&&a.offsetLeft+a.offsetWidth>s.clientWidth-30)s.scrollLeft=a.offsetLeft-24;u();s.addEventListener('scroll',u,{passive:true})})}
@@ -2227,7 +2378,11 @@ document.addEventListener('click',e=>{
   else if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
   else if(a==='aa')abrirAjustes();
-  else if(a==='shx')cerrarAjustes();
+  else if(a==='conv'){store.set('conv',v);render(true)}
+  else if(a==='advok'){const d=store.get('advh',{}),k=ymd(new Date());if(d[k])delete d[k];else d[k]=1;store.set('advh',d);render(true)}
+  else if(a==='repsend'){const m=(($('#repm')||{}).value||'').trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){$('#repmsg').textContent='Escribe tu correo para enviártelo.';return}store.set('repmail',m);location.href='mailto:'+m.replace(/[?&#\s]/g,'')+'?subject='+encodeURIComponent('Error en Venga tu Reino')+'&body='+encodeURIComponent(repTexto())}
+  else if(a==='repcopy'){const x=repTexto(),ok=()=>{$('#repmsg').textContent='Copiado. Pégalo donde quieras.'};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(x).then(ok).catch(()=>{$('#repmsg').textContent='No se pudo copiar.'});else{$('#repmsg').textContent='No se pudo copiar.'}}
+  else if(a==='shx'){if(Date.now()-(state.shT||0)>900)cerrarAjustes()}
   else if(a==='fz'){const L=FZ,i=Math.max(0,Math.min(L.length-1,L.indexOf(store.get('fz',1))+(+v)));store.set('fz',L[i]);aplicarPrefs();render(true)}
   else if(a==='tmq'){store.set('tema',temaOscuro()?'light':'dark');aplicarPrefs();render(true)}
   else if(a==='tema'){store.set('tema',v);aplicarPrefs();render(true)}
@@ -2325,6 +2480,7 @@ let diasT=0;
 async function guardarDias(){
   if(Date.now()-diasT<36e5||!('caches' in window)||!navigator.serviceWorker||!navigator.serviceWorker.controller)return;
   diasT=Date.now();const t=new Date();
+  fetch('dias/linea.json').catch(()=>{});
   for(let i=1;i<=8;i++){const u='dias/'+ymd(addDays(t,i))+'.js';try{if(!(await caches.match(u)))await fetch(u)}catch(e){}}
   for(const k in FE){const u=feSm(FE[k][0]);try{if(!(await caches.match(u)))await fetch(u,{mode:'no-cors'})}catch(e){}}
 }

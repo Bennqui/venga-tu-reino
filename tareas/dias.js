@@ -7,6 +7,7 @@
    node tareas/dias.js completar FECHA archivo.json       agrega o reemplaza secciones de un día que ya existe (p. ej. {"conoce":{…}})
    node tareas/dias.js validar   dias/FECHA.js            revisa que el archivo de un día esté completo y bien formado
    node tareas/dias.js temas                              personas y hechos que ya salieron (para no repetir)
+   node tareas/dias.js linea                              rehace dias/linea.json (línea del tiempo y estado); escribir, completar y hoy ya lo hacen solos
    node tareas/dias.js catecismo FECHA                    qué números del Catecismo tocan esa fecha (plan «el Catecismo en un año»)
    node tareas/dias.js hoy       AAAA-MM-DD               copia dias/AAAA-MM-DD.js a hoy.js (solo si es válido)
 
@@ -62,6 +63,36 @@ function temas() {
     try { const C = (evaluar(fs.readFileSync(rutaDia(f), 'utf8')).HOY || {}).conoce || {}; return { fecha: f, persona: (C.persona || {}).nombre || '', hecho: (C.hecho || {}).nombre || '' }; }
     catch (e) { return { fecha: f, persona: '', hecho: '' }; }
   });
+}
+const ROMANOS = { I: 1, V: 5, X: 10, L: 50, C: 100 };
+const deRomano = r => { let n = 0; const R = r.toUpperCase(); for (let i = 0; i < R.length; i++) { const v = ROMANOS[R[i]] || 0, w = ROMANOS[R[i + 1]] || 0; n += v < w ? -v : v; } return n; };
+/* Año principal de una persona o un hecho, para ordenarlo en la línea del tiempo (negativo = antes de Cristo; null = incierto). */
+function anioDe(x) {
+  if (typeof x.anio === 'number' && isFinite(x.anio)) return Math.round(x.anio);
+  const s = String(x.fechas || '');
+  const ac = /a\.\s?C\./i.test(s.split(/[–—-]/)[0]);
+  let m = /(\d{3,4})/.exec(s);
+  if (m) return (ac ? -1 : 1) * parseInt(m[1], 10);
+  m = /siglos?\s+([IVXLC]+)/i.exec(s);
+  if (m) { const c = deRomano(m[1]); if (c) return (ac ? -1 : 1) * (c * 100 - 50); }
+  m = /(?:año|hacia|c\.)\s*(\d{1,2})\b/i.exec(s);
+  if (m) return (ac ? -1 : 1) * parseInt(m[1], 10);
+  return null;
+}
+/* dias/linea.json: lo que la app necesita para la línea del tiempo y para mostrar hasta qué día hay contenido preparado. */
+function linea() {
+  const items = [], dias = [];
+  for (const f of preparados()) {
+    let H; try { H = evaluar(fs.readFileSync(rutaDia(f), 'utf8')).HOY; } catch (e) { continue; }
+    if (!H || !H.evangelio) continue;
+    dias.push(f);
+    const C = H.conoce || {};
+    for (const k of ['persona', 'hecho']) { const x = C[k]; if (x && x.nombre) items.push({ f, k, n: x.nombre, t: x.tipo || '', a: anioDe(x), d: x.fechas || '' }); }
+  }
+  const out = { generado: hoyCaracas(), dias: dias.slice(-90), items };
+  fs.mkdirSync(DIAS, { recursive: true });
+  fs.writeFileSync(path.join(DIAS, 'linea.json'), JSON.stringify(out) + '\n');
+  return out;
 }
 const llano = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -160,6 +191,12 @@ function validarCodigo(codigo, fechaEsperada) {
     }
   }
 
+  if ('santo' in H) {
+    const S = H.santo || {};
+    pide(txt(S.nombre, 3) && S.nombre.length <= 90, 'santo.nombre falta o es muy largo');
+    pide(txt(S.nota, 15) && S.nota.length <= 260, 'santo.nota debe tener entre 15 y 260 caracteres (una frase sobre quién fue)');
+  }
+
   /* Conoce tu Iglesia: una persona y un hecho por día */
   const C = H.conoce;
   if (!C || typeof C !== 'object') E.push('conoce: falta la sección «Conoce tu Iglesia» (persona y hecho del día)');
@@ -173,6 +210,7 @@ function validarCodigo(codigo, fechaEsperada) {
       cp(txt(x.tipo, 3) && x.tipo.length <= 80, '.tipo falta o pasa de 80 caracteres');
       cp(txt(x.fechas, 2), '.fechas falta');
       if ('lugar' in x) cp(txt(x.lugar, 2), '.lugar está vacío (omítelo si no aplica)');
+      if ('anio' in x) cp(Number.isInteger(x.anio) && x.anio > -4000 && x.anio < 2200, '.anio debe ser un número entero (el año principal; negativo si es antes de Cristo)');
       cp(txt(x.resumen, 80), '.resumen es muy corto');
       cp(Array.isArray(x.historia) && x.historia.length >= 3 && x.historia.every(s => txt(s, 150)), '.historia debe tener al menos 3 párrafos de 150 caracteres o más');
       cp(txt(x.impacto, 150), '.impacto es muy corto');
@@ -258,13 +296,14 @@ function guardar(fecha, H) {
   if (E.length) { console.log('NO VÁLIDO ' + fecha + ' (no se guardó nada):\n- ' + E.join('\n- ')); process.exit(1); }
   fs.mkdirSync(DIAS, { recursive: true });
   fs.writeFileSync(rutaDia(fecha), codigo);
+  linea();
   console.log('OK dias/' + fecha + '.js · ' + H.titulo + ' · ' + H.evangelio.cita + ' · persona: ' + H.conoce.persona.nombre + ' · hecho: ' + H.conoce.hecho.nombre + (H.catecismo ? ' · Catecismo ' + H.catecismo.desde + '–' + H.catecismo.hasta : ''));
 }
 
 const [, , cmd, a, b] = process.argv;
 function uso(msg) {
   if (msg) console.error(msg);
-  console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n] · escribir|completar FECHA archivo.json · validar dias/FECHA.js · temas · catecismo FECHA');
+  console.error('Uso: node tareas/dias.js estado|faltan|hoy AAAA-MM-DD [n] · escribir|completar FECHA archivo.json · validar dias/FECHA.js · temas · linea · catecismo FECHA');
   process.exit(2);
 }
 
@@ -298,6 +337,9 @@ if (cmd === 'validar') {
 } else if (cmd === 'temas') {
   const T = temas().filter(t => t.persona || t.hecho);
   console.log(T.length ? T.map(t => t.fecha + ' | persona: ' + t.persona + ' | hecho: ' + t.hecho).join('\n') : 'NINGUNO');
+} else if (cmd === 'linea') {
+  const L = linea();
+  console.log('OK dias/linea.json · ' + L.dias.length + ' días · ' + L.items.length + ' personas y hechos' + (L.items.some(x => x.a === null) ? ' · sin año: ' + L.items.filter(x => x.a === null).map(x => x.n).join('; ') : ''));
 } else if (cmd === 'faltan') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const n = b === undefined ? 7 : Math.max(0, Math.min(30, parseInt(b, 10) || 0));
@@ -315,6 +357,7 @@ if (cmd === 'validar') {
   const aviso = nv === 'sin-conoce' ? ' (AVISO: al día de hoy le falta: ' + seccionesMal(E).join(' y ') + ')' : '';
   if (fs.existsSync(destino) && fs.readFileSync(destino).equals(nuevo)) console.log('IGUAL hoy.js ya es el del ' + a + aviso);
   else { fs.writeFileSync(destino, nuevo); console.log('COPIADO dias/' + a + '.js → hoy.js' + aviso); }
+  linea();
 } else if (cmd === 'estado') {
   if (!esFecha(a)) uso('Falta la fecha de hoy (AAAA-MM-DD)');
   const fh = fechaHoyJs();
