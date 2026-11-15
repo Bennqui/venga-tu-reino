@@ -1209,7 +1209,7 @@ function fiestas(y){
   return L.map(x=>({d:x[0],n:x[1],r:x[2],g:x[3].split(' '),t:x[4],nov:x[5]||null})).sort((a,b)=>a.d-b.d);
 }
 const NOV_INFO={
-  cr:{n:'Novena de Cristo Rey',src:'Regnum Christi',url:'https://regnumchristi.es/cristo-rey-2026/',nota:'Títulos y Evangelios de la novena del Regnum Christi. La reflexión de cada día es una ayuda breve de la app; la oración inicial y final completas están en la página del Regnum Christi.'},
+  cr:{n:'Novena de Cristo Rey',src:'Regnum Christi',url:'https://regnumchristi.es/cristo-rey-2026/',pdf:'https://regnumchristi.es/wp-content/uploads/2026/10/Novena-Cristo-Rey-2026.pdf',wa:'https://whatsapp.com/channel/0029VaIMAIw5Ejy72zgMZy19',credito:'Novena de Cristo Rey 2026 © Regnum Christi. Títulos, Evangelios y orden de cada día tomados de su publicación oficial; el texto completo de las oraciones y reflexiones está en su página y en su PDF.',orden:['℣. El Señor reina, vestido de majestad (Salmo 93)','Oración inicial (la misma los nueve días)','Evangelio del día','Reflexión del día','Oración final','«Cristo Rey nuestro, ¡Venga tu Reino!»'],nota:'La novena oficial del Regnum Christi para preparar la solemnidad de Cristo Rey, su fiesta titular.'},
   mis:{n:'Novena de la Divina Misericordia',src:'Diario de santa Faustina',nota:'Cada día se reza la Coronilla de la Divina Misericordia (en Orar › Oraciones) por la intención del día.'},
   pen:{n:'Novena al Espíritu Santo',src:'La primera novena de la Iglesia',nota:'Es la novena más antigua: los apóstoles con María esperaron así al Espíritu Santo. Reza el «Ven, Espíritu Santo» y pide el don del día.'},
   nav:{n:'Novena de Navidad (Misas de aguinaldo)',src:'Tradición venezolana',nota:'En Venezuela se celebran las Misas de aguinaldo de madrugada con cantos y gaitas. Cada día, un paso hacia Belén.'},
@@ -1289,9 +1289,12 @@ function novenaHtml(f,hoyK){
   let h='<div class="nvh"><div class="kk">'+esc(I.src||'')+'</div><h2>'+esc(I.n)+'</h2><p class="mut small">'+esc(cap(fmt(f.nov.ini)))+' – '+esc(fmt(addDays(f.nov.ini,8)))+' · prepara '+esc(f.n)+' ('+esc(fmt(f.d))+')</p>'+(I.nota?'<p class="small">'+esc(I.nota)+'</p>':'')+'</div>';
   h+='<div class="steps">'+[0,1,2,3,4,5,6,7,8].map(k=>{const x=novDia(f,k),dd=addDays(f.nov.ini,k),on=k===hoyK,done=diff(t,dd)>0;
     return '<details class="nvd'+(on?' on':'')+(done?' done':'')+'"'+(on?' open':'')+'><summary><span class="num">'+(k+1)+'</span><span><b>'+esc(x.t)+'</b><br><span class="mut small">'+esc(cap(fmt(dd)))+(on?' · hoy':'')+'</span></span></summary><div class="in">'+
-    (x.cita?'<div class="lbl">'+(f.nov.id==='cr'&&k===8?'Lectura':'Evangelio')+'</div><p><b>'+esc(x.cita)+'</b></p>':'')+(x.b?'<p>'+esc(x.b)+'</p>':'')+
-    '<div class="lbl">Cómo rezarla</div><p class="small">Señal de la cruz · «Ven, Espíritu Santo» · lee el texto del día · un momento de silencio · Padre Nuestro, Ave María y Gloria · tu petición'+(f.nov.id==='cr'?' · «¡Cristo, Rey nuestro! ¡Venga tu Reino!»':'')+'.</p></div></details>'}).join('')+'</div>';
-  if(I.url)h+='<div class="row"><a class="btn ghost" href="'+esc(I.url)+'" target="_blank" rel="noopener noreferrer">Texto completo en '+esc(I.src)+'</a></div>';
+    (x.cita?'<div class="lbl">'+(f.nov.id==='cr'&&k===8?'Lectura':'Evangelio')+'</div><p><b>'+esc(x.cita)+'</b></p>':'')+
+    (I.orden?'<div class="lbl">Cómo la reza el Regnum Christi</div><ol class="tight">'+I.orden.map(o=>'<li>'+esc(o)+'</li>').join('')+'</ol>'+(I.url?'<div class="row"><a class="btn" href="'+esc(I.url)+'" target="_blank" rel="noopener noreferrer">Rezar el día '+(k+1)+' con el texto oficial</a></div>':'')+(x.b?'<div class="lbl">Para meditar (nota de la app)</div><p class="small">'+esc(x.b)+'</p>':'')+'</div></details>':(
+    (x.b?'<p>'+esc(x.b)+'</p>':'')+
+    '<div class="lbl">Cómo rezarla</div><p class="small">Señal de la cruz · «Ven, Espíritu Santo» · lee el texto del día · un momento de silencio · Padre Nuestro, Ave María y Gloria · tu petición'+(f.nov.id==='cr'?' · «¡Cristo, Rey nuestro! ¡Venga tu Reino!»':'')+'.</p></div></details>'))}).join('')+'</div>';
+  if(I.url)h+='<div class="row"><a class="btn ghost" href="'+esc(I.url)+'" target="_blank" rel="noopener noreferrer">Página oficial</a>'+(I.pdf?'<a class="btn ghost" href="'+esc(I.pdf)+'" target="_blank" rel="noopener noreferrer">PDF (guárdalo para sin internet)</a>':'')+(I.wa?'<a class="btn ghost" href="'+esc(I.wa)+'" target="_blank" rel="noopener noreferrer">Canal de WhatsApp</a>':'')+'</div>';
+  if(I.credito)h+='<p class="note">'+esc(I.credito)+'</p>';
   return h;
 }
 function viewFiestas(){
