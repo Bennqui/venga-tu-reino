@@ -248,6 +248,9 @@ summary:active{background:var(--soft);border-radius:16px}
 @keyframes phz{from{scale:1.18}to{scale:1}}
 @keyframes phu{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}
 }
+/* Al abrir la app no hay animación de entrada: la portada aparece directo. */
+html.boot .ph .pi img,html.boot .ph .pt>*{animation:none!important}
+html.boot .ph .pi img{transition:none!important}
 /* Minimalista: menos líneas, más aire */
 details,.card{border-color:var(--line);box-shadow:0 1px 0 rgba(156,112,10,.04)}
 .seg{background:var(--soft)}
@@ -2088,7 +2091,8 @@ function render(keepScroll){
   const sub=t=>{const L=SUBS[t]||[];return Math.max(0,L.findIndex(x=>x[0]===state.sub[t]))};
   const key=state.tab+'|'+sub(state.tab);
   let cls='';
-  if(!LAST)cls='go-f';
+  if(LAST&&!keepScroll)document.documentElement.classList.remove('boot');
+  if(!LAST){}
   else if(!keepScroll){
     const ti=t=>TABS.findIndex(x=>x.id===t);
     if(LAST.tab!==state.tab)cls=ti(state.tab)>ti(LAST.tab)?'go-r':'go-l';
@@ -2298,6 +2302,7 @@ async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFul
 /* Si el día de hoy todavía no está (ni preparado ni en hoy.js), se vuelve a buscar cada 10 minutos. */
 setInterval(async()=>{if(!document.hidden&&hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}},10*60*1000);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)return;guardarDias();if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
+document.documentElement.classList.add('boot');
 aplicarPrefs();
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',aplicarPrefs)}catch(e){}
 render();
