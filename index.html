@@ -354,6 +354,13 @@ nav.tabs button[aria-current="page"]::before{content:"";display:block;width:22px
 .zen #app{padding-top:8px}
 .zen .pager{min-height:calc(100vh - 150px);min-height:calc(100svh - 150px);border:0;padding:16px 4px;background:transparent}
 .zen .pager .pb{font-size:1.1em}
+.pasos{margin:4px 0 0}
+.paso{padding:22px 2px 18px;border-top:1px solid var(--line)}
+.paso:first-child{border-top:0;padding-top:8px}
+.paso .pk{display:flex;align-items:center;gap:10px}
+.paso .num{border-color:var(--litc);color:var(--ink)}
+.paso h2{font-size:1.5rem;margin:10px 0 6px}
+.zen .paso{font-size:1.08em}
 .zenbar{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 0}
 .zenbar .btn{min-height:40px;padding:4px 16px}
 /* Cierre sereno */
@@ -1606,22 +1613,12 @@ function viewEncPaso(){
   const E=H.evangelio,X=H.encuentro||{};
   const hist=store.get('hist',{});if(!hist[k]||hist[k].cita!==E.cita){hist[k]={cita:E.cita,frase:(X.frase&&X.frase.texto)||''};store.set('hist',hist)}
   const P=pasosHoy(H,N),tot=P.length;
-  if(state.plist)return '<div class="row" style="justify-content:flex-end"><button class="btn ghost" data-act="plist" data-v="0">Volver al modo paso a paso</button></div>'+P.map((p,i)=>step(i+1,p.t,p.b,i===0)).join('');
-  let i=Math.max(0,Math.min(state.ps||0,tot));state.ps=i;
-  let h=(state.zen?'<div class="zenbar"><span class="small mut">Modo oración</span><button class="btn ghost" data-act="zen" data-v="0">Salir</button></div>':'')+'<div class="pager">';
-  h+='<div class="ph"><div class="dots" role="group" aria-label="Pasos">'+P.map((p,j)=>'<button data-act="ps" data-v="'+j+'" class="'+(j===i?'on':j<i?'done':'')+'" aria-label="Paso '+(j+1)+': '+esc(p.t)+'"></button>').join('')+'</div><span class="small mut">'+(i<tot?(i+1)+' de '+tot:'Listo')+'</span></div>';
-  if(i<tot){
-    const p=P[i];
-    h+='<div class="pb">'+ic(p.ic)+'<h2>'+esc(p.t)+'</h2>'+p.b+'</div>';
-    h+='<div class="pn"><button class="btn ghost" data-act="ps" data-v="'+(i-1)+'"'+(i===0?' disabled':'')+'>Anterior</button><button class="btn" data-act="ps" data-v="'+(i+1)+'">'+(i===tot-1?'Amén. Terminar':'Siguiente')+'</button></div>';
-  }else{
-    const o=oreDays();if(!o[k]){o[k]=true;store.set('ore',o)}
-    const n=rachaN();
-    setTimeout(celebrar,60);
-    h+='<div class="pb fin">'+ic('check')+'<h2>Que venga su Reino a tu día</h2><p>Terminaste tu oración con el Evangelio de hoy.</p><p class="mut">'+(n===1?'Primer día de tu racha.':n+' días seguidos orando.')+'</p>'+semanaHtml().replace('class="week"','class="week" style="justify-content:center;margin:12px 0"')+'</div>'+
-    '<div class="pn"><button class="btn ghost" data-act="ps" data-v="0">Repasar</button><button class="btn" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
-  }
-  h+='</div><div class="row" style="justify-content:center">'+(state.zen?'':'<button class="btn ghost" data-act="zen" data-v="1">Modo oración</button>')+'<button class="btn ghost" data-act="plist" data-v="1">Ver todos los pasos en una lista</button></div>';
+  /* Todos los pasos en una sola lectura continua: sin «Siguiente», solo bajar. */
+  const done=!!oreDays()[k];
+  let h=state.zen?'<div class="zenbar"><span class="small mut">Modo oración</span><button class="btn ghost" data-act="zen" data-v="0">Salir</button></div>':'<div class="row" style="justify-content:flex-end;margin:2px 0 0"><button class="lk" data-act="zen" data-v="1">Modo oración ›</button></div>';
+  h+='<div class="pasos">'+P.map((p,i)=>'<section class="paso"><div class="pk"><span class="num">'+(i+1)+'</span><span class="small mut">de '+tot+'</span></div><h2>'+esc(p.t)+'</h2>'+p.b+'</section>').join('')+'</div>';
+  if(done){const n=rachaN();h+='<div class="fin">'+ic('check')+'<h2>Que venga su Reino a tu día</h2><p>Terminaste tu oración con el Evangelio de hoy.</p><p class="mut">'+(n===1?'Primer día de tu racha.':n+' días seguidos orando.')+'</p>'+semanaHtml().replace('class="week"','class="week" style="justify-content:center;margin:12px 0"')+'<div class="row" style="justify-content:center"><button class="btn" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div></div>'}
+  else h+='<div class="row"><button class="btn big" data-act="oredone">Amén. Terminé mi oración</button></div>';
   h+='<p class="note">Lo que escribes se guarda solo en este dispositivo. Las frases de santos y Papas llevan enlace a su fuente.</p>';
   return h;
 }
@@ -2190,7 +2187,7 @@ function speak(id,btn){
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act,v=b.dataset.v;
-  if(a!=='ps'&&a!=='pray'&&a!=='speak'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
+  if(a!=='ps'&&a!=='oredone'&&a!=='pray'&&a!=='speak'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
   if(a==='zen'){state.zen=v==='1';if(state.zen){state.tab='enc';state.sub.enc='paso';state.plist=false}render(true)}
   else if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
@@ -2227,6 +2224,7 @@ document.addEventListener('click',e=>{
   }
   else if(a==='nov'){state.nov=v||null;if(state.tab!=='orar'||state.sub.orar!=='fie'){state.tab='orar';state.sub.orar='fie';store.set('tab','orar');store.set('sub',state.sub)}render()}
   else if(a==='pray'){state.zen=true;state.tab='enc';state.sub.enc='paso';state.ps=0;state.plist=false;store.set('tab','enc');store.set('sub',state.sub);render()}
+  else if(a==='oredone'){const o=oreDays(),k=ymd(new Date());if(!o[k]){o[k]=true;store.set('ore',o)}celebrar();render(true)}
   else if(a==='ps'){state.ps=Math.max(0,+v);render()}
   else if(a==='plist'){state.plist=v==='1';render()}
   else if(a==='gv'){state.gdir=+v;state.gi=(state.gi||0)+(+v);render()}
