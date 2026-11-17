@@ -1,0 +1,21 @@
+name: Biblia de dominio público
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['.github/workflows/biblia.yml','tareas/biblia.py']
+permissions:
+  contents: write
+jobs:
+  biblia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          curl -fsSL --max-time 120 https://ebible.org/Scriptures/spablm_usfm.zip -o b.zip
+          mkdir -p usfm && unzip -q -o b.zip -d usfm && ls usfm | head -90
+          python3 tareas/biblia.py usfm biblia
+          rm -rf usfm b.zip
+          git config user.name "Biblia"; git config user.email "actions@users.noreply.github.com"
+          git add biblia && (git diff --cached --quiet || (git commit -m "Biblia de dominio público para las lecturas" && git push))
