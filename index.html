@@ -1981,6 +1981,13 @@ function viewVivo(){
 }
 /* ===== MISA: «Lo de hoy» — solo lo importante y lo que tú dices ===== */
 /* (se mantiene el nombre viewChuleta: la tarea diaria lo busca para saber que la app tiene la guía nueva) */
+/* La lectura de hoy dentro de su paso, con enlace al texto completo */
+function lecBox(p,D){
+  const k={'Primera lectura':[D.l1,'Hoy se lee'],'Salmo responsorial':[D.sal,'Salmo de hoy'],'Segunda lectura':[D.l2,'Hoy se lee'],'Evangelio':[D.ev,'Evangelio de hoy']}[p.n];
+  if(!k)return '';const l=k[0],lnk='<a class="small" style="display:inline-block;margin-top:4px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer el texto completo ↗</a>';
+  if(!l)return D.ok?'':'<div class="hoyb"><b>'+k[1]+'</b><p class="small mut" style="margin:0">Aún no ha cargado. '+lnk+'</p></div>';
+  return '<div class="hoyb"><b>'+k[1]+'</b><div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'+lnk+'</div>';
+}
 function respHtml(p,D){
   let h='';
   if(p.n==='Salmo responsorial')h+='<div class="say"><b>Tú repites después de cada estrofa</b><span class="prayer">'+esc(D.salResp||'La frase que diga el salmista al comenzar.')+'</span></div>';
@@ -1997,18 +2004,13 @@ function viewChuleta(){
   if(D.aviso)h+='<div class="nota"><b>Nota importante</b>'+esc(D.aviso)+'</div>';
   if(D.ev)h+='<div class="hoyb"><b>Evangelio de hoy</b><div class="cita">'+esc(D.ev.cita)+'</div><p>'+esc(D.ev.resumen)+'</p></div>';
   else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Todavía no ha cargado el de hoy. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button> o <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">verlo en EWTN</a></p></div>';
-  {const L=[[D.l1,'Primera lectura'],[D.sal,'Salmo responsorial'],[D.l2,'Segunda lectura'],[D.ev,'Evangelio']].filter(x=>x[0]);
-   h+='<div class="hoyb"><b>Las lecturas de hoy</b>';
-   if(L.length)h+=L.map(([l,t])=>'<details style="margin:8px 0"><summary>'+esc(t)+' <span class="mut" style="font-weight:400">· '+esc(l.cita)+'</span></summary><div class="in">'+(t==='Salmo responsorial'&&D.salResp?'<div class="say"><b>Respondemos</b>'+esc(D.salResp)+'</div>':'')+'<p>'+esc(l.resumen)+'</p></div></details>').join('');
-   else h+='<p class="small">Las lecturas de hoy aún no han cargado. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button></p>';
-   h+='<a class="btn ghost" style="width:100%;margin-top:8px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer las lecturas completas ↗</a><p class="small mut" style="margin:6px 0 0">Arriba, un resumen de cada lectura. El texto oficial completo, tal como lo proclaman los lectores en la Misa, se abre en EWTN.</p></div>';}
   if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+': '+esc(D.relato.titulo||'')+'</b><p>'+esc(D.relato.resumen||'')+'</p>'+(D.relato.ensenanza?'<p><b style="color:var(--ink)">Lo que enseña:</b> '+esc(D.relato.ensenanza)+'</p>':'')+'</div>';
   if(D.homilia)h+='<div class="hoyb"><b>En la homilía, escucha</b><p>'+esc(D.homilia)+'</p></div>';
   h+='</div><div class="row"><button class="btn big" data-act="gto" data-v="0">Seguir la Misa paso a paso</button></div>';
   h+='<h2 class="sec">Lo que tú dices</h2><p class="note" style="margin-top:0">Solo los momentos en que respondes o rezas, en orden. En gris lo que dice el sacerdote; en dorado, lo tuyo.</p>';
   let sec='',n=0;
   G.slice(1).forEach((g,j)=>{
-    const r=respHtml(g.p,D);if(!r)return;
+    const r=lecBox(g.p,D)+respHtml(g.p,D);if(!r)return;
     if(g.s!==sec){sec=g.s;h+='<div class="lbl" style="margin-top:20px">'+esc(sec)+'</div>'}
     n++;
     h+='<div class="resp"><div class="rh"><span class="num">'+n+'</span><b>'+esc(g.p.n.replace(/ \(.*\)/,''))+'</b><span class="pos">'+esc(g.p.pos.split(/[,(]/)[0])+'</span></div>'+r+'</div>';
