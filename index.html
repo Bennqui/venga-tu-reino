@@ -1996,7 +1996,12 @@ function viewChuleta(){
     '<ul class="hoyl">'+yes(D.gloria,'Gloria')+yes(D.segunda,'2.ª lectura')+yes(D.credo,'Credo')+'</ul>';
   if(D.aviso)h+='<div class="nota"><b>Nota importante</b>'+esc(D.aviso)+'</div>';
   if(D.ev)h+='<div class="hoyb"><b>Evangelio de hoy</b><div class="cita">'+esc(D.ev.cita)+'</div><p>'+esc(D.ev.resumen)+'</p></div>';
-  else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Se carga cada día pasada la medianoche. <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Ver las lecturas ahora</a></p></div>';
+  else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Todavía no ha cargado el de hoy. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button> o <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">verlo en EWTN</a></p></div>';
+  {const L=[[D.l1,'Primera lectura'],[D.sal,'Salmo responsorial'],[D.l2,'Segunda lectura'],[D.ev,'Evangelio']].filter(x=>x[0]);
+   h+='<div class="hoyb"><b>Las lecturas de hoy</b>';
+   if(L.length)h+=L.map(([l,t])=>'<details style="margin:8px 0"><summary>'+esc(t)+' <span class="mut" style="font-weight:400">· '+esc(l.cita)+'</span></summary><div class="in">'+(t==='Salmo responsorial'&&D.salResp?'<div class="say"><b>Respondemos</b>'+esc(D.salResp)+'</div>':'')+'<p>'+esc(l.resumen)+'</p></div></details>').join('');
+   else h+='<p class="small">Las lecturas de hoy aún no han cargado. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button></p>';
+   h+='<a class="btn ghost" style="width:100%;margin-top:8px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer las lecturas completas ↗</a><p class="small mut" style="margin:6px 0 0">Arriba, un resumen de cada lectura. El texto oficial completo, tal como lo proclaman los lectores en la Misa, se abre en EWTN.</p></div>';}
   if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+': '+esc(D.relato.titulo||'')+'</b><p>'+esc(D.relato.resumen||'')+'</p>'+(D.relato.ensenanza?'<p><b style="color:var(--ink)">Lo que enseña:</b> '+esc(D.relato.ensenanza)+'</p>':'')+'</div>';
   if(D.homilia)h+='<div class="hoyb"><b>En la homilía, escucha</b><p>'+esc(D.homilia)+'</p></div>';
   h+='</div><div class="row"><button class="btn big" data-act="gto" data-v="0">Seguir la Misa paso a paso</button></div>';
