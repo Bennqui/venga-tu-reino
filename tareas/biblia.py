@@ -6,7 +6,9 @@ os.makedirs(out, exist_ok=True)
 def clean(t):
     t = re.sub(r'\\f .*?\\f\*', '', t)            # notas al pie
     t = re.sub(r'\\x .*?\\x\*', '', t)            # referencias cruzadas
-    t = re.sub(r'\\w ([^|\\]*)\|[^\\]*\\w\*', r'\1', t)
+    t = re.sub(r'\\\+?w ([^|\\]*)(\|[^\\]*)?\\\+?w\*', r'\1', t)
+    t = re.sub(r'\|\s*[a-z-]+="[^"]*"', '', t)    # atributos sueltos
+    t = re.sub(r'([«“¿¡])\s+', r'\1', t)
     t = re.sub(r'\\\+?[a-z0-9]+\*?', '', t)      # resto de marcas
     return re.sub(r'\s+', ' ', t).strip()
 books = {}
