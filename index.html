@@ -122,6 +122,7 @@ nav.tabs button[aria-current="page"] svg{stroke:var(--lit);stroke-width:2}
 .say.big .prayer{font-size:1.12rem}
 .cue{font-size:.92rem;color:var(--mut);margin:10px 0 2px;line-height:1.45}
 .cue span{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.lecc{margin-top:8px}.lecc summary{cursor:pointer;color:var(--gold);font-weight:600;font-size:.9rem;list-style:none;padding:6px 0}.lecc summary::-webkit-details-marker{display:none}.lectxt{font-family:Georgia,serif;font-size:1.02rem;line-height:1.6;animation:lecIn .3s ease}@keyframes lecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.lectxt sup{color:var(--gold);font-size:.68em;font-family:system-ui}
 .hoyb{background:var(--tint);border-radius:14px;padding:10px 14px;margin:10px 0}
 .hoyb>b{display:block;font-size:.84rem;color:var(--gold);font-weight:600}
 .hoyb p{margin:4px 0 0}
@@ -1982,11 +1983,37 @@ function viewVivo(){
 /* ===== MISA: «Lo de hoy» — solo lo importante y lo que tú dices ===== */
 /* (se mantiene el nombre viewChuleta: la tarea diaria lo busca para saber que la app tiene la guía nueva) */
 /* La lectura de hoy dentro de su paso, con enlace al texto completo */
+const BIB={'génesis':'GEN','genesis':'GEN','éxodo':'EXO','exodo':'EXO','levítico':'LEV','números':'NUM','deuteronomio':'DEU','josué':'JOS','jueces':'JDG','rut':'RUT','1 samuel':'1SA','2 samuel':'2SA','1 reyes':'1KI','2 reyes':'2KI','1 crónicas':'1CH','2 crónicas':'2CH','esdras':'EZR','nehemías':'NEH','tobías':'TOB','judit':'JDT','ester':'ESG','1 macabeos':'1MA','2 macabeos':'2MA','job':'JOB','salmo':'PSA','salmos':'PSA','proverbios':'PRO','eclesiastés':'ECC','cantar de los cantares':'SNG','sabiduría':'WIS','eclesiástico':'SIR','sirácida':'SIR','isaías':'ISA','jeremías':'JER','lamentaciones':'LAM','baruc':'BAR','ezequiel':'EZK','daniel':'DAG','oseas':'HOS','joel':'JOL','amós':'AMO','abdías':'OBA','jonás':'JON','miqueas':'MIC','nahúm':'NAM','habacuc':'HAB','sofonías':'ZEP','ageo':'HAG','zacarías':'ZEC','malaquías':'MAL','mateo':'MAT','marcos':'MRK','lucas':'LUK','juan':'JHN','hechos':'ACT','hechos de los apóstoles':'ACT','romanos':'ROM','1 corintios':'1CO','2 corintios':'2CO','gálatas':'GAL','efesios':'EPH','filipenses':'PHP','colosenses':'COL','1 tesalonicenses':'1TH','2 tesalonicenses':'2TH','1 timoteo':'1TI','2 timoteo':'2TI','tito':'TIT','filemón':'PHM','hebreos':'HEB','santiago':'JAS','1 pedro':'1PE','2 pedro':'2PE','1 juan':'1JN','2 juan':'2JN','3 juan':'3JN','judas':'JUD','apocalipsis':'REV'};
+const _bib={};
+function citaPartes(c){
+  let m=String(c||'').trim().match(/^((?:[123]\s)?[^\d,]+?)\s+(\d+)(?:\((\d+)\))?\s*,\s*(.+)$/);
+  if(!m){const u=String(c||'').trim().match(/^((?:[123]\s)?[^\d,]+?)\s+(\d+[a-z]*(?:\s*[-–]\s*\d+[a-z]*)?)$/);if(u&&['abdías','filemón','2 juan','3 juan','judas'].includes(u[1].toLowerCase().trim()))m=[0,u[1],'1',0,u[2]];else return null}
+  const code=BIB[m[1].toLowerCase().trim()];if(!code)return null;
+  let ch=+(m[3]||m[2]);const out=[];
+  m[4].split(';').forEach((seg,i)=>{seg=seg.trim();
+    if(i>0){const mm=seg.match(/^(\d+)\s*,\s*(.+)$/);if(!mm)return;ch=+mm[1];seg=mm[2]}
+    seg.split(/\.\s*|\s+y\s+/).forEach(r=>{const q=r.trim().match(/^(\d+)[a-z]*(?:\s*[-–]\s*(\d+)[a-z]*)?$/);if(q)out.push([ch,+q[1],+(q[2]||q[1])])});
+  });
+  return out.length?{code,r:out}:null;
+}
+function textoLectura(cita){
+  const P=citaPartes(cita);if(!P)return Promise.reject('cita');
+  const b=_bib[P.code]||(_bib[P.code]=fetch('biblia/'+P.code+'.json').then(r=>{if(!r.ok)throw 0;return r.json()}).catch(e=>{delete _bib[P.code];throw e}));
+  return b.then(B=>{let h='',last=null;const seen={};P.r.forEach(([c,a,z])=>{const C=B.c[String(c)]||{};
+    if(last!==null&&last!==c)h+='</p><p>';
+    for(let v=a;v<=z;v++)if(C[v]&&!seen[c+':'+v])seen[c+':'+v]=1,h+='<sup>'+(last!==c?c+',':'')+v+'</sup> '+esc(C[v])+' ',last=c;});
+    if(!h)throw 'vacío';return '<p>'+h+'</p>'});
+}
+function abrirLectura(d){if(!d.open||d.dataset.ok)return;const t=d.querySelector('.lectxt');d.dataset.ok=1;
+  textoLectura(d.dataset.cita).then(h=>{t.innerHTML=h}).catch(()=>{delete d.dataset.ok;t.innerHTML='<p class="small mut">No pude cargar el texto. Revisa tu conexión o usa el enlace oficial.</p>'})}
+document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target)},true);
+function lecCompleta(l,lnk){if(!citaPartes(l.cita))return lnk;
+  return '<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer la lectura completa</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Traducción libre de dominio público («Santa Biblia libre para el mundo»). En Misa se proclama la traducción oficial; puede variar un poco. '+lnk+'</p></details>'}
 function lecBox(p,D){
   const k={'Primera lectura':[D.l1,'Hoy se lee'],'Salmo responsorial':[D.sal,'Salmo de hoy'],'Segunda lectura':[D.l2,'Hoy se lee'],'Evangelio':[D.ev,'Evangelio de hoy']}[p.n];
   if(!k)return '';const l=k[0],lnk='<a class="small" style="display:inline-block;margin-top:4px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer el texto completo ↗</a>';
   if(!l)return D.ok?'':'<div class="hoyb"><b>'+k[1]+'</b><p class="small mut" style="margin:0">Aún no ha cargado. '+lnk+'</p></div>';
-  return '<div class="hoyb"><b>'+k[1]+'</b><div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'+lnk+'</div>';
+  return '<div class="hoyb"><b>'+k[1]+'</b><div class="cita">'+esc(l.cita)+'</div><p>'+esc(l.resumen)+'</p>'+lecCompleta(l,lnk.replace('Leer el texto completo','Texto oficial'))+'</div>';
 }
 function respHtml(p,D){
   let h='';
