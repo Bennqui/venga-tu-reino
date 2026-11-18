@@ -2569,5 +2569,7 @@ setTimeout(guardarDias,6000);
 })();
 </script>
 
-<script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+/* pide al iPhone que no borre lo guardado (días preparados y tus marcas) aunque falte espacio */
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})}catch(e){}</script>
 </body></html>
