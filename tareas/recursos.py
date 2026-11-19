@@ -58,10 +58,14 @@ if cfg.get('imagenes'):
             except Exception as e: print('  no:', c[:100], e)
         if not data: print('FALLÓ', key); continue
         im = Image.open(io.BytesIO(data)); im = im.convert('RGB'); w, h = im.size
-        big = im if w <= 3840 else im.resize((3840, round(h * 3840 / w)), Image.LANCZOS)
-        big.save(f'assets/img/{key}-4k.webp', 'WEBP', quality=80, method=6)
-        mid = im.resize((1440, round(h * 1440 / w)), Image.LANCZOS) if w > 1440 else im
-        mid.save(f'assets/img/{key}.webp', 'WEBP', quality=78, method=6)
+        fit = lambda L: im if max(w, h) <= L else im.resize((round(w * L / max(w, h)), round(h * L / max(w, h))), Image.LANCZOS)
+        big = fit(3840)   # 4K: el lado más largo mide 3840 px
+        q = 78
+        while True:
+            big.save(f'assets/img/{key}-4k.webp', 'WEBP', quality=q, method=6)
+            if os.path.getsize(f'assets/img/{key}-4k.webp') < 1600 * 1024 or q <= 60: break
+            q -= 6
+        fit(1600).save(f'assets/img/{key}.webp', 'WEBP', quality=76, method=6)
         tiny = im.resize((32, max(1, round(h * 32 / w))), Image.LANCZOS).filter(ImageFilter.GaussianBlur(1))
         b = io.BytesIO(); tiny.save(b, 'WEBP', quality=40)
         meta[key] = {'w': big.size[0], 'h': big.size[1], 'ph': 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()}
