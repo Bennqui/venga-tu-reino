@@ -37,7 +37,8 @@ for url, path in cfg.get('archivos', {}).items():
 if cfg.get('iconos'):
     ver = cfg.get('lucide', '0.468.0'); syms = []
     for n in sorted(set(cfg['iconos'])):
-        svg = get(f'https://unpkg.com/lucide-static@{ver}/icons/{n}.svg').decode('utf-8')
+        try: svg = get(f'https://unpkg.com/lucide-static@{ver}/icons/{n}.svg', tries=2).decode('utf-8')
+        except Exception as e: print('  icono no encontrado:', n); continue
         inner = re.sub(r'^.*?<svg[^>]*>|</svg>\s*$', '', svg, flags=re.S).strip()
         syms.append(f'<symbol id="i-{n}" viewBox="0 0 24 24">{inner}</symbol>')
     open('assets/iconos.svg', 'w').write('<svg xmlns="http://www.w3.org/2000/svg" style="display:none">' + ''.join(syms) + '</svg>\n')
