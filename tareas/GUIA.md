@@ -148,3 +148,11 @@ node tareas/dias.js completar AAAA-MM-DD /tmp/AAAA-MM-DD-conoce.json
 ```
 
 Los dos comandos validan antes de guardar. Si responden `NO VÁLIDO`, no se guardó nada: corrige lo que indiquen y repite. Solo se sube a GitHub un día que respondió `OK`.
+
+## Revisión litúrgica de cada noche
+
+Antes de publicar el día, compara la **celebración, el rango y el color** que escribiste con una segunda fuente católica (dominicos.org o evangeli.net) y con el calendario de Venezuela. Si no coinciden, corrige el archivo del día y explica el cambio en el mensaje del commit. Si el error está en el cálculo propio de la app (por ejemplo, el tiempo litúrgico o una fiesta fija en `index.html` o `datos.js`), no lo cambies tú: déjalo anotado en el resumen de la tarea, con la fecha, lo que muestra la app y lo que dicen las fuentes, para que Cesar lo revise.
+
+## Textos fijos de la app (`datos.js`)
+
+Las oraciones, santos, misterios, novenas y pinturas están en `datos.js`, separados del código. Si alguna vez cambias ese archivo, ejecuta después `node tareas/version-datos.js` para que el iPhone descargue la versión nueva.
