@@ -9,3 +9,4 @@ App católica para seguir la Misa, rezar el Rosario y orar con el Evangelio del 
 - `dias/linea.json`: índice que se rehace solo con cada día nuevo; alimenta la línea del tiempo de «Personas y hechos» y la línea de estado de la app.
 - Una tarea programada de Claude corre cada medianoche **en la nube** (no necesita ninguna computadora encendida): prepara los días que falten y los sube aquí. Otra tarea, el «Vigilante», revisa de madrugada y avisa si algo falló.
 - `tareas/GUIA.md` explica cómo se escribe cada día y `tareas/dias.js` lo valida.
+- `biblia/`: la Biblia que usa «Leer la lectura completa»: versión católica de Mons. Juan Straubinger (Biblia Platense, dominio público), 73 libros, salmos con la numeración de la Vulgata y «el Señor» en lugar de «Yahvé». La genera `tareas/biblia.py` (workflow «Biblia católica de dominio público»).
