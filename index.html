@@ -1386,7 +1386,7 @@ function fiestas(y){
     nv=(id,ini,dias)=>({id,ini,dias});
   const L=[
   [D(1,1),'Santa María, Madre de Dios','Solemnidad','I','Comienza el año civil poniéndolo en manos de María. Jornada Mundial de la Paz.'],
-  [D(1,3),'Aniversario de la fundación de la Legión de Cristo','Fiesta de familia','R','Se recuerda la fundación de la Legión de Cristo (3 de enero de 1941), origen del Regnum Christi. Día para dar gracias por el carisma.'],
+  [D(1,3),'Aniversario de la fundación de la Legión de Cristo y del Regnum Christi','Aniversario','R','El 3 de enero de 1941 se fundó en México la Legión de Cristo y, con ella, el Regnum Christi. Ese día el Colegio Directivo General escribe a todos los miembros para dar gracias a Dios por el carisma y por cada vocación.'],
   [epi,'Epifanía del Señor (Reyes Magos)','Solemnidad','I V','Jesús se manifiesta a todos los pueblos. En Venezuela se celebra el 6 de enero.'],
   [D(1,14),'Divina Pastora','Fiesta','B V','La gran procesión de Barquisimeto: la imagen de la Divina Pastora sale de Santa Rosa hacia la Catedral. Una de las mayores manifestaciones marianas del mundo.',nv('pastora',D(1,5),null)],
   [D(2,2),'Presentación del Señor (Candelaria)','Fiesta','I','Jesús es presentado en el Templo: Luz de las naciones. Se bendicen las velas.'],
@@ -1403,6 +1403,7 @@ function fiestas(y){
   [addDays(E,49),'Pentecostés','Solemnidad','I','Venida del Espíritu Santo sobre María y los apóstoles: nacimiento misionero de la Iglesia.',nv('pen',addDays(E,40),NOV_PEN)],
   [addDays(E,56),'Santísima Trinidad','Solemnidad','I','Un solo Dios en tres Personas: Padre, Hijo y Espíritu Santo.'],
   [addDays(E,63),'Corpus Christi','Solemnidad','I V','Fiesta del Cuerpo y la Sangre de Cristo, con procesión eucarística. En Venezuela, el domingo.'],
+  [D(5,31),'Aniversario de la Federación Regnum Christi','Aniversario','R','El 31 de mayo de 2019 la Santa Sede erigió la Federación Regnum Christi, que une a las cuatro vocaciones: legionarios de Cristo, consagradas, laicos consagrados y laicos asociados. Día para dar gracias por la familia espiritual.'],
   [addDays(E,68),'Sagrado Corazón de Jesús','Solemnidad','I R','Fiesta muy querida por el Regnum Christi, que suele preparar una novena propia.',nv('scj',addDays(E,59),NOV_SCJ)],
   [addDays(E,69),'Inmaculado Corazón de María','Memoria','I','Al día siguiente del Sagrado Corazón: el corazón de María que guarda todo en silencio.'],
   [D(6,24),'Natividad de San Juan Bautista','Solemnidad','I','El precursor que señala a Jesús: «Este es el Cordero de Dios».'],
@@ -1416,7 +1417,7 @@ function fiestas(y){
   [D(10,26),'San José Gregorio Hernández','Memoria (Venezuela)','V','El médico de los pobres, canonizado el 19 de octubre de 2025 junto con santa Carmen Rendiles: los primeros santos venezolanos.'],
   [D(11,1),'Todos los Santos','Solemnidad','I','La fiesta de todos los que ya están con Dios: la santidad es para todos.'],
   [D(11,2),'Fieles Difuntos','Conmemoración','I','Oramos por todos los que han muerto.'],
-  [ck,'Jesucristo, Rey del Universo','Solemnidad','I R','Último domingo del año litúrgico y fiesta titular del Regnum Christi: «¡Cristo, Rey nuestro! ¡Venga tu Reino!». Los miembros laicos renuevan por devoción sus compromisos con el Regnum Christi (la fórmula está en el libro «Señor, enséñanos a orar», p. 70).',nv('cr',addDays(ck,-9),NOV_CR)],
+  [ck,'Jesucristo, Rey del Universo','Solemnidad','I R','Último domingo del año litúrgico y fiesta titular del Regnum Christi: «¡Cristo, Rey nuestro! ¡Venga tu Reino!». Los miembros laicos renuevan cada año por devoción los compromisos de su adhesión al Regnum Christi (Reglamento de los fieles asociados, n. 20 § 4), ordinariamente al terminar la Misa de esta solemnidad. La fórmula está en «Señor, enséñanos a orar» (p. 70) y en regnumchristi.com.',nv('cr',addDays(ck,-9),NOV_CR)],
   [adv,'Primer domingo de Adviento','Inicio del año litúrgico','I','Cuatro semanas para preparar la Navidad con esperanza.'],
   [fechaReal(y,12,8),'Inmaculada Concepción','Solemnidad','I','María, concebida sin pecado original.',nv('inm',D(11,29),null)],
   [D(12,12),'Nuestra Señora de Guadalupe','Fiesta','I','Patrona de América.'],
@@ -1753,7 +1754,7 @@ function viewDia(){
   '<div class="card"><div class="small mut"><span id="rp">'+done.length+'</span> de '+RUTINA.length+' hoy · Racha: <b id="rs">'+n+'</b> '+(n===1?'día':'días')+' (cuenta el día con 3 o más)</div><div class="bar"><i id="rbar" style="width:'+Math.round(done.length/RUTINA.length*100)+'%"></i></div>'+
   RUTINA.map(r=>'<label class="chk"><input type="checkbox" data-act="rut" data-id="'+r.id+'"'+(done.includes(r.id)?' checked':'')+'><span><span class="t">'+esc(r.h)+'</span><br>'+esc(r.t)+'</span></label>').join('')+'</div>'+
   '<div class="card"><div class="lbl">Obra de misericordia de hoy ('+esc(ob[0].toLowerCase())+')</div><p style="margin:0"><b>'+esc(ob[1])+'.</b></p></div>'+
-  '<details><summary>Ritmo de la semana y del mes</summary><div class="in"><ul class="tight"><li><b>Domingo:</b> Misa, descanso y familia.</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo del Regnum Christi.</li><li><b>Jueves:</b> Hora Santa o un rato de adoración.</li><li><b>Viernes:</b> penitencia (en Cuaresma, abstinencia de carne).</li><li><b>Sábado:</b> día dedicado a María; Rosario.</li><li><b>Cada mes:</b> confesión, y si puedes un rato de adoración ante el Santísimo.</li></ul></div></details>';
+  '<details><summary>Ritmo de la semana y del mes</summary><div class="in"><ul class="tight"><li><b>Domingo:</b> Misa, descanso y familia.</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo del Regnum Christi.</li><li><b>Jueves</b> (u otro día): Hora eucarística o un rato de adoración.</li><li><b>Viernes:</b> penitencia (en Cuaresma, abstinencia de carne).</li><li><b>Sábado:</b> día dedicado a María; Rosario.</li><li><b>Cada mes:</b> confesión, y si puedes un rato de adoración ante el Santísimo.</li></ul></div></details>';
 }
 
 
@@ -1802,7 +1803,7 @@ const ENC_GLOS=[
  ['Luz','Lo que el Espíritu Santo te hace ver al meditar el Evangelio.'],
  ['Caso','Un hecho real que se analiza con el método ver, juzgar y actuar.'],
  ['Propósito o compromiso apostólico','Acción concreta que se asume para la semana.'],
- ['Hora Santa','Tradición del Regnum Christi: un rato de adoración ante el Santísimo, de ordinario el jueves.'],
+ ['Hora eucarística','Un rato de adoración ante el Santísimo. «Señor, enséñanos a orar» la propone entre las oraciones de cada semana; muchos la hacen el jueves.'],
  ['¡Venga tu Reino!','Lema del Regnum Christi, tomado del Padre Nuestro: que Cristo reine en el corazón y en la sociedad.']
 ];
 function nextTue(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());return addDays(x,(2-x.getDay()+7)%7)}
@@ -1888,7 +1889,7 @@ function viewEncGuia(){
   h+='<h2 class="sec">Tu primera vez</h2><div class="card"><ul class="tight" style="margin:0">'+ENC_TIPS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>';
   h+='<h2 class="sec">Frases que te ayudan a participar</h2><div class="card">'+ENC_FRASES.map(f=>'<p><b>'+esc(f[0])+':</b> '+esc(f[1])+'</p>').join('')+'</div>';
   h+='<h2 class="sec">Palabras que vas a escuchar</h2><div class="card">'+ENC_GLOS.map(g=>'<p><b>'+esc(g[0])+'.</b> '+esc(g[1])+'</p>').join('')+'</div>';
-  h+='<h2 class="sec">La semana del Regnum Christi</h2><div class="card"><ul class="tight" style="margin:0"><li><b>Cada día:</b> encuentro personal con Cristo en la oración (el «Paso a paso de hoy»).</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo.</li><li><b>Jueves:</b> Hora Santa o adoración, como es tradición en el Regnum Christi.</li><li><b>Viernes:</b> un pequeño sacrificio.</li><li><b>Domingo:</b> Misa.</li></ul></div>';
+  h+='<h2 class="sec">La semana del Regnum Christi</h2><div class="card"><ul class="tight" style="margin:0"><li><b>Cada día:</b> encuentro personal con Cristo en la oración (el «Paso a paso de hoy»).</li><li><b>Martes:</b> Encuentro con Cristo con tu equipo.</li><li><b>Una vez por semana</b> (muchos, el jueves): Hora eucarística o adoración, como propone «Señor, enséñanos a orar».</li><li><b>Viernes:</b> un pequeño sacrificio.</li><li><b>Domingo:</b> Misa.</li></ul></div>';
   h+='<p class="note">Cada equipo adapta el orden y los tiempos; tu responsable de equipo te irá guiando. Fuente: <a href="https://www.regnumchristi.com/en/wp-content/uploads/2023/05/Ensayo-Encuentro-con-CRISTO-2022.pdf" target="_blank" rel="noopener noreferrer">«El Encuentro con Cristo en la vida del Regnum Christi»</a> (2022).</p>';
   return h;
 }
