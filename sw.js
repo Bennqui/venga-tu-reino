@@ -1,8 +1,8 @@
 /* Venga tu Reino: funciona sin conexión. La app y sus textos se guardan en el teléfono.
    hoy.js (el Evangelio del día) se busca primero en internet y, si no hay, se usa el último guardado.
    dias/AAAA-MM-DD.js (los días preparados por adelantado) y dias/linea.json (línea del tiempo) también se guardan, para que la app cambie de día sin internet. */
-const V='vtr-v24';
-const BASE=['./','index.html','hoy.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png'];
+const V='vtr-v25';
+const BASE=['./','index.html','hoy.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','assets/fuentes.css','assets/fonts/Marcellus-400-normal-latin.woff2','assets/fonts/Literata-400-normal-latin.woff2','assets/fonts/Literata-600-normal-latin.woff2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(BASE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{

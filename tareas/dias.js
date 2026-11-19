@@ -226,6 +226,10 @@ function validarCodigo(codigo, fechaEsperada) {
         if (txt(fr.texto)) cp(!/[«»]/.test(fr.texto), '.frase.texto no lleva « »');
       }
       if ('fiesta' in x) cp(txt(x.fiesta, 3), '.fiesta está vacío (omítelo si no aplica)');
+      if ('imagen' in x) {
+        const im = x.imagen || {};
+        cp(/^https:\/\/upload\.wikimedia\.org\/\S+\.(jpe?g|png|webp)$/i.test(im.url || '') && txt(im.credito, 5), '.imagen: url de upload.wikimedia.org (jpg, png o webp) y credito; si no hay una imagen de dominio público verificada, omítela');
+      }
       cp(Array.isArray(x.fuentes) && x.fuentes.length >= 1 && x.fuentes.every(f => f && txt(f.n, 2) && /^https:\/\/\S+$/.test(f.url || '')), '.fuentes: al menos una {n,url} con un enlace https que hayas visto');
       if (txt(x.nombre)) {
         const rep = usados.find(t => llano(t[k]) === llano(x.nombre));

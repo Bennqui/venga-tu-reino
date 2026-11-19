@@ -94,6 +94,7 @@ Cada día lleva **dos reseñas**: `conoce.persona` (alguien importante para la I
 - `frase` (opcional): `{texto, fuente}`, una frase breve suya o sobre el hecho, sin « », **solo si la viste textualmente** en una fuente fiable. Si no, omítela.
 - `ensenanza`: 2 o 3 frases: qué nos enseña hoy, con una aplicación o pregunta concreta para Cesar.
 - `fiesta` (opcional): cuándo se celebra («15 de octubre»).
+- `imagen` (opcional, muy recomendado): `{url, credito}`. Un retrato o una pintura de la persona o del hecho que sea de **dominio público** en Wikimedia Commons. `url` es la miniatura de 1280 px de upload.wikimedia.org (por ejemplo `https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Nombre.jpg/1280px-Nombre.jpg`), tomada de la página del archivo en commons.wikimedia.org donde confirmaste la licencia; `credito`: autor u obra, año y «dominio público». Si no encuentras una imagen de dominio público verificada, omítela. Nunca uses fotos con derechos.
 - `fuentes`: 1 a 3 enlaces `{n, url}` (nombre del sitio y enlace https) de las páginas que de verdad usaste.
 
 Cada reseña debe sumar entre 1.500 y 4.500 caracteres (resumen + historia + impacto + enseñanza): unas 300 a 500 palabras.
