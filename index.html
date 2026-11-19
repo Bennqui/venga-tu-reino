@@ -648,7 +648,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=81a78ff8"></script>
+<script src="datos.js?v=b7ac5850"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -1744,7 +1744,7 @@ function textoLectura(cita){
 }
 function abrirLectura(d){if(!d.open||d.dataset.ok)return;const t=d.querySelector('.lectxt');d.dataset.ok=1;
   textoLectura(d.dataset.cita).then(h=>{t.innerHTML=h}).catch(()=>{delete d.dataset.ok;t.innerHTML='<p class="small mut">No pude cargar el texto. Revisa tu conexión o usa el enlace oficial.</p>'})}
-document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target)},true);
+document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target);else if(e.target.open&&e.target.querySelector&&e.target.querySelector('.mistxt'))misLlenar(e.target)},true);
 function lecCompleta(l,lnk){if(!citaPartes(l.cita))return lnk;
   return '<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer la lectura completa</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Texto de la Biblia católica de Mons. Juan Straubinger (dominio público). En Misa se proclama la traducción oficial del Leccionario: las palabras pueden variar un poco. '+lnk+'</p></details>'}
 function lecBox(p,D){
@@ -1802,6 +1802,16 @@ function rosMap(active){
   const xc=st('X');s+='<path class="cx'+xc+'" d="M100 234V258M92 242H108"/>';if(active==='X')ring='<circle class="ring" cx="100" cy="245" r="15"/>';
   return s+ring+'</svg>';
 }
+/* Texto completo de un misterio: la Palabra de Dios entera, la meditación y el fruto */
+function misHtml(k,i){
+  const T=(typeof MIS_TXT!=='undefined'&&MIS_TXT[k]||[])[i],md=MED[k][i];
+  if(!T)return '<p>'+esc(md[0])+'</p><p class="small"><b>Pídele a Dios:</b> '+esc(md[1])+'.</p>';
+  return '<div class="misw">'+T.c.map(c=>'<div class="lbl" style="margin-top:12px">Palabra de Dios · '+esc(c)+'</div><div class="mistxt lectxt" data-cita="'+esc(c)+'"><p class="small mut">Cargando el texto…</p></div>').join('')+
+    '<div class="lbl" style="margin-top:12px">Para meditar</div>'+T.m.map(x=>'<p>'+esc(x)+'</p>').join('')+
+    '<p class="small"><b>Fruto del misterio:</b> '+esc(md[1])+'.</p></div>';
+}
+function misLlenar(r){(r||document).querySelectorAll('.mistxt:not([data-ok])').forEach(t=>{t.dataset.ok=1;
+  textoLectura(t.dataset.cita).then(h=>{t.innerHTML=h}).catch(()=>{delete t.dataset.ok;t.innerHTML='<p class="small mut">No pude cargar el texto (sin conexión). Búscalo en tu Biblia: '+esc(t.dataset.cita)+'.</p>'})})}
 function rosPasos(k){
   const M=MISTERIOS[k],md=MED[k],P=[];
   const pr=id=>'<div class="say"><b>Reza</b><span class="prayer">'+esc(oraT(id))+'</span></div>';
@@ -1814,7 +1824,7 @@ function rosPasos(k){
   P.push({t:'Gloria',bead:'P2',w:'En la cadena, antes de la siguiente cuenta grande',b:pr('gloria'),say:'gloria'});
   for(let i=0;i<5;i++){
     const nm=ORD[i]+' misterio '+M.n.toLowerCase().replace(/s$/,''),big=i===0?'P2':'G'+i;
-    P.push({t:nm,bead:big,w:'En la cuenta grande',myst:i,b:'<div class="say"><b>Anuncia en voz alta</b><span class="prayer">'+esc(nm)+': '+esc(M.list[i])+'.</span></div><p>'+esc(md[i][0])+'</p><p class="small"><b>Pídele a Dios:</b> '+esc(md[i][1])+'.</p>'});
+    P.push({t:nm,bead:big,w:'En la cuenta grande',myst:i,b:'<div class="say"><b>Anuncia en voz alta</b><span class="prayer">'+esc(nm)+': '+esc(M.list[i])+'.</span></div>'+misHtml(k,i)});
     P.push({t:'Padre Nuestro',bead:big,w:'En la misma cuenta grande',b:pr('padre'),say:'padre'});
     P.push({t:'Diez Ave Marías',bead:'d'+(i+1)+'_',n:10,w:'Las diez cuentas pequeñas',b:'<p class="small mut">Mientras rezas, imagina la escena: '+esc(md[i][0].charAt(0).toLowerCase()+md[i][0].slice(1))+'</p>'+pr('ave'),say:'ave'});
     P.push({t:'Gloria y «Oh Jesús mío»',bead:i<4?'G'+(i+1):'M',w:'Al terminar las diez, antes de la siguiente cuenta grande',b:pr('gloria')+'<div class="say"><b>Y añade</b><span class="prayer">'+esc(FATIMA)+'</span></div>'});
@@ -1848,7 +1858,7 @@ function viewRosPaso(){
   });
   h+='<section class="rstep rfin" id="rfin"><div class="fin">'+ic('check')+'<h2>¡Rezaste el Rosario!</h2><p>María te acompaña. Lo que hoy meditaste se queda contigo.</p></div><div class="row" style="justify-content:center"><button class="btn" data-act="rdone">Marcar en mi rutina</button><button class="btn ghost" data-act="rreset">Empezar de nuevo</button></div><p class="note" id="rmsg" style="text-align:center"></p></section>';
   h+='</div><p class="note">Se recuerda dónde ibas si cierras la app hoy. Puedes ir a tu ritmo: no hay prisa.</p>';
-  setTimeout(rosSync,0);
+  setTimeout(()=>{rosSync();misLlenar()},0);
   return h;
 }
 function rosBead(s){const n=+s.dataset.n,b=s.dataset.bead;if(!n)return b;const c=Math.min((state.rcs||{})[s.dataset.i]||0,n-1);return b==='s'?'s'+(c+1):b+(c+1)}
@@ -1881,7 +1891,7 @@ function viewRosario(){
   if(v==='paso')return h+viewRosPaso();
   const t=new Date(),L=liturgia(t),m=misDia(t,L);
   h+='<div class="card tint"><div class="lbl">Misterios de hoy</div><h3 style="margin-top:0">'+esc(m.n)+'</h3><ol class="tight">'+m.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
-  h+='<h2 class="sec">Qué día se reza cada uno</h2>'+Object.keys(MISTERIOS).map(k=>{const x=MISTERIOS[k];return '<details><summary>'+esc(x.n)+' · <span class="mut" style="font-weight:400">'+esc(x.dias)+'</span></summary><div class="in"><ol class="tight">'+x.list.map((y,i)=>'<li><b>'+esc(y)+'.</b> <span class="small">'+esc(MED[k][i][0])+'</span></li>').join('')+'</ol></div></details>'}).join('');
+  h+='<h2 class="sec">Qué día se reza cada uno</h2>'+Object.keys(MISTERIOS).map(k=>{const x=MISTERIOS[k];return '<details><summary>'+esc(x.n)+' · <span class="mut" style="font-weight:400">'+esc(x.dias)+'</span></summary><div class="in">'+x.list.map((y,i)=>'<details class="mini"><summary>'+(i+1)+'. '+esc(y)+'</summary><div class="in">'+misHtml(k,i)+'</div></details>').join('')+'</div></details>'}).join('');
   h+='<h2 class="sec">El Rosario en resumen</h2><div class="card"><ol class="tight" style="margin:0">'+ROSARIO_PASOS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div><p class="note">Los domingos de Adviento y Navidad se suelen rezar los gozosos, y los de Cuaresma los dolorosos.</p>';
   return h;
 }
