@@ -542,6 +542,83 @@ html.misal body{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .ph .glow{background:linear-gradient(180deg,rgba(10,6,4,.32) 0,transparent 30%,transparent 45%,rgba(10,6,4,.62) 100%)!important;opacity:1!important}
 .ph .kick{text-shadow:0 1px 10px rgba(0,0,0,.7)}
 </style>
+<style id="diseno3">
+/* ===== Diseño 3 (nov 2026): corona de Adviento, vela, Ángelus, noche cálida, calendario en colores, vitral y custodias ===== */
+/* Corona de Adviento */
+.corona{position:relative;margin:14px 0;padding:18px 18px 16px;border-radius:24px;color:#FBEFD6;overflow:hidden;background:radial-gradient(120% 90% at 50% 18%,#3A2611 0%,#22160A 55%,#140D06 100%);box-shadow:0 14px 34px rgba(30,18,6,.28)}
+.corona svg.cw{display:block;width:100%;max-width:400px;height:auto;margin:0 auto}
+.corona .kk{font-family:var(--fd);letter-spacing:.24em;font-size:.72rem;text-transform:uppercase;color:#F2CF73;text-align:center}
+.corona h3{font-family:var(--fd);font-weight:400;text-align:center;margin:4px 0 2px;font-size:1.35rem;color:#fff}
+.corona p{text-align:center;margin:2px 0 0;font-size:.9rem;color:#E9D8B4}
+.corona .vn{display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.corona .vn span{font-size:.74rem;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08);color:#D8C59B}
+.corona .vn span.on{background:rgba(242,207,115,.2);color:#FFE7A6}
+.fl{transform-box:fill-box;transform-origin:50% 100%;animation:llama 2.6s ease-in-out infinite}
+.fl.b{animation-duration:3.1s;animation-delay:-.7s}.fl.c{animation-duration:2.3s;animation-delay:-1.3s}.fl.d{animation-duration:2.9s;animation-delay:-.3s}
+.halo{animation:halo 3.4s ease-in-out infinite}
+@keyframes llama{0%,100%{transform:scale(1,1) skewX(0)}25%{transform:scale(.94,1.07) skewX(2deg)}50%{transform:scale(1.04,.95) skewX(-2deg)}75%{transform:scale(.97,1.04) skewX(1deg)}}
+@keyframes halo{0%,100%{opacity:.85}50%{opacity:.6}}
+/* Vela del día */
+.vela{display:flex;align-items:center;gap:14px;margin:12px 0;padding:12px 16px;border-radius:18px;background:linear-gradient(135deg,#FFF8E6,#FCEFD0);border:1px solid #F1DFAF}
+.vela svg{width:34px;height:52px;flex:none}
+.vela b{display:block;font-family:var(--fd);font-weight:400;font-size:1.05rem}
+.vela span{font-size:.86rem;color:var(--mut)}
+/* Ángelus */
+.angelus{margin:12px 0;border-radius:20px;border:1px solid #EBD9A8;background:linear-gradient(160deg,#FFFBEF,#FBF1D6);padding:14px 16px}
+.angelus .top{display:flex;align-items:center;gap:12px}
+.angelus .top svg{width:36px;height:36px;flex:none;color:#B98A12}
+.angelus b{font-family:var(--fd);font-weight:400;font-size:1.1rem}
+.angelus .row{margin:10px 0 0;gap:8px}
+.angelus pre{white-space:pre-wrap;font-family:var(--fb);font-size:1rem;line-height:1.55;margin:12px 0 0}
+.angelus.ok{opacity:.8}
+/* Rosario: custodia con la pintura del misterio */
+.rcus{position:relative;width:170px;height:170px;margin:8px auto 14px}
+.rcus::before{content:"";position:absolute;inset:-26px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(225,174,30,.85) 0 1.6deg,transparent 1.6deg 11.25deg);-webkit-mask:radial-gradient(circle,transparent 52%,#000 55%,transparent 72%);mask:radial-gradient(circle,transparent 52%,#000 55%,transparent 72%);animation:rgira 40s linear infinite}
+.rcus::after{content:"";position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(#F6DE8D,#B9820F,#FBE08A,#C9960F,#F6DE8D);z-index:0;box-shadow:0 0 30px rgba(232,185,35,.45)}
+.rcus img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover;z-index:1;background:#2a1e08}
+@keyframes rgira{to{transform:rotate(360deg)}}
+/* Noche cálida (de 8 p. m. a 5 a. m., en modo claro) */
+html.noche:not([data-theme=dark]){--bg:#F5EAD8;--card:#FAF1E2;--soft:#F0E2CB;--tint:#F0E2CB;--line:#E3D1B4;--ink:#3A2C17;--mut:#7D6A4B;--gold-bg:#F4E3B9}
+html.noche:not([data-theme=dark]) body{background:var(--bg)}
+html.noche:not([data-theme=dark]) nav.tabs{background:rgba(247,236,218,.94)}
+html.noche:not([data-theme=dark]) .ph img,html.noche:not([data-theme=dark]) .fe img{filter:sepia(.12) brightness(.94)}
+html.noche:not([data-theme=dark]) .vela,html.noche:not([data-theme=dark]) .angelus{background:linear-gradient(135deg,#F8EBD0,#F2DEB6)}
+/* Calendario en colores litúrgicos */
+.lcal{padding:14px 12px 12px}
+.lcal .lch{display:flex;align-items:center;justify-content:space-between;margin:0 4px 10px}
+.lcal .lch b{font-family:var(--fd);font-weight:400;font-size:1.2rem}
+.lcal .lch button{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:1.2rem}
+.lcal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.lcal .dw{font-size:.7rem;text-align:center;color:var(--mut);letter-spacing:.08em;padding-bottom:2px}
+.lcal .d{position:relative;aspect-ratio:1;border-radius:11px;border:0;font-family:var(--fd);font-size:.95rem;color:var(--ink);background:color-mix(in srgb,var(--c) 20%,var(--card));box-shadow:inset 0 -4px 0 var(--c);padding:0}
+.lcal .d.s{background:color-mix(in srgb,var(--c) 34%,var(--card))}
+.lcal .d.s::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:#E1AE1E;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+.lcal .d.h{outline:2px solid var(--ink);outline-offset:1px}
+.lcal .d[aria-pressed=true]{box-shadow:inset 0 -4px 0 var(--c),0 0 0 2px var(--c);transform:scale(1.06)}
+.lcal .d{transition:transform var(--t2) var(--e)}
+.lcal .info{display:flex;gap:10px;align-items:flex-start;margin:12px 4px 0;font-size:.92rem;min-height:44px}
+.lcal .info i{width:12px;height:12px;border-radius:50%;flex:none;margin-top:5px}
+.lcal .ley{display:flex;flex-wrap:wrap;gap:10px;margin:10px 4px 0;font-size:.74rem;color:var(--mut)}
+.lcal .ley span{display:inline-flex;align-items:center;gap:5px}.lcal .ley i{width:9px;height:9px;border-radius:50%}
+/* Vitral en las fiestas grandes */
+.ph .vit{position:absolute;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:overlay;opacity:.95;
+ -webkit-mask:radial-gradient(ellipse 78% 62% at 50% 58%,transparent 58%,#000 92%);mask:radial-gradient(ellipse 78% 62% at 50% 58%,transparent 58%,#000 92%);
+ background:
+  repeating-linear-gradient(60deg,rgba(30,18,6,.75) 0 1.5px,transparent 1.5px 38px),
+  repeating-linear-gradient(-60deg,rgba(30,18,6,.75) 0 1.5px,transparent 1.5px 38px),
+  repeating-linear-gradient(0deg,rgba(30,18,6,.6) 0 1.5px,transparent 1.5px 33px),
+  radial-gradient(34% 30% at 8% 12%,rgba(190,24,44,1),transparent 70%),
+  radial-gradient(30% 30% at 92% 10%,rgba(30,80,210,1),transparent 70%),
+  radial-gradient(34% 36% at 96% 62%,rgba(240,190,40,1),transparent 70%),
+  radial-gradient(34% 36% at 4% 66%,rgba(30,140,90,1),transparent 70%),
+  radial-gradient(40% 24% at 50% 0%,rgba(120,60,200,.9),transparent 70%)}
+.ph .vitl{position:absolute;inset:-20%;z-index:-1;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(30% 22% at calc(30% + var(--k,0)*40%) calc(25% + var(--k,0)*30%),rgba(255,236,170,.55),transparent 70%);animation:vluz 9s ease-in-out infinite alternate}
+@keyframes vluz{from{transform:translateX(-6%)}to{transform:translateX(6%)}}
+/* Botón para compartir la custodia */
+.story .csh{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:12px;z-index:4;display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.28);color:#fff;font-family:var(--fb);font-size:.84rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.story .csh svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (prefers-reduced-motion:reduce){.fl,.halo,.rcus::before,.ph .vitl{animation:none!important}}
+</style>
 <script src="hoy.js"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
@@ -2752,6 +2829,107 @@ async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFul
 /* Si el día de hoy todavía no está (ni preparado ni en hoy.js), se vuelve a buscar cada 10 minutos. */
 setInterval(async()=>{if(!document.hidden&&hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}},10*60*1000);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)return;guardarDias();if(ymd(new Date())!==state.day)nuevoDia();else if(hoyViejo())cargarHoy().then(()=>{if(!hoyViejo())render(true)})});
+/* ===== Diseño 3 (nov 2026): corona de Adviento, vela del día, Ángelus, noche cálida, calendario en colores,
+   vitral en las fiestas grandes, custodia en el Rosario y tarjeta de la custodia para compartir ===== */
+const D3={};
+/* --- Corona de Adviento (SVG) --- */
+D3.corona=(lit,nav)=>{
+  const C=[{x:96,y:112,h:66,c:'#6B3FA0',k:'a'},{x:224,y:112,h:66,c:'#6B3FA0',k:'b'},{x:252,y:140,h:74,c:'#D27C9A',k:'c'},{x:68,y:140,h:74,c:'#6B3FA0',k:'d'}];
+  /* orden de encendido: 1.ª atrás izquierda, 2.ª atrás derecha, 3.ª (rosa) adelante derecha, 4.ª adelante izquierda */
+  const vela=(v,on,blanca)=>{const top=v.y-v.h,w=blanca?20:16;let s='<rect x="'+(v.x-w/2)+'" y="'+top+'" width="'+w+'" height="'+v.h+'" rx="3" fill="'+(blanca?'#FFF8EA':v.c)+'"/><rect x="'+(v.x-w/2)+'" y="'+top+'" width="'+(w*.35)+'" height="'+v.h+'" rx="3" fill="rgba(255,255,255,.18)"/>';
+    s+='<path d="M'+(v.x-w/2)+' '+(top+2)+' q'+(w/2)+' -5 '+w+' 0" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/><line x1="'+v.x+'" y1="'+top+'" x2="'+v.x+'" y2="'+(top-6)+'" stroke="#2A1A0A" stroke-width="1.6"/>';
+    if(on)s+='<circle class="halo" cx="'+v.x+'" cy="'+(top-14)+'" r="26" fill="url(#cgl)"/><path class="fl '+(v.k||'a')+'" d="M'+v.x+' '+(top-30)+' C'+(v.x+9)+' '+(top-18)+' '+(v.x+7)+' '+(top-4)+' '+v.x+' '+(top-3)+' C'+(v.x-7)+' '+(top-4)+' '+(v.x-9)+' '+(top-18)+' '+v.x+' '+(top-30)+'Z" fill="url(#cfl)"/>';
+    return s};
+  let hojas='';for(let i=0;i<96;i++){const a=i/96*Math.PI*2,r=1+((i*37)%7-3)/34,x=160+Math.cos(a)*118*r,y=140+Math.sin(a)*30*r,rot=a*180/Math.PI+(i%2?40:-40),f=['#1F4A2A','#2C6338','#173B21','#3A7445'][i%4];hojas+='<ellipse cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" rx="16" ry="6" fill="'+f+'" transform="rotate('+rot.toFixed(0)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>'}
+  let bayas='';for(let i=0;i<14;i++){const a=i/14*Math.PI*2+.2,x=160+Math.cos(a)*112,y=141+Math.sin(a)*27;bayas+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.4" fill="#B3262E"/><circle cx="'+(x-1).toFixed(1)+'" cy="'+(y-1).toFixed(1)+'" r="1.1" fill="#F7B4B4"/>'}
+  const atras=hojas.split('<ellipse').filter((e,i)=>i&&+e.match(/cy="([\d.]+)"/)[1]<140).map(e=>'<ellipse'+e).join(''),frente=hojas.split('<ellipse').filter((e,i)=>i&&+e.match(/cy="([\d.]+)"/)[1]>=140).map(e=>'<ellipse'+e).join('');
+  return '<svg class="cw" viewBox="0 0 320 196" role="img" aria-label="Corona de Adviento con '+lit+' velas encendidas"><defs><radialGradient id="cfl" cx=".5" cy=".75" r=".7"><stop offset="0" stop-color="#FFFDF0"/><stop offset=".35" stop-color="#FFE48A"/><stop offset=".75" stop-color="#F59E1B"/><stop offset="1" stop-color="#E0561B" stop-opacity=".2"/></radialGradient><radialGradient id="cgl"><stop offset="0" stop-color="#FFD877" stop-opacity=".55"/><stop offset="1" stop-color="#FFD877" stop-opacity="0"/></radialGradient><radialGradient id="cbase"><stop offset="0" stop-color="#FFC75A" stop-opacity="'+(.08+lit*.05)+'"/><stop offset="1" stop-color="#FFC75A" stop-opacity="0"/></radialGradient></defs>'+
+   '<ellipse cx="160" cy="140" rx="160" ry="56" fill="url(#cbase)"/>'+atras+vela(C[0],lit>=1)+vela(C[1],lit>=2)+(nav?vela({x:160,y:128,h:86,k:'b'},true,true):'')+frente+bayas+vela(C[3],lit>=4)+vela(C[2],lit>=3)+'</svg>'};
+D3.coronaHtml=t=>{
+  const L=liturgia(t),A=advHoy(t),nav=L.tiempo==='Navidad';
+  const NOM=['esperanza','paz','alegría','amor'];
+  let lit,kk,tit,sub;
+  if(A){lit=A.w+1;kk='Corona de Adviento · semana '+(A.w+1)+' de 4';tit='Encendemos la vela de la '+NOM[A.w];sub=A.w===2?'La vela rosa: el domingo Gaudete, «alégrense», porque el Señor está cerca.':'Una vela más cada domingo, hasta Navidad.'}
+  else if(nav&&diff(t,new Date(t.getMonth()===0?t.getFullYear()-1:t.getFullYear(),11,25))<=12){lit=4;kk='Navidad';tit='Cristo, luz del mundo';sub='La vela blanca del centro: Jesús ya nació.'}
+  else{const a=adventStart(t.getFullYear()),f=diff(a,t);if(f<1||f>10)return '';lit=0;kk='Corona de Adviento';tit='Se enciende el '+(f===1?'domingo, mañana':'domingo '+a.getDate()+' de '+MESES[a.getMonth()]);sub='Faltan '+f+' días para el primer domingo de Adviento.'}
+  return '<div class="corona"><div class="kk">'+esc(kk)+'</div>'+D3.corona(lit,nav&&!A)+'<h3>'+esc(tit)+'</h3><p>'+esc(sub)+'</p>'+(A?'<div class="vn">'+NOM.map((n,i)=>'<span class="'+(i<lit?'on':'')+'">'+(i+1)+'.ª '+n+'</span>').join('')+'</div>':'')+'</div>'};
+/* --- Vela del día: se enciende al terminar una oración --- */
+const celebrar0=celebrar;
+celebrar=function(){const v=store.get('vela',{});const d=ymd(new Date());store.set('vela',{d,n:(v.d===d?v.n||0:0)+1});return celebrar0.apply(this,arguments)};
+D3.velaSvg='<svg viewBox="0 0 34 52" aria-hidden="true"><defs><radialGradient id="vfl" cx=".5" cy=".75" r=".7"><stop offset="0" stop-color="#FFFDF0"/><stop offset=".4" stop-color="#FFE48A"/><stop offset="1" stop-color="#F08A1B"/></radialGradient></defs><circle class="halo" cx="17" cy="13" r="13" fill="#FFD877" opacity=".35"/><path class="fl" d="M17 1 C22 8 21 17 17 18 C13 17 12 8 17 1Z" fill="url(#vfl)"/><line x1="17" y1="18" x2="17" y2="22" stroke="#3A2A12" stroke-width="1.5"/><rect x="9" y="22" width="16" height="28" rx="3" fill="#FFF4DC" stroke="#E7D3A3"/></svg>';
+D3.velaHtml=()=>{const v=store.get('vela',{});if(v.d!==ymd(new Date()))return '';return '<div class="vela">'+D3.velaSvg+'<div><b>Tu vela de hoy está encendida</b><span>'+(v.n>1?'Terminaste '+v.n+' oraciones hoy.':'Terminaste una oración hoy.')+' Se apaga a medianoche.</span></div></div>'};
+/* --- Ángelus de mediodía, con campana --- */
+D3.angelusHtml=t=>{const m=t.getHours()*60+t.getMinutes();if(m<11*60+30||m>13*60+30)return '';const ok=store.get('ang','')===ymd(t);
+  return '<div class="angelus'+(ok?' ok':'')+'"><div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v1.5"/><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2H5z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg><div><b>'+(ok?'Rezaste el Ángelus':'Es mediodía: el Ángelus')+'</b><div class="small mut">'+(ok?'María te acompaña en la tarde.':'Un minuto para recordar que Dios se hizo hombre.')+'</div></div></div>'+
+  (ok?'':'<div class="row"><button class="btn" data-d3="angv">Rezarlo</button><button class="btn ghost" data-d3="bell">Tocar la campana</button></div><div id="angt" hidden><pre>'+esc(oraT('angelus'))+'</pre><div class="row"><button class="btn" data-d3="angok">Amén</button></div></div>')+'</div>'};
+D3.bell=()=>{try{const A=D3.ac||(D3.ac=new (window.AudioContext||window.webkitAudioContext)());if(A.state==='suspended')A.resume();
+  const toll=t0=>{[[1,.5],[2,.22],[2.4,.16],[3,.12],[4.2,.07],[.5,.18]].forEach(([r,g])=>{const o=A.createOscillator(),v=A.createGain();o.type='sine';o.frequency.value=196*r;v.gain.setValueAtTime(0,t0);v.gain.linearRampToValueAtTime(g*.6,t0+.01);v.gain.exponentialRampToValueAtTime(.0005,t0+4.5/r**.3);o.connect(v);v.connect(A.destination);o.start(t0);o.stop(t0+5)})};
+  const n=A.currentTime+.05;[0,2.2,4.4].forEach(d=>toll(n+d))}catch(e){}};
+/* --- Noche cálida: de 8 p. m. a 5 a. m. en modo claro --- */
+D3.noche=()=>{const h=new Date().getHours(),on=store.get('noche','auto')!=='off'&&(h>=20||h<5);document.documentElement.classList.toggle('noche',on)};
+D3.noche();setInterval(D3.noche,5*60*1000);
+const viewAjustes0=viewAjustes;
+viewAjustes=function(){const n=store.get('noche','auto')!=='off';return viewAjustes0.apply(this,arguments)+'<h3 style="margin:18px 0 6px">Luz de noche</h3><p class="small mut" style="margin:0 0 8px">De 8 p. m. a 5 a. m. la app toma un tono cálido, como de vela, para rezar antes de dormir.</p><div class="seg" role="group" aria-label="Luz de noche"><button data-d3="noche" data-v="auto" aria-pressed="'+n+'">Automática</button><button data-d3="noche" data-v="off" aria-pressed="'+!n+'">Apagada</button></div>'};
+/* --- Calendario del mes en colores litúrgicos --- */
+D3.dia=d=>{const L=liturgia(d),S=santoDia(d,L);return {c:(S&&S.color)||L.color,t:(S&&S.n)||L.titulo||('Feria · '+L.tiempo),r:(S&&S.r)||L.rango||(d.getDay()===0?'Domingo':''),tiempo:L.tiempo}};
+D3.calHtml=()=>{const hoy=new Date(),off=state.calm||0,b=new Date(hoy.getFullYear(),hoy.getMonth()+off,1),n=new Date(b.getFullYear(),b.getMonth()+1,0).getDate(),pad0=(b.getDay()+6)%7;
+  const sel=state.cald&&state.cald.slice(0,7)===ymd(b).slice(0,7)?state.cald:(off===0?ymd(hoy):ymd(b));
+  let g='';['L','M','M','J','V','S','D'].forEach(x=>g+='<span class="dw">'+x+'</span>');for(let i=0;i<pad0;i++)g+='<span></span>';
+  let info=null;
+  for(let i=1;i<=n;i++){const d=new Date(b.getFullYear(),b.getMonth(),i),x=D3.dia(d),k=ymd(d),grande=/Solemnidad|Fiesta/.test(x.r)||d.getDay()===0&&/Navidad|Pascua/.test(x.tiempo)&&false;
+    if(k===sel)info=x;
+    g+='<button class="d'+(/Solemnidad|Fiesta/.test(x.r)?' s':'')+(k===ymd(hoy)?' h':'')+'" style="--c:'+litColor(x.c)+'" data-d3="cald" data-v="'+k+'" aria-pressed="'+(k===sel)+'" aria-label="'+i+': '+esc(x.t)+'">'+i+'</button>'}
+  const sd=new Date(sel+'T12:00');
+  return '<div class="card lcal"><div class="lch"><button data-d3="calm" data-v="-1" aria-label="Mes anterior">‹</button><b>'+esc(cap(MESES[b.getMonth()]))+' '+b.getFullYear()+'</b><button data-d3="calm" data-v="1" aria-label="Mes siguiente">›</button></div><div class="g">'+g+'</div>'+
+   (info?'<div class="info"><i style="background:'+litColor(info.c)+'"></i><div><b>'+esc(cap(fmt(sd)))+'</b><br>'+esc(info.t)+(info.r?' <span class="mut">('+esc(info.r.toLowerCase())+')</span>':'')+'<br><span class="small mut">Color '+esc(info.c)+' · '+esc(info.tiempo)+'</span></div></div>':'')+
+   '<div class="ley">'+[['verde','Verde'],['morado','Morado'],['blanco','Blanco'],['rojo','Rojo'],['rosa','Rosa']].map(([c,n])=>'<span><i style="background:'+litColor(c)+'"></i>'+n+'</span>').join('')+'<span><i style="background:#E1AE1E"></i>Fiesta o solemnidad</span></div></div>'};
+const viewApr0=viewApr;
+viewApr=function(){const h=viewApr0.apply(this,arguments);if(!['cat','ens','con','glos','euc'].includes(state.sub.apr)){const k=h.indexOf('<h2 class="sec">Fechas del año</h2>');if(k>0)return h.slice(0,k)+'<h2 class="sec">Este mes en colores</h2>'+D3.calHtml()+h.slice(k)}return h};
+/* --- Hoy: corona, vela y Ángelus debajo de la portada --- */
+const viewHoy0=viewHoy;
+viewHoy=function(){const h=viewHoy0.apply(this,arguments),t=new Date(),extra=D3.angelusHtml(t)+D3.coronaHtml(t)+D3.velaHtml();if(!extra)return h;const k=h.indexOf('</header>');return k<0?extra+h:h.slice(0,k+9)+extra+h.slice(k+9)};
+/* --- Rosario: custodia con la pintura de cada misterio; vitral en fiestas grandes; botón de compartir la custodia --- */
+D3.MIS={gozosos:['virgen','inmaculada','virgen','inmaculada','basilica'],luminosos:['corazon','virgen','corazon','corazon','cena'],dolorosos:['getsemani','getsemani','pieta','pieta','pieta'],gloriosos:['resurreccion','resurreccion','basilica','inmaculada','inmaculada']};
+const decorate0=decorate;
+decorate=function(){
+  decorate0.apply(this,arguments);
+  const R=D3.MIS[state.rk];if(R)document.querySelectorAll('#rflow .rstep.myst').forEach((s,i)=>{if(s.querySelector('.rcus'))return;const f=FE[R[i%5]],h3=s.querySelector('h3');if(f&&h3)h3.insertAdjacentHTML('afterend','<div class="rcus"><img src="'+feSm(f[0])+'" style="object-position:50% '+(f[4]*100)+'%" alt="" loading="lazy" decoding="async"></div>')});
+  const MH=misaHoy();if(MH.rango==='Solemnidad'||MH.L.octava||state.vitral)document.querySelectorAll('.ph').forEach(p=>{if(!p.querySelector('.vit'))p.insertAdjacentHTML('beforeend','<i class="vit"></i><i class="vitl"></i>')});
+  document.querySelectorAll('.story .stick').forEach(s=>{if(!s.querySelector('.csh'))s.insertAdjacentHTML('beforeend','<button class="csh" data-d3="csh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></svg>Compartir</button>')});
+};
+/* Tarjeta 1080×1920 con la pintura dentro de la custodia */
+D3.compartir=async k=>{const f=FE[k];if(!f)return;const W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  const img=new Image();img.src=feHd(f[0])||'assets/img/'+k+'-4k.webp';try{await img.decode()}catch(e){img.src=feSm(f[0]);try{await img.decode()}catch(e2){}}
+  const bg=g.createRadialGradient(W/2,760,40,W/2,760,1300);bg.addColorStop(0,'#3A2A0C');bg.addColorStop(.45,'#160F05');bg.addColorStop(1,'#0B0803');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const cx=W/2,cy=760,R=300;
+  const gl=g.createRadialGradient(cx,cy,R*.8,cx,cy,R*2.1);gl.addColorStop(0,'rgba(232,185,35,.45)');gl.addColorStop(1,'rgba(232,185,35,0)');g.fillStyle=gl;g.fillRect(0,0,W,H);
+  for(let i=0;i<48;i++){const a=i/48*Math.PI*2,L=(i%2?R*1.45:R*1.75),lg=g.createLinearGradient(cx+Math.cos(a)*R,cy+Math.sin(a)*R,cx+Math.cos(a)*L,cy+Math.sin(a)*L);lg.addColorStop(0,'rgba(255,236,170,.95)');lg.addColorStop(1,'rgba(232,185,35,0)');g.strokeStyle=lg;g.lineWidth=i%2?5:9;g.lineCap='round';g.beginPath();g.moveTo(cx+Math.cos(a)*(R+18),cy+Math.sin(a)*(R+18));g.lineTo(cx+Math.cos(a)*L,cy+Math.sin(a)*L);g.stroke()}
+  const ring=g.createLinearGradient(cx-R,cy-R,cx+R,cy+R);ring.addColorStop(0,'#FBE08A');ring.addColorStop(.5,'#B9820F');ring.addColorStop(1,'#F6DE8D');g.fillStyle=ring;g.beginPath();g.arc(cx,cy,R+22,0,Math.PI*2);g.fill();
+  g.save();g.beginPath();g.arc(cx,cy,R,0,Math.PI*2);g.clip();g.fillStyle='#2a1e08';g.fillRect(cx-R,cy-R,R*2,R*2);
+  if(img.naturalWidth){const s=Math.max(2*R/img.naturalWidth,2*R/img.naturalHeight)*1.05,iw=img.naturalWidth*s,ih=img.naturalHeight*s;g.drawImage(img,cx-iw/2,cy-R-(ih-2*R)*(f[4]||.4),iw,ih)}
+  g.restore();
+  try{await document.fonts.load('64px Marcellus');await document.fonts.load('36px Literata')}catch(e){}
+  g.textAlign='center';g.fillStyle='#F6DE8D';g.font='34px Marcellus, Georgia, serif';g.fillText('C O N T E M P L A',cx,230);
+  g.fillStyle='#fff';g.font='64px Marcellus, Georgia, serif';const words=f[1].split(' ');let line='',lines=[];words.forEach(w=>{const t=line?line+' '+w:w;if(g.measureText(t).width>W-200){lines.push(line);line=w}else line=t});lines.push(line);
+  let y=1230;lines.slice(0,6).forEach(l=>{g.fillText(l,cx,y);y+=82});
+  g.fillStyle='#F6DE8D';g.font='38px Literata, Georgia, serif';g.fillText(f[2],cx,y+30);
+  g.fillStyle='rgba(255,255,255,.55)';g.font='28px Literata, Georgia, serif';g.fillText(f[3].length>60?f[3].slice(0,58)+'…':f[3],cx,H-170);g.fillText('Venga tu Reino',cx,H-120);
+  const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.92));if(!blob)return;const file=new File([blob],'contempla-'+k+'.jpg',{type:'image/jpeg'});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Contempla'});return}}catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)};
+const storyHtml0=storyHtml;
+storyHtml=function(ks){return storyHtml0.apply(this,arguments).replace('<section class="story"','<section class="story" data-ks="'+ks.join(',')+'"')};
+/* Botones del diseño 3 (atributo propio, para no mezclarse con los demás) */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-d3]');if(!b)return;const a=b.dataset.d3,v=b.dataset.v;
+  if(a==='angv'){const x=$('#angt');if(x){x.hidden=!x.hidden;b.textContent=x.hidden?'Rezarlo':'Ocultar'}}
+  else if(a==='angok'){store.set('ang',ymd(new Date()));celebrar();render(true)}
+  else if(a==='bell')D3.bell();
+  else if(a==='noche'){store.set('noche',v);D3.noche();$('#shc').innerHTML=viewAjustes()}
+  else if(a==='calm'){state.calm=(state.calm||0)+(+v);state.cald=null;render(true)}
+  else if(a==='cald'){state.cald=v;document.querySelectorAll('.lcal .d').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===v));const c=b.closest('.lcal');if(c){const t=document.createElement('div');t.innerHTML=D3.calHtml();c.replaceWith(t.firstChild)}}
+  else if(a==='csh'){const st=b.closest('.story'),ks=(st.dataset.ks||'').split(','),pi=[...st.querySelectorAll('.pips i')].findIndex(x=>x.classList.contains('on'));D3.compartir(ks[Math.max(0,pi)])}
+});
+VIEWS.hoy=viewHoy;VIEWS.apr=viewApr;
 document.documentElement.classList.add('boot');
 aplicarPrefs();
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',aplicarPrefs)}catch(e){}
