@@ -6,6 +6,13 @@ UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
 BOT = 'AppRecursos/1.0 (https://github.com/Bennqui; app personal sin fines de lucro)'
 cfg = json.load(open('tareas/recursos.json', encoding='utf-8'))
 os.makedirs('assets', exist_ok=True)
+def movil(im, A=0.6, H=2400):
+    # Versión para teléfono: recorte vertical (centrado) con la proporción de la pantalla y 2400 px de alto.
+    w, h = im.size
+    if w / h > A: x = round((w - h * A) / 2); im = im.crop((x, 0, x + round(h * A), h))
+    w, h = im.size
+    return im if h <= H else im.resize((round(w * H / h), H), Image.LANCZOS)
+
 def get(url, ua=UA, tries=4):
     for i in range(tries):
         try:
@@ -66,6 +73,11 @@ if cfg.get('imagenes'):
             if os.path.getsize(f'assets/img/{key}-4k.webp') < 1600 * 1024 or q <= 60: break
             q -= 6
         fit(1600).save(f'assets/img/{key}.webp', 'WEBP', quality=76, method=6)
+        mv, q = movil(big), 80   # recorte vertical nítido para iPhone, máximo ~430 KB
+        while True:
+            mv.save(f'assets/img/{key}-m.webp', 'WEBP', quality=q, method=6)
+            if os.path.getsize(f'assets/img/{key}-m.webp') < 430 * 1024 or q <= 62: break
+            q -= 6
         tiny = im.resize((32, max(1, round(h * 32 / w))), Image.LANCZOS).filter(ImageFilter.GaussianBlur(1))
         b = io.BytesIO(); tiny.save(b, 'WEBP', quality=40)
         meta[key] = {'w': big.size[0], 'h': big.size[1], 'ph': 'data:image/webp;base64,' + base64.b64encode(b.getvalue()).decode()}
