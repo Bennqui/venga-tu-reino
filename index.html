@@ -205,7 +205,7 @@ details.mini .in{padding:0 0 8px}
 .rstep.on{border-left-color:var(--gold)}
 .rstep.rfin{border-left-color:var(--line);text-align:center}
 .rdots{gap:6px}
-.rdots button{width:23px;height:23px;border-radius:50%;border:2px solid var(--lit);background:none;padding:0}
+.rdots button{width:23px;height:23px;border-radius:50%;border:2px solid var(--lit);background:none;padding:0}.rdots button{position:relative}.rdots button::after{content:'';position:absolute;inset:-7px}
 .rdots button.on{background:var(--lit)}
 /* Apóstol */
 .qa{margin:6px 0 0;padding-left:20px}
@@ -648,7 +648,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=29437d9e"></script>
+<script src="datos.js?v=43952f9a"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -737,6 +737,7 @@ function fijaDe(d){
 function rangoDe(g){return /Solemnidad/.test(g)?'Solemnidad':/Fiesta/.test(g)?'Fiesta':/Memoria/.test(g)?'Memoria':''}
 
 function liturgia(d){
+  d=new Date(d.getFullYear(),d.getMonth(),d.getDate());   /* solo la fecha: la hora del teléfono no debe cambiar el día litúrgico */
   const y=d.getFullYear(),E=easter(y),ash=addDays(E,-46),pent=addDays(E,49),adv=adventStart(y),bap=baptism(y),ck=addDays(adv,-7);
   const wd=d.getDay(),nm=cap(DIAS[wd]),k=diff(d,E);
   let r;
@@ -948,7 +949,7 @@ function viewHoy(){
    '<button class="tile" data-act="go" data-v="orar" data-s="ros">'+ic('rosary','sm')+'<b>Rosario</b><span class="mut">Misterios '+esc(m.n.toLowerCase())+'</span></button>'+
    '<button class="tile" data-act="go" data-v="orar" data-s="ora">'+ic('bell','sm')+'<b>Ángelus</b><span class="mut">A las 12:00</span></button>'+
    '<button class="tile" data-act="go" data-v="dia" data-s="rutina">'+ic('heart','sm')+'<b>Obra del día</b><span class="mut">'+esc(ob[1])+'</span></button></div>';
-  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Examen de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
+  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Oración de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
   h+='<p class="note">El comentario es una paráfrasis para ayudarte a comprender y orar; no reemplaza el texto bíblico.</p>';
   h+=estadoHtml();
   return h;
@@ -1189,6 +1190,7 @@ function viewHoras(){
   h+='<div class="lhh"><div class="kk">Oración oficial de la Iglesia</div><h2>Liturgia de las Horas</h2><p>Con ella la Iglesia santifica cada momento del día, rezando con los Salmos junto a Cristo. Los sacerdotes y consagrados la rezan cada día, y se recomienda mucho a los laicos, sobre todo Laudes y Vísperas.</p>'+
     (sw?'<div class="chips"><span class="chip">Semana '+ROM[sw]+' del salterio</span><span class="chip">'+esc(cap(DIAS[t.getDay()]))+'</span></div>':'<div class="chips"><span class="chip">Hoy se usan textos propios del tiempo</span></div>')+'</div>';
   h+='<div class="row"><a class="btn" href="'+aci+'" target="_blank" rel="noopener noreferrer">Laudes y Vísperas de hoy</a><a class="btn ghost" href="https://www.ibreviary.com/" target="_blank" rel="noopener noreferrer">Todas las horas (iBreviary)</a></div>';
+  h+='<div class="card tint"><b>Completas guiadas, sin internet</b><p class="small" style="margin:4px 0 8px">La oración de antes de dormir, paso a paso: examen, «En tus manos, Señor», Cántico de Simeón, «Visita, Señor, esta habitación» y la Virgen.</p><button class="btn" data-act="go" data-v="dia" data-s="exa">Rezar la oración de la noche</button></div>';
   h+='<p class="note" style="margin-top:0">Los textos se abren en ACI Prensa (semana y día del salterio) o en iBreviary, que trae todas las horas con los propios de cada fiesta. Necesitan internet.</p>';
   h+='<div class="steps">'+HORAS.map(x=>{const on=x.desde&&hr>=x.desde&&hr<x.hasta;return '<div class="hora'+(on?' on':'')+'"><div class="hn"><b>'+esc(x.n)+'</b>'+(on?'<span class="ahora">Ahora</span>':'')+'<span class="small mut">'+esc(x.h)+'</span></div><p class="small">'+esc(x.d)+'</p></div>'}).join('')+'</div>';
   h+='<h2 class="sec">Cómo se reza una hora</h2><div class="card"><ol class="tight" style="margin:0"><li><b>Invocación:</b> «Dios mío, ven en mi auxilio» (o «Señor, ábreme los labios» en la primera hora del día).</li><li><b>Himno.</b></li><li><b>Salmos</b> con su antífona, terminando cada uno con el Gloria.</li><li><b>Lectura breve</b> de la Biblia y un breve silencio.</li><li><b>Cántico del Evangelio</b> (Benedictus, Magníficat o Nunc dimittis, según la hora).</li><li><b>Preces</b> o peticiones, <b>Padre Nuestro</b> y <b>oración final</b>.</li></ol></div>';
@@ -1471,10 +1473,20 @@ function streak(){
 function viewDia(){
   const s=state.sub.dia,t=new Date(),k=ymd(t);
   if(s==='exa'){
-    const e=(store.get('exa',{})[k])||{};
-    return segHtml('dia')+'<div class="card tint"><p style="margin:0">Dedica 5 minutos antes de dormir. Reza un momento, responde despacio y termina con el acto de contrición. Lo que escribas se guarda <b>solo en tu dispositivo</b>.</p></div>'+
-    EXAMEN.map((x,i)=>'<div class="card"><h3><span class="num" style="margin-right:8px">'+(i+1)+'</span>'+esc(x.n)+'</h3><p>'+esc(x.g)+'</p><textarea data-k="'+i+'" aria-label="'+esc(x.n)+'" placeholder="Escribe aquí si quieres…">'+esc(e[i]||'')+'</textarea></div>').join('')+
-    '<div class="card"><h3>Para terminar</h3><p class="prayer">'+esc(ORACIONES.find(o=>o.id==='contri').t)+'</p><div class="row"><button class="btn" data-act="exadone">Terminé mi examen de hoy</button>'+sayBtn('exa',ORACIONES.find(o=>o.id==='contri').t.replace(/\n/g,' '))+'</div><p class="note" id="examsg" style="margin:6px 0 0">'+(rutDone().includes('examen')?'Marcado en tu rutina de hoy.':'')+'</p></div>';
+    const e=(store.get('exa',{})[k])||{},O=id=>ORACIONES.find(o=>o.id===id).t;
+    const paso=(n,tit,body)=>'<div class="card"><h3><span class="num" style="margin-right:8px">'+n+'</span>'+tit+'</h3>'+body+'</div>';
+    const rez=(id,ex)=>'<p class="prayer">'+esc(O(id))+'</p>'+(ex||'')+'<div class="row" style="margin-bottom:0">'+sayBtn('n_'+id,O(id).replace(/\n/g,' '))+'</div>';
+    let n=1,h=segHtml('dia')+'<div class="lhh"><div class="kk">Antes de dormir · unos 10 minutos</div><h2>Oración de la noche</h2><p>Sigue el orden de Completas, la oración con la que la Iglesia cierra el día: miras tu día con Dios, le pides perdón, te pones en sus manos y terminas con la Virgen. Lo que escribas se guarda <b>solo en tu dispositivo</b>.</p></div>';
+    h+=paso(n++,'Señal de la Cruz','<p class="prayer">En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.\n\nDios mío, ven en mi auxilio.\n— Señor, date prisa en socorrerme.\nGloria al Padre, y al Hijo, y al Espíritu Santo.\nComo era en el principio, ahora y siempre, por los siglos de los siglos. Amén.</p>');
+    h+=EXAMEN.map((x,i)=>paso(n++,esc(x.n),'<p>'+esc(x.g)+'</p><textarea data-k="'+i+'" aria-label="'+esc(x.n)+'" placeholder="'+(i===0?'1. …\n2. …\n3. …':'Escribe aquí si quieres…')+'">'+esc(e[i]||'')+'</textarea>')).join('');
+    h+=paso(n++,'Acto de contrición',rez('contri'));
+    h+=paso(n++,'En tus manos, Señor','<p class="small mut">Responsorio de Completas: te pones en manos de Dios, como Jesús en la cruz (Lucas 23, 46).</p><p class="prayer">En tus manos, Señor, encomiendo mi espíritu.\n— En tus manos, Señor, encomiendo mi espíritu.\nTú, el Dios leal, nos librarás.\n— Encomiendo mi espíritu.\nGloria al Padre, y al Hijo, y al Espíritu Santo.\n— En tus manos, Señor, encomiendo mi espíritu.</p>');
+    h+=paso(n++,'Cántico de Simeón',rez('simeon'));
+    h+=paso(n++,'Visita, Señor, esta habitación',rez('visita','<p class="prayer">El Señor todopoderoso nos conceda una noche tranquila y una muerte santa. Amén.</p>'));
+    h+=paso(n++,'Un momento con la Virgen','<p class="small mut">No te acuestes sin saludar a tu Madre. Reza la Salve; si prefieres, el «Bajo tu amparo» o tres Ave Marías.</p>'+rez('salve')+'<details class="mini"><summary>Bajo tu amparo</summary><div class="in"><p class="prayer">'+esc(O('amparo'))+'</p></div></details>');
+    h+=paso(n++,'Ángel de la guarda',rez('guarda','<p class="prayer">En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</p>'));
+    h+='<div class="card tint"><div class="row" style="margin:0"><button class="btn" data-act="exadone">Terminé mi oración de la noche</button></div><p class="note" id="examsg" style="margin:6px 0 0">'+(rutDone().includes('examen')?'Marcado en tu rutina de hoy.':'')+'</p></div>';
+    return h;
   }
   if(s==='conf'){
     const c=store.get('conf',{});let nM=Object.keys(c).filter(x=>c[x]).length;
@@ -2219,7 +2231,7 @@ document.addEventListener('click',e=>{
   else if(a==='speak')speak(v,b);
   else if(a==='yr'){state.year+=+v;render(true)}
   else if(a==='exadone'){celebrar();
-    const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];if(!r[k].includes('examen'))r[k].push('examen');store.set('rut',r);
+    const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];['examen','noche'].forEach(x=>{if(!r[k].includes(x))r[k].push(x)});store.set('rut',r);
     $('#examsg').textContent='Marcado en tu rutina de hoy. Que Dios te dé buen descanso.';
   }
   else if(a==='nov'){state.nov=v||null;if(state.tab!=='orar'||state.sub.orar!=='fie'){state.tab='orar';state.sub.orar='fie';store.set('tab','orar');store.set('sub',state.sub)}render()}

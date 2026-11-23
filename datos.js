@@ -139,6 +139,9 @@ const ORACIONES=[
 {id:'salve',n:'Salve',t:'Dios te salve, Reina y Madre de misericordia,\nvida, dulzura y esperanza nuestra; Dios te salve.\nA ti llamamos los desterrados hijos de Eva;\na ti suspiramos, gimiendo y llorando\nen este valle de lágrimas.\nEa, pues, Señora, abogada nuestra,\nvuelve a nosotros esos tus ojos misericordiosos;\ny después de este destierro,\nmuéstranos a Jesús, fruto bendito de tu vientre.\n¡Oh clemente, oh piadosa, oh dulce Virgen María!\nRuega por nosotros, santa Madre de Dios,\npara que seamos dignos de alcanzar\nlas promesas de nuestro Señor Jesucristo. Amén.',m:'Se reza al terminar el Rosario. Es una oración antigua de súplica a María, nuestra madre y abogada.'},
 {id:'letanias',n:'Letanías de la Virgen (Lauretanas)',t:'Señor, ten piedad.\nCristo, ten piedad.\nSeñor, ten piedad.\nCristo, óyenos.\nCristo, escúchanos.\n\nDios, Padre celestial, — ten piedad de nosotros.\nDios, Hijo, Redentor del mundo, — ten piedad de nosotros.\nDios, Espíritu Santo, — ten piedad de nosotros.\nSantísima Trinidad, un solo Dios, — ten piedad de nosotros.\n\n(A cada invocación se responde: ruega por nosotros.)\nSanta María,\nSanta Madre de Dios,\nSanta Virgen de las Vírgenes,\nMadre de Cristo,\nMadre de la Iglesia,\nMadre de la misericordia,\nMadre de la divina gracia,\nMadre de la esperanza,\nMadre purísima,\nMadre castísima,\nMadre siempre virgen,\nMadre inmaculada,\nMadre amable,\nMadre admirable,\nMadre del buen consejo,\nMadre del Creador,\nMadre del Salvador,\nVirgen prudentísima,\nVirgen digna de veneración,\nVirgen digna de alabanza,\nVirgen poderosa,\nVirgen clemente,\nVirgen fiel,\nEspejo de justicia,\nTrono de la sabiduría,\nCausa de nuestra alegría,\nVaso espiritual,\nVaso digno de honor,\nVaso de insigne devoción,\nRosa mística,\nTorre de David,\nTorre de marfil,\nCasa de oro,\nArca de la Alianza,\nPuerta del cielo,\nEstrella de la mañana,\nSalud de los enfermos,\nRefugio de los pecadores,\nConsuelo de los migrantes,\nConsoladora de los afligidos,\nAuxilio de los cristianos,\nReina de los Ángeles,\nReina de los Patriarcas,\nReina de los Profetas,\nReina de los Apóstoles,\nReina de los Mártires,\nReina de los Confesores,\nReina de las Vírgenes,\nReina de todos los Santos,\nReina concebida sin pecado original,\nReina asunta a los cielos,\nReina del santísimo Rosario,\nReina de la familia,\nReina de la paz,\n\nCordero de Dios, que quitas el pecado del mundo, — perdónanos, Señor.\nCordero de Dios, que quitas el pecado del mundo, — escúchanos, Señor.\nCordero de Dios, que quitas el pecado del mundo, — ten misericordia de nosotros.\n\nV. Ruega por nosotros, santa Madre de Dios.\nR. Para que seamos dignos de alcanzar las promesas de nuestro Señor Jesucristo.\n\nOremos: Te rogamos, Señor Dios nuestro, que nos concedas gozar de continua salud de alma y cuerpo, y que, por la gloriosa intercesión de la bienaventurada siempre Virgen María, seamos librados de las tristezas presentes y gocemos de las alegrías eternas. Por Cristo nuestro Señor. Amén.',m:'Letanías de Loreto, aprobadas por el papa Sixto V en 1587. Se rezan al terminar el Rosario, después de la Salve. Están al día: en 2020 el papa Francisco añadió «Madre de la misericordia», «Madre de la esperanza» y «Consuelo de los migrantes»; también incluyen «Madre de la Iglesia» y «Reina de la familia», que añadió san Juan Pablo II.'},
 {id:'madregr',n:'María, Madre de gracia',t:'María, Madre de gracia, Madre de piedad y de misericordia,\ndefiéndenos de nuestros enemigos\ny ampáranos ahora y en la hora de nuestra muerte. Amén.',m:'Jaculatoria muy rezada en Venezuela y América Latina después del Gloria de cada misterio del Rosario, junto al «Oh Jesús mío». Es opcional.'},
+{id:'simeon',n:'Cántico de Simeón (Nunc dimittis)',t:'Antífona: Sálvanos, Señor, despiertos, protégenos mientras dormimos, para que velemos con Cristo y descansemos en paz.\n\nAhora, Señor, según tu promesa,\npuedes dejar a tu siervo irse en paz.\nPorque mis ojos han visto a tu Salvador,\na quien has presentado ante todos los pueblos:\nluz para alumbrar a las naciones\ny gloria de tu pueblo Israel.\n\nGloria al Padre, y al Hijo, y al Espíritu Santo.\nComo era en el principio, ahora y siempre,\npor los siglos de los siglos. Amén.\n\nAntífona: Sálvanos, Señor, despiertos, protégenos mientras dormimos, para que velemos con Cristo y descansemos en paz.',m:'Son las palabras del anciano Simeón cuando tomó en brazos al Niño Jesús en el Templo (Lucas 2, 29-32). La Iglesia las reza cada noche en Completas, la última hora de la Liturgia de las Horas: como Simeón, terminamos el día en paz porque hemos visto a Jesús.'},
+{id:'visita',n:'Visita, Señor, esta habitación',t:'Visita, Señor, esta habitación:\naleja de ella las insidias del enemigo;\nque tus santos ángeles habiten en ella\ny nos guarden en paz,\ny que tu bendición permanezca siempre con nosotros.\nPor Jesucristo, nuestro Señor. Amén.',m:'Oración final de Completas, muy antigua. Pide a Dios que proteja la casa durante la noche y que sus ángeles nos cuiden mientras dormimos.'},
+{id:'amparo',n:'Bajo tu amparo',t:'Bajo tu amparo nos acogemos,\nsanta Madre de Dios;\nno deseches las súplicas\nque te dirigimos en nuestras necesidades,\nantes bien, líbranos de todo peligro,\noh Virgen gloriosa y bendita.',m:'Es la oración a la Virgen más antigua que se conoce (hacia el siglo III). Se puede rezar al final de Completas en lugar de la Salve, o en cualquier momento de necesidad.'},
 {id:'ofrec',n:'Ofrecimiento del día',t:'Señor, te ofrezco este día:\nmis pensamientos, mis palabras, mi trabajo,\nmis alegrías y mis cansancios.\nQue todo lo que haga hoy sea para tu gloria\ny para el bien de las personas que me rodean.\nAmén.',m:'Oración sencilla para empezar el día. Puedes decirla con tus palabras. Existe también el ofrecimiento tradicional del Apostolado de la Oración.'},
 {id:'comida',n:'Bendición de los alimentos',t:'Bendícenos, Señor,\ny bendice estos alimentos que vamos a tomar,\npor Cristo nuestro Señor. Amén.',m:'Dar gracias antes de comer nos recuerda que todo es don. Al final: «Te damos gracias, Señor, por estos alimentos».'},
 {id:'guarda',n:'Ángel de la guarda',t:'Ángel de la guarda,\ndulce compañía,\nno me desampares\nni de noche ni de día.\nHasta que me pongas\nen paz y alegría\ncon todos los santos,\nJesús, José y María.',m:'Oración tradicional para los niños y para toda la familia, especialmente antes de dormir.'},
@@ -155,7 +158,7 @@ luminosos:{n:'Luminosos',dias:'jueves',list:['El Bautismo de Jesús en el Jordá
 const MIS_DIA=['gloriosos','gozosos','dolorosos','gloriosos','luminosos','dolorosos','gozosos'];
 const ROSARIO_PASOS=['Señal de la Cruz y Acto de contrición.','Credo (Símbolo de los Apóstoles).','Un Padre Nuestro, tres Ave Marías (por la fe, la esperanza y la caridad) y un Gloria.','Cinco decenas. En cada una: anuncia el misterio, reza un Padre Nuestro, diez Ave Marías y un Gloria. Después del Gloria se añade: «Oh Jesús mío, perdona nuestros pecados, líbranos del fuego del infierno, lleva al cielo a todas las almas, especialmente a las más necesitadas de tu misericordia». En Venezuela muchos añaden también «María, Madre de gracia…».','Al final se reza la Salve y las Letanías de la Virgen, y un Padre Nuestro, un Ave María y un Gloria por las intenciones del Papa.'];
 const EXAMEN=[
-{n:'Dar gracias',g:'Recorre el día y recuerda al menos tres cosas buenas: personas, sucesos, comida, una conversación, un rato de calma. Dale gracias a Dios por cada una.'},
+{n:'Tus tres cosas maravillosas de hoy',g:'Recorre el día y elige tres cosas buenas que Dios te regaló: una persona, algo que salió bien, una conversación, un rato de calma. Dale gracias por cada una.'},
 {n:'Pedir luz',g:'Pide al Espíritu Santo que te ayude a mirar el día como Dios lo mira, sin excusarte y sin condenarte.'},
 {n:'Repasar el día',g:'Desde que te levantaste: ¿cuándo sentí cercanía de Dios? ¿Cuándo me aparté de él? ¿Cómo traté a mi familia, a mis compañeros y a quien me pidió algo? ¿Cómo usé mi tiempo, mi lengua y mi dinero?'},
 {n:'Pedir perdón',g:'Reconoce con sencillez lo que no estuvo bien y dilo a Dios. Rézale el acto de contrición. Recuerda que Dios es más misericordioso de lo que imaginas.'},
@@ -199,7 +202,7 @@ const RUTINA=[
 {id:'misa',h:'Si puedes',t:'Participar en la Misa (domingos y fiestas es obligatorio)'},
 {id:'obra',h:'Durante el día',t:'Practicar la obra de misericordia del día'},
 {id:'lectura',h:'Tarde o noche',t:'Lectura espiritual: Biblia, vida de un santo, Catecismo (10 min)'},
-{id:'examen',h:'Noche',t:'Examen de conciencia (pestaña «Mi día»)'},
+{id:'examen',h:'Noche',t:'Oración de la noche: examen, Cántico de Simeón y un momento con la Virgen (pestaña «Mi día» › Noche, 10 min)'},
 {id:'noche',h:'Antes de dormir',t:'Ángel de la guarda y Señal de la Cruz'}
 ];
 const FIJAS=[
@@ -255,7 +258,7 @@ const SUBS={
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['fie','Novenas y fiestas'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO']],
   apr:[['con','Personas y hechos'],['cat','Catecismo'],['anio','Año litúrgico'],['euc','Eucaristía y Misa'],['glos','Glosario'],['ens','Ensayos RC']],
-  dia:[['rutina','Rutina'],['exa','Examen'],['conf','Confesión'],['cua','Cuaderno']]
+  dia:[['rutina','Rutina'],['exa','Noche'],['conf','Confesión'],['cua','Cuaderno']]
 };
 const ICP={
  dove:'<path d="M3 14c3.5 0 6-2.2 7-6 1 2.8 3.2 4.2 6 4.2L21 9l-2.4 4.6C17.4 17.6 14 20 9.8 20 6.5 20 4.3 18.4 3 16.3l4.2-.9"/><circle cx="16.6" cy="10.4" r=".5"/>',
@@ -345,7 +348,7 @@ const SEO=[
  ['Una semana orante',48,'Los momentos de oración de cada semana en el Regnum Christi.',[['Encuentro con Cristo',49],['Hora Santa y Adoración Eucarística',54]],['enc','guia','Ver el Encuentro con Cristo en la app']],
  ['Una vida orante',56,'La oración a lo largo del año litúrgico y en los momentos fuertes de la vida.',[['Adviento y Navidad',57],['Cuaresma, Semana Santa y Pascua',59],['Vía Crucis',61],['Sagrado Corazón de Jesús y Cristo Rey',68],['Renovación de la asociación al Regnum Christi',70],['Ejercicios espirituales',72],['Sacramento de la Reconciliación',73],['Examen de conciencia',74],['Rito de la penitencia',75]],['orar','fie','Ver fiestas y novenas']],
  ['Oraciones para diversos momentos de la vida',77,'Antes y después de comer, por la renovación y la comunión del Regnum Christi, a San Miguel, del apóstol, de los laicos, de novios y esposos, por los hijos, por los enfermos, en las dificultades, antes de un viaje, por un difunto y de acción de gracias.',[['Antes y después de comer',78],['Por la renovación del Regnum Christi',79],['Por la comunión del Regnum Christi',80],['A San Miguel Arcángel',80],['Oración del apóstol',81],['Oración de los laicos',81],['Novios y esposos',82],['Por los hijos y por la vocación de los hijos',84],['Por los enfermos y los que sufren',86],['En las dificultades y antes de un viaje',87],['Por un difunto y por una buena muerte',87],['Acción de gracias',88]]],
- ['Oraciones comunes de la Iglesia',89,'Oración a Jesús crucificado, Alma de Cristo, oración universal de Clemente XI, «Tomad, Señor, y recibid» de San Ignacio, a Cristo Rey, por el Papa y por las vocaciones.',[],['orar','ora','Ver las oraciones de la app']]
+ ['Oraciones comunes de la Iglesia',89,'Oración a Jesús crucificado, Alma de Cristo, oración universal de Clemente XI, «Toma, Señor, y recibe» de San Ignacio, a Cristo Rey, por el Papa y por las vocaciones.',[],['orar','ora','Ver las oraciones de la app']]
 ];
 const ENSAYOS=[
  ['El Encuentro con Cristo en la vida del Regnum Christi','Identidad, fundamento y dinámica','2022','Explica de dónde viene el Encuentro con Cristo, su base bíblica y el sentido de cada una de sus partes. Ideal para entender lo que vives los martes.','https://www.regnumchristi.com/en/wp-content/uploads/2023/05/Ensayo-Encuentro-con-CRISTO-2022.pdf'],
@@ -395,13 +398,13 @@ const FRASES=[
 ['San Agustín','Nos hiciste, Señor, para ti, y nuestro corazón está inquieto hasta que descanse en ti.','Confesiones I,1'],
 ['Santa Teresa de Jesús','Nada te turbe, nada te espante; todo se pasa, Dios no se muda. Quien a Dios tiene nada le falta: solo Dios basta.','Poesías'],
 ['San Juan de la Cruz','A la tarde te examinarán en el amor.','Dichos de luz y amor, 59'],
-['San Juan Pablo II','¡No tengáis miedo! ¡Abrid, más todavía, abrid de par en par las puertas a Cristo!','Homilía de inicio del pontificado, 1978'],
+['San Juan Pablo II','¡No tengan miedo! ¡Abran, más todavía, abran de par en par las puertas a Cristo!','Homilía de inicio del pontificado, 1978'],
 ['Benedicto XVI','No se comienza a ser cristiano por una decisión ética o una gran idea, sino por el encuentro con una Persona.','Deus caritas est, 1'],
 ['San Ireneo de Lyon','La gloria de Dios es el hombre viviente.','Contra las herejías IV,20,7'],
 ['San Ignacio de Loyola','En todo amar y servir.','Ejercicios Espirituales, 233'],
 ['San Josemaría Escrivá','Que busques a Cristo. Que encuentres a Cristo. Que ames a Cristo.','Camino, 382'],
 ['San Agustín','Tarde te amé, hermosura tan antigua y tan nueva, tarde te amé.','Confesiones X,27'],
-['Santa Catalina de Siena','Si sois lo que debéis ser, prenderéis fuego al mundo entero.','Cartas'],
+['Santa Catalina de Siena','Si son lo que deben ser, prenderán fuego al mundo entero.','Cartas'],
 ['San Benito','No anteponer nada al amor de Cristo.','Regla, 4'],
 ['San Jerónimo','Desconocer la Escritura es desconocer a Cristo.','Comentario a Isaías, prólogo'],
 ['San Atanasio','El Hijo de Dios se hizo hombre para que nosotros nos hiciéramos Dios.','Sobre la Encarnación, 54'],
@@ -418,12 +421,12 @@ const FRASES=[
 ['San Pier Giorgio Frassati','Verso l’alto: ¡hacia lo alto!',''],
 ['Santa Teresa de Jesús','Orar es tratar de amistad, estando muchas veces tratando a solas con quien sabemos nos ama.','Libro de la Vida 8,5'],
 ['San Juan de la Cruz','Donde no hay amor, pon amor y sacarás amor.','Carta a la M. María de la Encarnación'],
-['Benedicto XVI','No habéis sido creados para la comodidad, sino para la grandeza.','A los peregrinos alemanes, 2005'],
+['Benedicto XVI','No han sido creados para la comodidad, sino para la grandeza.','A los peregrinos alemanes, 2005'],
 ['San Juan Pablo II','¡Remad mar adentro!','Novo millennio ineunte, 1'],
 ['San Bernardo','Mira la estrella, invoca a María.','Homilías sobre el «Missus est»'],
 ['Santa Isabel de la Trinidad','He encontrado mi cielo en la tierra, porque el cielo es Dios y Dios está en mi alma.','Cartas'],
 ['San Policarpo','Ochenta y seis años hace que le sirvo y ningún mal me ha hecho; ¿cómo puedo blasfemar de mi Rey que me ha salvado?','Martirio de Policarpo, 9'],
-['San Ignacio de Loyola','Tomad, Señor, y recibid toda mi libertad, mi memoria, mi entendimiento y toda mi voluntad.','Ejercicios Espirituales, 234'],
+['San Ignacio de Loyola','Toma, Señor, y recibe toda mi libertad, mi memoria, mi entendimiento y toda mi voluntad.','Ejercicios Espirituales, 234'],
 ['San Pablo VI','El hombre contemporáneo escucha más a gusto a los que dan testimonio que a los que enseñan.','Evangelii nuntiandi, 41'],
 ['Concilio Vaticano II','Cristo manifiesta plenamente el hombre al propio hombre.','Gaudium et spes, 22'],
 ['Santa Teresa Benedicta de la Cruz','Quien busca la verdad, busca a Dios, sea consciente de ello o no.','Cartas'],
@@ -437,9 +440,9 @@ const FRASES=[
 ['San Juan Damasceno','La oración es la elevación del alma a Dios.','Citado en el Catecismo, 2559'],
 ['Santa Teresa de Calcuta','No todos podemos hacer grandes cosas, pero sí cosas pequeñas con gran amor.',''],
 ['San Luis María Grignion de Montfort','A Jesús por María.','Tratado de la verdadera devoción'],
-['San Felipe Neri','Sed buenos, si podéis.',''],
+['San Felipe Neri','Sean buenos, si pueden.',''],
 ['San Pío de Pietrelcina','Reza, espera y no te preocupes.',''],
-['San Juan Bosco','Basta que seáis jóvenes para que yo os ame con toda mi alma.',''],
+['San Juan Bosco','Basta que sean jóvenes para que yo los ame con toda mi alma.',''],
 ['San Agustín','Si lo comprendes, no es Dios.','Sermón 117']
 ];
 const TIEMPO_ORA={
