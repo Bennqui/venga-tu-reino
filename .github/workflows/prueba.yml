@@ -1,0 +1,13 @@
+name: Prueba del calendario litúrgico
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ['index.html','datos.js','tareas/prueba-calendario.js','.github/workflows/prueba.yml']
+jobs:
+  calendario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: node tareas/prueba-calendario.js

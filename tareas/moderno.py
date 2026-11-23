@@ -24,7 +24,7 @@ def quitar_tilde(s):
 # ---------- verbos con cambio de raíz (en las formas con acento en la raíz) ----------
 IE = """pensar cerrar comenzar empezar despertar sentar acertar apretar atravesar calentar confesar encerrar enterrar
 gobernar helar manifestar merendar negar renegar quebrar recomendar encomendar regar sembrar temblar tentar desterrar
-alentar desalentar zaherir apacentar acrecentar enmendar aterrar mentar plegar desplegar fregar segar cegar sosegar asentar errar
+alentar desalentar zaherir concertar desconcertar apacentar acrecentar enmendar aterrar mentar plegar desplegar fregar segar cegar sosegar asentar errar
 tener contener detener entretener mantener obtener retener sostener abstener atener
 querer perder entender atender extender tender encender defender descender ascender trascender verter
 venir convenir intervenir prevenir sobrevenir
@@ -318,7 +318,7 @@ DIRECTO = re.compile(r'^(am|llam|salv|libr|bendig|bendec|bendij|elij|eleg|escog|
                      r'extermin|arranc|lanz|precipit|abandon|desampar|olvid|recuerd|record|pastor|congreg|junt|'
                      r'hic|har|hag|hac|ech|vuelv|volv|devuelv|devolv|lav|limpi|perdon|exhort|import|molest|asust|'
                      r'espant|aterr|atemoriz|asombr|sorprend|confund|avergonz|cubr|vist|vest|cort|derrib|venc|venz|'
-                     r'reprend|corrig|correg|instru|form|engendr|alab|seduj|seduc|adopt|justific|glorific|santific|'
+                     r'reprend|corrig|correg|instru|form|engendr|alab|seduj|seduc|exclu|insult|maldig|maldij|maldec|calumni|golpe|abofete|despreci|desprecia|rechaz|apedre|encarcel|prend|ultraj|vitupe|escarne|azot|flagel|crucific|adopt|justific|glorific|santific|'
                      r'consagr|unj|ung|hiri|suj|sujet|somet|domin|oprim|aflig|afligi|azot|herid)', re.I)
 AUX = set("he has ha hemos han había habían habrá habrán habré hube hubo haya hayan voy va vamos van iba iban "
           "quiero quiere quieren quise puedo puede pueden podrá podré debo debe deben suelo vuelvo vuelve "
@@ -330,6 +330,110 @@ def os_por(sig, sig2, es_vos):
     v = sig
     if v in AUX and sig2: v = sig2
     return 'los' if DIRECTO.match(v or '') else 'les'
+
+# ---------- segunda pasada: futuro de subjuntivo y pronombres al final del verbo ----------
+ENCL_PAS = {'díjole': 'le dijo', 'díjoles': 'les dijo', 'díjome': 'me dijo', 'díjolo': 'lo dijo', 'apareciósele': 'se le apareció',
+            'habíase': 'se había', 'habíanse': 'se habían', 'hacíanse': 'se hacían', 'hacíale': 'le hacía',
+            'fortalecíase': 'se fortalecía', 'prendiósele': 'se le prendió', 'púsose': 'se puso', 'púsole': 'le puso',
+            'púsolo': 'lo puso', 'púsolas': 'las puso', 'repúsole': 'le repuso', 'reprendíanle': 'le reprendían',
+            'respondióle': 'le respondió', 'hízolo': 'lo hizo', 'hízose': 'se hizo', 'dióme': 'me dio',
+            'bendíjolos': 'los bendijo', 'ruégote': 'te ruego', 'hallábase': 'se hallaba', 'levantóse': 'se levantó',
+            'fuése': 'se fue', 'acercóse': 'se acercó', 'díjose': 'se dijo'}
+
+PRET_IRR = {'hub': 'haber', 'hic': 'hacer', 'hiz': 'hacer', 'vin': 'venir', 'dij': 'decir', 'tuv': 'tener', 'quis': 'querer',
+            'pud': 'poder', 'pus': 'poner', 'sup': 'saber', 'estuv': 'estar', 'anduv': 'andar', 'traj': 'traer',
+            'cup': 'caber', 'plugu': 'placer', 'fu': 'ser', 'di': 'dar', 'vi': 'ver', 'oy': 'oír', 'cay': 'caer', 'crey': 'creer',
+            'ley': 'leer', 'conduj': 'conducir', 'produj': 'producir', 'introduj': 'introducir', 'reduj': 'reducir',
+            'bendij': 'bendecir', 'maldij': 'maldecir', 'contradij': 'contradecir', 'predij': 'predecir',
+            'satisfic': 'satisfacer', 'deshic': 'deshacer', 'rehic': 'rehacer'}
+PRES_IRR = {'haber': ('ha', 'han'), 'hacer': ('hace', 'hacen'), 'venir': ('viene', 'vienen'), 'decir': ('dice', 'dicen'),
+            'tener': ('tiene', 'tienen'), 'querer': ('quiere', 'quieren'), 'poder': ('puede', 'pueden'),
+            'poner': ('pone', 'ponen'), 'saber': ('sabe', 'saben'), 'estar': ('está', 'están'), 'ser': ('es', 'son'),
+            'ir': ('va', 'van'), 'dar': ('da', 'dan'), 'ver': ('ve', 'ven'), 'oír': ('oye', 'oyen'), 'caer': ('cae', 'caen'),
+            'traer': ('trae', 'traen'), 'creer': ('cree', 'creen'), 'leer': ('lee', 'leen'), 'caber': ('cabe', 'caben'),
+            'andar': ('anda', 'andan'), 'reír': ('ríe', 'ríen')}
+NO_FS = set('quiere quieren hiere hieren profiere profieren refiere refieren adquiere adquieren requiere requieren '
+            'prefiere prefieren sugiere sugieren difiere difieren confiere confieren infiere infieren transfiere '
+            'transfieren inquiere inquieren digiere digieren adhiere adhieren interfiere zare separe preparen prepare '
+            'declare compare ampare repare mare clare tare zahiere zahieren reparen declaren separen amparen paren pare desampare'.split())
+
+def lema_fs(r, t, infs):
+    """Infinitivo de un futuro de subjuntivo: toc+are -> tocar, pid+iere -> pedir, hub+iere -> haber."""
+    if t.startswith('ar'):
+        if len(r) >= 2 and (r + 'ar') in infs: return r + 'ar'
+        if len(r) >= 3 and (r + 'arar') not in infs and (r + 'rar') not in infs: return r + 'ar'
+        return None
+    if r in ('d', 'v'): return {'d': 'dar', 'v': 'ver'}[r]
+    for pre in ('', 'con', 'de', 're', 'pre', 'pro', 'sobre', 'inter', 'ob', 'sos', 'man', 'dis', 'pro', 'im', 'ex', 'com', 'su', 'pos'):
+        if r.startswith(pre):
+            st = r[len(pre):]
+            if st in PRET_IRR:
+                base = PRET_IRR[st]
+                if pre and base in ('dar', 'ver', 'ser', 'oír', 'leer', 'creer'): continue
+                return pre + base
+    for e in ('er', 'ir'):
+        if r + e in infs: return r + e
+    # -ir con cambio en el pretérito: pid -> pedir, mur -> morir, sirv -> servir, convirt -> convertir
+    for i in range(len(r) - 1, -1, -1):
+        if r[i] == 'u' and i and r[i - 1] in 'gq': continue
+        if r[i] in 'iu':
+            alt = r[:i] + ('e' if r[i] == 'i' else 'o') + r[i + 1:] + 'ir'
+            if alt in infs or alt in CAMBIO: return alt
+            break
+        if r[i] in 'aeo': break
+    if r.endswith('uy'): return r[:-1] + 'ir'          # destruyere -> destruir
+    if r.endswith('ey'): return r[:-1] + 'er'          # poseyere -> poseer
+    if len(r) >= 3: return r + 'er'                    # en 3.ª persona, -er y -ir se conjugan igual
+    return None
+
+def presente_de(inf, plural, modo, sig=''):
+    """Presente de indicativo o subjuntivo, 3.ª persona (él / ellos-ustedes)."""
+    if modo == 'sub':
+        s = tildes(subj3(inf))
+        if plural: return s
+        s = s[:-1]
+        return {'de': 'dé', 'este': 'esté'}.get(s, s) if inf in ('dar', 'estar') else s
+    if inf == 'haber' and not re.search(r'(ado|ido|to|so|cho)$', sig or ''): return 'hay' if not plural else 'hay'
+    for base, (sg, pl) in sorted(PRES_IRR.items(), key=lambda x: -len(x[0])):
+        if inf == base or (inf.endswith(base) and len(base) > 3):
+            pre = inf[:-len(base)]
+            return pre + (pl if plural else sg)
+    raiz, t = inf[:-2], quitar_tilde(inf[-2:])
+    if inf.endswith('uir') and not inf.endswith(('guir', 'quir')): return raiz + ('yen' if plural else 'ye')
+    r = aplicar_cambio(raiz, cambio(inf))
+    if t == 'ar':
+        fin = 'an' if plural else 'a'
+    else:
+        if raiz.endswith('gu') and t == 'ir' and not cambio(inf): r = raiz
+        fin = 'en' if plural else 'e'
+    if inf in ACENTO_I and r[-1] in 'iu': r = r[:-1] + TILDE[r[-1]]
+    return tildes(r + fin)
+
+def si_antes(toks, i, texto):
+    for j in range(i - 1, max(-1, i - 14), -1):
+        if re.search(r'[.;:?!«»“”]', texto[toks[j][1]:toks[j + 1][0]]): return False
+        w = toks[j][2].lower()
+        if w == 'si': return True
+        if w in ('que', 'quien', 'cuando', 'donde', 'adonde', 'cual', 'cuanto', 'cuantos', 'cuanta', 'como', 'mientras', 'hasta', 'antes'):
+            return False
+    return False
+
+def fut_subj(lw, toks, i, texto, infs, sig, prev=''):
+    if lw in NO_FS: return None
+    m = re.match(r'^(.+?)(areis|iereis|yereis|ereis|aren|ieren|yeren|eren|are|iere|yere|ere)$', lw)
+    if not m: return None
+    r, t = m.groups()
+    if t.startswith('y'): r, t = r + 'y', t[1:]
+    if t.startswith('e') and not (r.endswith(('j', 'y')) or r in ('fu', 'tuv')): return None    # dijere, oyere
+    if t.startswith('e'): t = 'i' + t
+    vos = t.endswith('eis')
+    plural = vos or t.endswith('en')
+    tt = t.replace('eis', 'e').replace('en', 'e') if not t.startswith('ar') else ('are')
+    inf = lema_fs(r, 'are' if t.startswith('ar') else 'iere', infs)
+    if not inf: return None
+    if inf == 'ser' and (sig in ('a', 'al', 'hacia', 'adonde', 'donde') or prev in ('adonde', 'donde', 'dondequiera')): inf = 'ir'
+    modo = 'ind' if si_antes(toks, i, texto) else 'sub'
+    return presente_de(inf, plural, modo, sig)
 
 def tildes(n):
     return re.sub(r'^(reun|prohib|rehus|aisl)(?=(a|e|an|en|anse|ense|e|a)$)', lambda m: {'reun': 'reún', 'prohib': 'prohíb', 'rehus': 'rehús', 'aisl': 'aísl'}[m.group(1)], n)
@@ -393,7 +497,9 @@ def modernizar(texto, infs):
             else: n = base + 'les'
         else:
             medio = w[0].isupper() and re.search(r'[%s,;]\s*$' % L, texto[:a]) is not None
-            n = None if medio else (imperativo(w, infs, prev) or verbo(w, infs))
+            if lw in ENCL_PAS: n = ENCL_PAS[lw]
+            elif medio: n = None
+            else: n = fut_subj(lw, toks, i, texto, infs, sig, prev) or imperativo(w, infs, prev) or verbo(w, infs)
         if n and n != lw:
             out.append(texto[pos:a]); out.append(caso(w, tildes(n))); pos = b
     out.append(texto[pos:])
@@ -416,8 +522,14 @@ def infinitivos(textos):
                 if re.search(r'(ar|er|ir|ír)$', x) and len(x) > 2: s.add(x)
     return s
 
+ERRATAS = {('LEV', '25', '25'): ('se empobreceré', 'se empobreciere'), ('JDG', '4', '22'): ('te mostrare', 'te mostraré')}
+
 def modernizar_libros(libros):
     """libros: {cod: {cap: {vers: texto}}} -> mismo formato, en español actual."""
+    # erratas del texto de origen
+    for (lib, c, v), (a, b) in ERRATAS.items():
+        t = libros.get(lib, {}).get(c, {}).get(v)
+        if t and a in t: libros[lib][c][v] = t.replace(a, b)
     infs = infinitivos(t for chs in libros.values() for c in chs.values() for t in c.values())
     infs |= set(CAMBIO) | set(ACENTO_I) | set('loar aullar aclamar prorrumpir uncir ulular moler expurgar anhelar reaccionar aprovechar desmochar '
              'derrumbar educar embrazar repasar engrasar alegar despejar acicalar lamentar forjar'.split())

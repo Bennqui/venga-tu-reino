@@ -205,7 +205,7 @@ details.mini .in{padding:0 0 8px}
 .rstep.on{border-left-color:var(--gold)}
 .rstep.rfin{border-left-color:var(--line);text-align:center}
 .rdots{gap:6px}
-.rdots button{width:23px;height:23px;border-radius:50%;border:2px solid var(--lit);background:none;padding:0}.rdots button{position:relative}.rdots button::after{content:'';position:absolute;inset:-7px}
+.rdots button{width:23px;height:23px;border-radius:50%;border:2px solid var(--lit);background:none;padding:0}.rdots button{position:relative}.mashoy{margin:18px 0}.mashoy>summary{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px}.mashoy>summary .small{font-weight:400}.mashoy>.in{padding-top:4px}.rdots button::after{content:'';position:absolute;inset:-7px}
 .rdots button.on{background:var(--lit)}
 /* Apóstol */
 .qa{margin:6px 0 0;padding-left:20px}
@@ -632,6 +632,11 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 #bienv .dots{display:flex;gap:8px;justify-content:center;margin:0 0 22px}#bienv .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)}#bienv .dots i.on{background:#E8B923;width:22px;border-radius:4px}
 #bienv .row{justify-content:center;gap:10px}
 #bienv .btn.ghost{background:transparent;color:#FBEFD6;border-color:rgba(255,255,255,.3)}
+/* Bienvenida con los colores del tema (claro por defecto) */
+#bienv{color:var(--ink);background:var(--bg);background:radial-gradient(110% 80% at 50% 38%,color-mix(in srgb,var(--lit) 16%,var(--bg)) 0%,var(--bg) 72%)}
+#bienv .kk{color:var(--gold)}#bienv h2{color:var(--ink)}#bienv p{color:var(--ink);opacity:.82}
+#bienv .dots i{background:var(--line)}#bienv .dots i.on{background:var(--lit)}
+#bienv .btn.ghost{color:var(--ink);border-color:var(--line)}#bienv .ca{stroke:var(--lit);filter:drop-shadow(0 0 8px color-mix(in srgb,var(--lit) 35%,transparent))}
 /* Modo oscuro de lo nuevo */
 :root[data-theme=dark] .velad{background:linear-gradient(135deg,#2A2213,#211A10);border-color:#3A3224}
 :root[data-theme=dark] .angelus{background:linear-gradient(160deg,#2A2213,#1E1A13);border-color:#3A3224}
@@ -907,6 +912,7 @@ function viewHoy(){
   const FD=fraseDia(t),frase=X.frase?X.frase.texto:(viejo||!E?FD[1]:'Evangelio según '+E.cita);
   const cita=X.frase?X.frase.cita:(viejo||!E?FD[0]:'');
   const nvh=novenaHoy(t),dk=feHoy(t,nvh);
+  let m2='';
   let h=phHtml(dk,'<i class="dot"></i>'+esc(misaHoy().titulo)+' · '+esc(cap(fmt(t))),(X.frase||viejo||!E?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
@@ -931,24 +937,25 @@ function viewHoy(){
     '<h3>Para vivirlo hoy</h3><ul class="tight">'+(E.hoy||[]).map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>'+
     '<div class="say"><b>Pregunta para el día</b>'+esc(E.pregunta)+'</div>'+
     '<h3>Oración</h3><p class="prayer">'+esc(E.oracion)+'</p>';
-    if(H.lecturas&&H.lecturas.length)h+='<h2 class="sec">Las otras lecturas</h2>'+H.lecturas.filter(l=>l.tipo!=='Evangelio').map(l=>'<details><summary>'+esc(l.tipo)+' <span class="mut" style="font-weight:400">'+esc(l.cita)+'</span></summary><div class="in"><p>'+esc(l.resumen)+'</p></div></details>').join('');
+    if(H.lecturas&&H.lecturas.length)m2+='<h2 class="sec">Las otras lecturas</h2>'+H.lecturas.filter(l=>l.tipo!=='Evangelio').map(l=>'<details><summary>'+esc(l.tipo)+' <span class="mut" style="font-weight:400">'+esc(l.cita)+'</span></summary><div class="in"><p>'+esc(l.resumen)+'</p></div></details>').join('');
   }else{
     h+='<div class="card"><p style="margin-top:0">El comentario de hoy se publica cada día pasada la medianoche. Si aún no aparece, vuelve a abrir la página en un momento.</p><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
   }
   /* 4. Para aprender hoy */
-   {const C=conoHoy();if(C&&(C.persona||C.hecho))h+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
-  {const P=catPlan(t);if(P){const K=catDe(window.HOY,ymd(t)),leido=!!store.get('catl',{})[ymd(t)];h+='<div class="conk">El Catecismo en un año · día '+P.dia+'</div><div class="nextf"><button data-act="go" data-v="apr" data-s="cat"><span class="fd ci">'+ic(leido?'check':'book','sm')+'</span><span><span class="small mut">Números '+P.desde+' a '+P.hasta+(leido?' · leído':'')+'</span><br><b>'+esc(K?K.tema:'Leer los números de hoy')+'</b></span></button></div>'}}
+   {const C=conoHoy();if(C&&(C.persona||C.hecho))m2+='<div class="conk">Conoce tu Iglesia · hoy</div><div class="nextf">'+[['persona','Persona del día','flame'],['hecho','Hecho del día','book']].filter(x=>C[x[0]]).map(x=>'<button data-act="go" data-v="apr" data-s="con"><span class="fd ci">'+ic(x[2],'sm')+'</span><span><span class="small mut">'+x[1]+'</span><br><b>'+esc(C[x[0]].nombre)+'</b><br><span class="small mut">'+esc(C[x[0]].tipo||'')+'</span></span></button>').join('')+'</div>'}
+  {const P=catPlan(t);if(P){const K=catDe(window.HOY,ymd(t)),leido=!!store.get('catl',{})[ymd(t)];m2+='<div class="conk">El Catecismo en un año · día '+P.dia+'</div><div class="nextf"><button data-act="go" data-v="apr" data-s="cat"><span class="fd ci">'+ic(leido?'check':'book','sm')+'</span><span><span class="small mut">Números '+P.desde+' a '+P.hasta+(leido?' · leído':'')+'</span><br><b>'+esc(K?K.tema:'Leer los números de hoy')+'</b></span></button></div>'}}
   /* 5. Intención del Papa, frase del día y próximas fiestas */
-  {const P=papaMes(t);if(P)h+='<div class="conk">Intención del Papa · '+esc(MESES[t.getMonth()])+'</div><div class="card tint" style="margin-top:8px"><b>'+esc(P[0])+'</b><p class="small" style="margin:4px 0 0">'+esc(P[1])+'</p><p class="small mut" style="margin:6px 0 0"><a href="https://www.popesprayer.va/" target="_blank" rel="noopener noreferrer">Red Mundial de Oración del Papa</a></p></div>'}
-   h+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
+  {const P=papaMes(t);if(P)m2+='<div class="conk">Intención del Papa · '+esc(MESES[t.getMonth()])+'</div><div class="card tint" style="margin-top:8px"><b>'+esc(P[0])+'</b><p class="small" style="margin:4px 0 0">'+esc(P[1])+'</p><p class="small mut" style="margin:6px 0 0"><a href="https://www.popesprayer.va/" target="_blank" rel="noopener noreferrer">Red Mundial de Oración del Papa</a></p></div>'}
+   m2+='<figure class="quote"><span class="qm">“</span><blockquote>'+esc(fr[1])+'</blockquote><figcaption><b>'+esc(fr[0])+'</b>'+(fr[2]?' · '+esc(fr[2]):'')+'</figcaption><div class="kk">Frase del día</div></figure>';
    const nx=proximas(t,3).filter(f=>!nh||f!==nh.f).slice(0,2);
-   if(nx.length)h+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
+   if(nx.length)m2+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
   /* 6. Para tu día */
   const m=misDia(t,L),ob=OBRAS[(Math.floor((t-new Date(t.getFullYear(),0,0))/864e5))%OBRAS.length];
   h+='<h2 class="sec">Para tu día</h2><div class="tiles">'+
    '<button class="tile" data-act="go" data-v="orar" data-s="ros">'+ic('rosary','sm')+'<b>Rosario</b><span class="mut">Misterios '+esc(m.n.toLowerCase())+'</span></button>'+
    '<button class="tile" data-act="go" data-v="orar" data-s="ora">'+ic('bell','sm')+'<b>Ángelus</b><span class="mut">A las 12:00</span></button>'+
    '<button class="tile" data-act="go" data-v="dia" data-s="rutina">'+ic('heart','sm')+'<b>Obra del día</b><span class="mut">'+esc(ob[1])+'</span></button></div>';
+  if(m2){const ab=!!store.get('mashoy',0);h+='<details class="mashoy"'+(ab?' open':'')+'><summary><b>Más de hoy</b><span class="small mut">Lecturas, persona y hecho, Catecismo, Papa, frase y fiestas</span></summary><div class="in">'+m2+'</div></details>'}
   h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Oración de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
   h+='<p class="note">El comentario es una paráfrasis para ayudarte a comprender y orar; no reemplaza el texto bíblico.</p>';
   h+=estadoHtml();
@@ -1072,7 +1079,8 @@ function conoCarga(f){
 }
 function conoPrev(){
   const t=new Date(),F=[];for(let i=1;i<=10;i++)F.push(addDays(t,-i));
-  Promise.all(F.map(d=>conoCarga(ymd(d)))).then(R=>{
+  /* solo los días que existen (según dias/linea.json), para no pedir archivos que no hay */
+  lineaCarga().then(Li=>{const hay=Li&&Li.dias?new Set(Li.dias):null;return Promise.all(F.map(d=>hay&&!hay.has(ymd(d))?null:conoCarga(ymd(d))))}).then(R=>{
     const el=$('#conoprev');if(!el)return;
     const h=R.map((c,i)=>{if(!c||!(c.persona||c.hecho))return '';const d=F[i],k=ymd(d);
       return '<details class="fi"><summary><span class="fd"><b>'+d.getDate()+'</b><i>'+esc(MESES[d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(c.persona?c.persona.nombre:'')+'</b><br><span class="small mut">'+esc(c.hecho?c.hecho.nombre:'')+'</span></span></summary><div class="in">'+conoHtml(c.persona,'persona',k)+conoHtml(c.hecho,'hecho',k)+'</div></details>'}).join('');
@@ -1758,6 +1766,7 @@ function textoLectura(cita){
 }
 function abrirLectura(d){if(!d.open||d.dataset.ok)return;const t=d.querySelector('.lectxt');d.dataset.ok=1;
   textoLectura(d.dataset.cita).then(h=>{t.innerHTML=h}).catch(()=>{delete d.dataset.ok;t.innerHTML='<p class="small mut">No pude cargar el texto. Revisa tu conexión o usa el enlace oficial.</p>'})}
+document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('mashoy'))store.set('mashoy',e.target.open?1:0)},true);
 document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target);else if(e.target.open&&e.target.querySelector&&e.target.querySelector('.mistxt'))misLlenar(e.target)},true);
 function lecCompleta(l,lnk){
   const of='<a class="btn ghost" style="min-height:40px;margin-top:8px" href="'+esc(misaURL())+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy ↗</a>';
@@ -2306,7 +2315,14 @@ async function guardarDias(){
   if(Date.now()-diasT<36e5||!('caches' in window)||!navigator.serviceWorker||!navigator.serviceWorker.controller)return;
   diasT=Date.now();const t=new Date();
   fetch('dias/linea.json').catch(()=>{});
-  for(let i=1;i<=8;i++){const u='dias/'+ymd(addDays(t,i))+'.js';try{if(!(await caches.match(u)))await fetch(u)}catch(e){}}
+  /* Los días preparados (hasta el primero que todavía no existe) y los libros de la Biblia de sus lecturas, para leerlas sin internet */
+  const libros=new Set();
+  const citas=H=>{try{(H.lecturas||[]).concat(H.evangelio?[{cita:H.evangelio.cita}]:[]).forEach(l=>{const P=citaPartes(l.cita||'');if(P)libros.add(P.code)})}catch(e){}};
+  if(window.HOY)citas(window.HOY);
+  for(let i=1;i<=7;i++){const u='dias/'+ymd(addDays(t,i))+'.js';
+    try{let r=await caches.match(u);if(!r){r=await fetch(u);if(!r.ok)break}
+      const tx=await r.clone().text();citas(JSON.parse(tx.replace(/^\s*window\.HOY\s*=\s*/,'').replace(/;\s*$/,'')))}catch(e){break}}
+  for(const c of libros){const u='biblia/'+c+'.json';try{if(!(await caches.match(u)))await fetch(u)}catch(e){}}
   for(const k in FE){const u=feSm(FE[k][0]);try{if(!(await caches.match(u)))await fetch(u,{mode:'no-cors'})}catch(e){}}
 }
 async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFullYear();state.nov=null;render();if(hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}diasT=0;guardarDias()}

@@ -157,3 +157,7 @@ Antes de publicar el día, compara la **celebración, el rango y el color** que 
 ## Textos fijos de la app (`datos.js`)
 
 Las oraciones, santos, misterios, novenas y pinturas están en `datos.js`, separados del código. Si alguna vez cambias ese archivo, ejecuta después `node tareas/version-datos.js` para que el iPhone descargue la versión nueva.
+
+## Prueba del calendario
+
+Si cambias `index.html` o `datos.js`, ejecuta `node tareas/prueba-calendario.js`: revisa 40 fechas clave (Adviento, Navidad, Bautismo, Cuaresma, Semana Santa, Pascua, Ascensión y Corpus en domingo, Pentecostés, fiestas de Venezuela), los ciclos y los misterios del Rosario, a distintas horas del día. Si dice «fallos», no publiques. La misma prueba corre sola en GitHub con cada cambio.
