@@ -118,6 +118,11 @@ function validarCodigo(codigo, fechaEsperada) {
   pide(txt(H.titulo, 5), 'falta titulo');
   pide(txt(H.fuente) && /^https:\/\//.test(H.fuente), 'fuente debe ser un enlace https');
   pide(esFecha(H.actualizado), 'actualizado debe ser AAAA-MM-DD');
+  if (H.lecturasURL !== undefined) pide(/^https:\/\/\S+$/.test(H.lecturasURL || ''), 'lecturasURL debe ser un enlace https (o se omite)');
+  /* español de América: nada de «vosotros» en lo que se muestra */
+  {const plano = JSON.stringify(H).replace(/"(url|fuente|lecturasURL)":"[^"]*"/g, '');
+   const v = plano.replace(/\b(dieci|veinti)séis\b/gi, '').match(/\b(vosotros|vosotras|vuestr[oa]s?|os\s+(digo|doy|he|ha|ruego)|[a-záéíóú]+(áis|éis))\b/i);
+   pide(!v, 'usa el español de América («ustedes»), no «' + (v && v[0]) + '»');}
 
   const L = Array.isArray(H.lecturas) ? H.lecturas : [];
   pide(L.length >= 3, 'lecturas debe tener al menos primera lectura, salmo y Evangelio');

@@ -1,13 +1,18 @@
-name: Prueba del calendario litúrgico
+name: Prueba del calendario y revisión de los días
 on:
   workflow_dispatch: {}
   push:
     branches: [main]
-    paths: ['index.html','datos.js','tareas/prueba-calendario.js','.github/workflows/prueba.yml']
+    paths: ['index.html','datos.js','dias/**','tareas/**','.github/workflows/prueba.yml']
 jobs:
-  calendario:
+  revisar:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      TZ: America/Caracas
     steps:
       - uses: actions/checkout@v4
-      - run: node tareas/prueba-calendario.js
+      - name: Calendario litúrgico de la app
+        run: node tareas/prueba-calendario.js
+      - name: Días preparados (hoy y los 7 siguientes)
+        run: node tareas/revisar-dias.js

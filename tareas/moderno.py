@@ -277,8 +277,9 @@ def imperativo(w, infs, prev):
     if lw in NO_VERBO: return None
     if lw in IRR: return IRR[lw]
     if lw == 'sed':
-        sig = SIG.get('w', '')
-        return 'sean' if prev not in SED_SUST and (sig.endswith('s') or sig in ('pues', 'conmigo', 'también')) else None
+        sig, pausa = SIG.get('w', ''), SIG.get('pausa', False)
+        if prev in SED_SUST or (pausa and sig not in ('pues', 'sí')): return None
+        return 'sean' if (sig.endswith('s') or sig in ('pues', 'conmigo', 'también', 'como', 'en', 'sí')) else None
     if lw in ('id', 'oíd', 'idos'): return IRR[lw]
     m = re.match(r'(.*[aeií])d(%s)?$' % ENC[1:-1] if False else r'(.*[aeií])d' + ENC + r'?$', lw)
     if m and len(lw) > 2:
@@ -304,7 +305,7 @@ def imperativo(w, infs, prev):
 
 SIG = {}
 SED_SUST = set("la de su mi tu con sin por nuestra vuestra gran tanta tengo tienes tiene tienen tenía tenían tuvo "
-               "tuvieron tendrá tendrán tendré padecen padece mucha esa esta y ni que mi el tenéis tengáis tendréis teníais padecéis morir muero muera morirán muriendo".split())
+               "tuvieron tendrá tendrán tendré padecen padece mucha esa esta y ni que mi el tenéis tengáis tendréis teníais padecéis morir muero muera morirán muriendo sufrimos sufrían sufriendo padecieron padecido grandísima teniendo tienes tenga hambre".split())
 
 # «os» con verbos que llevan complemento directo de persona -> «los»; si no, «les» (les digo, les doy)
 DIRECTO = re.compile(r'^(am|llam|salv|libr|bendig|bendec|bendij|elij|eleg|escog|escoj|conoc|conozc|guard|llev|traig|traj|'
@@ -318,18 +319,41 @@ DIRECTO = re.compile(r'^(am|llam|salv|libr|bendig|bendec|bendij|elij|eleg|escog|
                      r'extermin|arranc|lanz|precipit|abandon|desampar|olvid|recuerd|record|pastor|congreg|junt|'
                      r'hic|har|hag|hac|ech|vuelv|volv|devuelv|devolv|lav|limpi|perdon|exhort|import|molest|asust|'
                      r'espant|aterr|atemoriz|asombr|sorprend|confund|avergonz|cubr|vist|vest|cort|derrib|venc|venz|'
-                     r'reprend|corrig|correg|instru|form|engendr|alab|seduj|seduc|exclu|insult|maldig|maldij|maldec|calumni|golpe|abofete|despreci|desprecia|rechaz|apedre|encarcel|prend|ultraj|vitupe|escarne|azot|flagel|crucific|adopt|justific|glorific|santific|'
+                     r'reprend|preced|enví|corrig|correg|instru|form|engendr|alab|seduj|seduc|exclu|insult|maldig|maldij|maldec|calumni|golpe|abofete|despreci|desprecia|rechaz|apedre|encarcel|prend|ultraj|vitupe|escarne|azot|flagel|crucific|adopt|justific|glorific|santific|'
                      r'consagr|unj|ung|hiri|suj|sujet|somet|domin|oprim|aflig|afligi|azot|herid)', re.I)
 AUX = set("he has ha hemos han había habían habrá habrán habré hube hubo haya hayan voy va vamos van iba iban "
           "quiero quiere quieren quise puedo puede pueden podrá podré debo debe deben suelo vuelvo vuelve "
           "vendré vendrá vino viene hago hace estoy está están no".split())
 
-def os_por(sig, sig2, es_vos):
+DET = set('el la los las un una unos unas este esta estos estas esto eso esa ese esos esas aquel aquella aquello mi mis '
+          'tu tus su sus nuestro nuestra nuestros nuestras todo toda todos todas '
+          'algo nada cuanto cuanta cuantos cuantas pan agua tierra paz vida gloria'.split())
+
+def tras(toks, j, texto, n):
+    """Palabras que siguen al token j, sin cruzar una puntuación."""
+    out = []
+    for x in range(j + 1, min(len(toks), j + 1 + n)):
+        if re.search(r'[.,;:!?«»“”()]', texto[toks[x - 1][1]:toks[x][0]]): break
+        w = toks[x][2]
+        out.append(w if w[:1].isupper() and len(out) else w.lower())
+    return out
+
+def os_por(sig, sig2, es_vos, despues=()):
+    """«os» ante un verbo que no es de «ustedes»: «los» si ustedes son el complemento directo (los amo),
+    «les» si reciben algo (les doy la paz, les digo)."""
     if es_vos: return 'se'
     if sig in ('lo', 'la', 'los', 'las'): return 'se'
-    v = sig
-    if v in AUX and sig2: v = sig2
-    return 'los' if DIRECTO.match(v or '') else 'les'
+    v, k = sig, 0
+    if v in AUX and sig2: v, k = sig2, 1
+    if not DIRECTO.match(v or ''): return 'les'
+    if re.match(r'^env[ií]', v or '') and despues[k:k + 1] and despues[k].lower() not in ('como', 'a', 'al'): return 'les'   # «les envío profetas» / «los envío como ovejas»
+    obj = list(despues[k:k + 3])
+    if not obj or obj[0].lower() not in DET: return 'los'
+    if len(obj) > 1 and obj[0].lower() in ('el', 'la', 'su') and obj[1][:1].isupper(): return 'los'
+    obj = [w.lower() for w in obj]   # «los prueba el Señor» (sujeto)
+    # «los odien los hombres», «los devorará la tierra»: si el artículo concuerda con el verbo, es el sujeto
+    if obj[0] in ('el', 'la', 'los', 'las') and (obj[0] in ('los', 'las')) == sig.endswith('n'): return 'los'
+    return 'les'
 
 # ---------- segunda pasada: futuro de subjuntivo y pronombres al final del verbo ----------
 ENCL_PAS = {'díjole': 'le dijo', 'díjoles': 'les dijo', 'díjome': 'me dijo', 'díjolo': 'lo dijo', 'apareciósele': 'se le apareció',
@@ -338,7 +362,7 @@ ENCL_PAS = {'díjole': 'le dijo', 'díjoles': 'les dijo', 'díjome': 'me dijo', 
             'púsolo': 'lo puso', 'púsolas': 'las puso', 'repúsole': 'le repuso', 'reprendíanle': 'le reprendían',
             'respondióle': 'le respondió', 'hízolo': 'lo hizo', 'hízose': 'se hizo', 'dióme': 'me dio',
             'bendíjolos': 'los bendijo', 'ruégote': 'te ruego', 'hallábase': 'se hallaba', 'levantóse': 'se levantó',
-            'fuése': 'se fue', 'acercóse': 'se acercó', 'díjose': 'se dijo'}
+            'fuése': 'se fue', 'acercóse': 'se acercó', 'díjose': 'se dijo', 'estimádselo': 'estímenlo', 'daos': 'dense'}
 
 PRET_IRR = {'hub': 'haber', 'hic': 'hacer', 'hiz': 'hacer', 'vin': 'venir', 'dij': 'decir', 'tuv': 'tener', 'quis': 'querer',
             'pud': 'poder', 'pus': 'poner', 'sup': 'saber', 'estuv': 'estar', 'anduv': 'andar', 'traj': 'traer',
@@ -471,11 +495,12 @@ def modernizar(texto, infs):
         sig2 = toks[i + 2][2].lower() if i + 2 < len(toks) else ''
         n = None
         SIG['w'] = sig
+        SIG['pausa'] = bool(i + 1 < len(toks) and re.search(r'[.,;:!?]', texto[b:toks[i + 1][0]]))
         if lw in ('vosotros', 'vosotras'): n = 'ustedes'
         elif lw in POSES:
             despues = texto[b:toks[i + 1][0]] if i + 1 < len(toks) else texto[b:]
             pospuesto = bool(re.match(r'\s*[^\s%s]' % L, despues)) or not sig or sig in FUNC
-            if prev in ('el', 'la', 'los', 'las', 'lo', 'es', 'son', 'sea', 'sean', 'será', 'serán'): n = SUYO[lw]
+            if prev in ('el', 'la', 'los', 'las', 'lo') or (prev in ('es', 'son', 'sea', 'sean', 'será', 'serán') and pospuesto): n = SUYO[lw]
             elif pospuesto and prev not in ('de', 'a', 'en', 'con', 'por', 'para', 'y', 'o', 'que', 'todo', 'toda', 'todos', 'todas'): n = 'de ustedes'
             else: n = POSES[lw]
         elif lw == 'os' and sig in ('unos', 'mutuamente'):
@@ -483,7 +508,8 @@ def modernizar(texto, infs):
         elif lw == 'os' and prev == 'se':
             n = 'les'
         elif lw == 'os':
-            n = os_por(sig, sig2, es_vos_verbo(sig, infs) or (sig in ('lo', 'la', 'los', 'las') and es_vos_verbo(sig2, infs)))
+            n = os_por(sig, sig2, es_vos_verbo(sig, infs) or (sig in ('lo', 'la', 'los', 'las') and es_vos_verbo(sig2, infs)),
+                       tras(toks, i + 1, texto, 4))
         elif lw.endswith('ndoos'):
             base = lw[:-2]
             n = base + ('los' if DIRECTO.match(sin_tilde(base)) else 'les')
@@ -492,8 +518,8 @@ def modernizar(texto, infs):
             n = None
         elif (re.search(r'(ar|er|ir|ír)os$', lw) and lw[:-2] in infs and lw[:-2] not in NO_INF) or lw == 'iros':
             base = lw[:-2]
-            if sig in ('unos', 'mutuamente') or lw == 'iros' or vos_antes(toks, i, texto, infs): n = base + 'se'
-            elif DIRECTO.match(base) and not (base.startswith('envi') and sig == 'a'): n = base + 'los'
+            if sig in ('unos', 'mutuamente') or lw == 'iros' or vos_antes(toks, i, texto, infs) or REFLEX_INF.match(base): n = base + 'se'
+            elif DIRECTO.match(base) and not (base.startswith('envi') and sig == 'a') and sig not in DET: n = base + 'los'
             else: n = base + 'les'
         else:
             medio = w[0].isupper() and re.search(r'[%s,;]\s*$' % L, texto[:a]) is not None
@@ -509,6 +535,8 @@ def modernizar(texto, infs):
 # gerundios reflexivos: «apartándoos» -> «apartándose» (el sujeto son ustedes)
 REFLEX_GER = re.compile(r'^(apart|postr|acord|separ|alleg|arrim|comport|rebel|apoy|convirti|apropi|esforz|despoj|'
                         r'sujet|ocup|adhiri|opon|entreteni|corrompi|guard|deshaci)', re.I)
+
+REFLEX_INF = re.compile(r'^(levantar|apartar|acordar|acercar|alegrar|regocijar|arrepentir|convertir|humillar|someter|despojar|revestir|vestir|esforzar|gloriar|jactar|quejar|atrever|postrar|prosternar|reconciliar|abstener)$')
 
 def es_vos_reflexivo_gerundio(base):
     return bool(REFLEX_GER.match(sin_tilde(base).replace('a', 'a')) or REFLEX_GER.match(base))
@@ -532,7 +560,8 @@ def modernizar_libros(libros):
         if t and a in t: libros[lib][c][v] = t.replace(a, b)
     infs = infinitivos(t for chs in libros.values() for c in chs.values() for t in c.values())
     infs |= set(CAMBIO) | set(ACENTO_I) | set('loar aullar aclamar prorrumpir uncir ulular moler expurgar anhelar reaccionar aprovechar desmochar '
-             'derrumbar educar embrazar repasar engrasar alegar despejar acicalar lamentar forjar'.split())
+             'derrumbar educar embrazar repasar engrasar alegar despejar acicalar lamentar forjar confortar dilatar encaminar '
+             'maravillar apurar admirar ensanchar pasmar apegar desaprobar horrorizar emborrachar circular salmodiar preceder'.split())
     return {k: {c: {v: modernizar(t, infs) for v, t in vs.items()} for c, vs in chs.items()} for k, chs in libros.items()}
 
 if __name__ == '__main__':

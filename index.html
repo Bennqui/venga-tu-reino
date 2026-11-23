@@ -930,7 +930,7 @@ function viewHoy(){
   /* 3. El Evangelio */
   if(ok){
     const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
-    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+
+    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+citasHoy(H)+
     '<div class="reading">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
     '<details><summary>Para ubicarnos</summary><div class="in"><p>'+esc(E.contexto)+'</p></div></details>'+
     '<details><summary>Qué quiere decir hoy</summary><div class="in"><p>'+esc(E.significado)+'</p></div></details>'+
@@ -1654,7 +1654,12 @@ function misaHoy(){
   };
 }
 /* Lecturas como se proclaman en la Misa: Leccionario de la Conferencia del Episcopado Mexicano (el mismo del Misal de Venezuela), publicado con permiso por los obispos de EE. UU. */
-function misaURL(d){const s=typeof d==='string'?d:ymd(d||new Date());return 'https://bible.usccb.org/es/bible/lecturas/'+s.slice(5,7)+s.slice(8,10)+s.slice(2,4)+'.cfm'}
+function misaURL(d){const s=typeof d==='string'?d:ymd(d||new Date());const H=window.HOY;
+  if(H&&H.fecha===s&&H.lecturasURL)return H.lecturasURL;   /* el día preparado puede indicar otra página si allá se celebra otra fiesta */
+  return 'https://bible.usccb.org/es/bible/lecturas/'+s.slice(5,7)+s.slice(8,10)+s.slice(2,4)+'.cfm'}
+/* Las citas de hoy en Venezuela, para comprobar que la página oficial muestra las mismas */
+function citasHoy(H){if(!H||!H.lecturas)return '';
+  return '<p class="small mut" style="margin:6px 2px 0">Lecturas de hoy en Venezuela: '+H.lecturas.map(l=>esc(l.cita)).join(' · ')+'. Si la página oficial muestra otras, es porque en EE. UU. hoy se celebra otra fiesta.</p>'}
 function evSegun(c){const m=(c||'').match(/^(Mateo|Marcos|Lucas|Juan)/i);return m?'san '+cap(m[1].toLowerCase()):'san…'}
 function guiaPasos(){
   const D=misaHoy(),L=[{intro:true,s:'Antes de empezar',p:{n:'La Misa de hoy'}}];
