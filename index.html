@@ -648,7 +648,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=b7ac5850"></script>
+<script src="datos.js?v=29437d9e"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -1827,9 +1827,10 @@ function rosPasos(k){
     P.push({t:nm,bead:big,w:'En la cuenta grande',myst:i,b:'<div class="say"><b>Anuncia en voz alta</b><span class="prayer">'+esc(nm)+': '+esc(M.list[i])+'.</span></div>'+misHtml(k,i)});
     P.push({t:'Padre Nuestro',bead:big,w:'En la misma cuenta grande',b:pr('padre'),say:'padre'});
     P.push({t:'Diez Ave Marías',bead:'d'+(i+1)+'_',n:10,w:'Las diez cuentas pequeñas',b:'<p class="small mut">Mientras rezas, imagina la escena: '+esc(md[i][0].charAt(0).toLowerCase()+md[i][0].slice(1))+'</p>'+pr('ave'),say:'ave'});
-    P.push({t:'Gloria y «Oh Jesús mío»',bead:i<4?'G'+(i+1):'M',w:'Al terminar las diez, antes de la siguiente cuenta grande',b:pr('gloria')+'<div class="say"><b>Y añade</b><span class="prayer">'+esc(FATIMA)+'</span></div>'});
+    P.push({t:'Gloria y «Oh Jesús mío»',bead:i<4?'G'+(i+1):'M',w:'Al terminar las diez, antes de la siguiente cuenta grande',b:pr('gloria')+'<div class="say"><b>Y añade</b><span class="prayer">'+esc(FATIMA)+'</span></div><details class="mini"><summary>Si quieres, añade «María, Madre de gracia»</summary><div class="in"><p class="prayer">'+esc(oraT('madregr'))+'</p></div></details>'});
   }
   P.push({t:'Salve',bead:'M',w:'En la medalla, donde se unen las cuentas',b:'<p class="small mut">Terminaste las cinco decenas. Ahora saludas a María como Reina y Madre.</p>'+pr('salve'),say:'salve'});
+  P.push({t:'Letanías de la Virgen',bead:'M',w:'Sigue en la medalla',b:'<p class="small mut">Después de cada invocación a María se responde «ruega por nosotros». Incluyen las tres que añadió el papa Francisco en 2020.</p>'+pr('letanias'),say:'letanias'});
   P.push({t:'Por el Papa (opcional)',bead:'M',w:'Sigue en la medalla',b:'<p>Reza un Padre Nuestro, un Ave María y un Gloria por las intenciones del Papa.</p>'});
   P.push({t:'Señal de la Cruz',bead:'X',w:'Vuelve a la cruz',b:'<div class="say"><b>Di</b><span class="prayer">En el nombre del Padre, y del Hijo, y del Espíritu Santo. Amén.</span></div>'});
   return P;
