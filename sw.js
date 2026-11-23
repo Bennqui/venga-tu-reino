@@ -1,7 +1,7 @@
 /* Venga tu Reino: funciona sin conexión. La app y sus textos se guardan en el teléfono.
    hoy.js (el Evangelio del día) se busca primero en internet y, si no hay, se usa el último guardado.
    dias/AAAA-MM-DD.js (los días preparados por adelantado) y dias/linea.json (línea del tiempo) también se guardan, para que la app cambie de día sin internet. */
-const V='vtr-v29';
+const V='vtr-v30';
 /* Las pinturas en versión para teléfono se guardan en segundo plano, para que después abran al instante. */
 const IMGS=['basilica','cena','corazon','getsemani','inmaculada','pieta','plaza','resurreccion','virgen'].map(k=>'assets/img/'+k+'-m.webp');
 const BASE=['./','index.html','hoy.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','assets/fuentes.css','assets/fonts/Marcellus-400-normal-latin.woff2','assets/fonts/Literata-400-normal-latin.woff2','assets/fonts/Literata-600-normal-latin.woff2'];

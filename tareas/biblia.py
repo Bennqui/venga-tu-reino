@@ -3,8 +3,11 @@ a biblia/<COD>.json: {"c": {"cap": {"vers": "texto"}}}.
 - Solo los 73 libros del canon católico.
 - Numeración de la Vulgata (Salmo 22 = «El Señor es mi pastor», como el primer número del Leccionario: «Salmo 22(23)»).
 - Joel y Malaquías se pasan a los capítulos que usa el Leccionario.
-- El nombre divino «Yahvé» se escribe «el Señor», como pide la Iglesia en la liturgia (Congregación para el Culto Divino, 2008)."""
+- El nombre divino «Yahvé» se escribe «el Señor», como pide la Iglesia en la liturgia (Congregación para el Culto Divino, 2008).
+- Español actual de América: «ustedes» en lugar de «vosotros», con sus verbos y pronombres (tareas/moderno.py)."""
 import json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from moderno import modernizar_libros
 src, out = sys.argv[1], sys.argv[2]
 os.makedirs(out, exist_ok=True)
 CODES = {'Genesis':'GEN','Exodus':'EXO','Leviticus':'LEV','Numbers':'NUM','Deuteronomy':'DEU','Joshua':'JOS','Judges':'JDG','Ruth':'RUT',
@@ -64,8 +67,10 @@ for b in d['books']:
         chs['3'] = {str(int(v) - 27): chs['2'].pop(v) for v in list(chs['2']) if int(v) >= 28}
         if tres: chs['4'] = tres
     libros[code] = chs
+libros = modernizar_libros(libros)
+for code, chs in libros.items():
     json.dump({'c': chs}, open(os.path.join(out, code + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 json.dump({'fuente': 'La Sagrada Biblia, versión de Mons. Juan Straubinger (Biblia Platense, 1944-1951), dominio público; texto del módulo SpaPlatense de CrossWire',
-           'notas': 'Canon católico (73 libros). Salmos con la numeración de la Vulgata, como el primer número del Leccionario. El nombre «Yahvé» se escribe «el Señor».',
+           'notas': 'Canon católico (73 libros). Salmos con la numeración de la Vulgata, como el primer número del Leccionario. El nombre «Yahvé» se escribe «el Señor». Español actual de América: «ustedes» en lugar de «vosotros».',
            'libros': {k: len(v) for k, v in libros.items()}}, open(os.path.join(out, 'indice.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 print(len(libros), 'libros')

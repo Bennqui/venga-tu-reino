@@ -901,7 +901,7 @@ function misDia(t,L){
 }
 function viewHoy(){
   const t=new Date(),L=liturgia(t),H=window.HOY,ok=!!(H&&H.evangelio),viejo=ok&&H.fecha!==ymd(t);
-  const link='https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(t);
+  const link=misaURL(t);
   const X=ok&&!viejo&&H.encuentro||{},E=ok?H.evangelio:null;
   const FD=fraseDia(t),frase=X.frase?X.frase.texto:(viejo||!E?FD[1]:'Evangelio según '+E.cita);
   const cita=X.frase?X.frase.cita:(viejo||!E?FD[0]:'');
@@ -923,7 +923,7 @@ function viewHoy(){
   /* 3. El Evangelio */
   if(ok){
     const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
-    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Leer el texto bíblico</a></div>'+
+    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+
     '<div class="reading">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
     '<details><summary>Para ubicarnos</summary><div class="in"><p>'+esc(E.contexto)+'</p></div></details>'+
     '<details><summary>Qué quiere decir hoy</summary><div class="in"><p>'+esc(E.significado)+'</p></div></details>'+
@@ -1526,11 +1526,11 @@ function viewEnc(){
 }
 function step(n,title,body,open){return '<details'+(open?' open':'')+'><summary><span class="num">'+n+'</span>'+esc(title)+'</summary><div class="in">'+body+'</div></details>'}
 function pasosHoy(H,N){
-  const k=ymd(new Date()),E=H.evangelio,X=H.encuentro||{},link='https://www.ewtn.com/es/catolicismo/lecturas/'+k;
+  const k=ymd(new Date()),E=H.evangelio,X=H.encuentro||{},link=misaURL(k);
   const ver=X.ver||ENC_GEN.ver,juz=X.juzgar||ENC_GEN.juzgar,act=X.actuar||ENC_GEN.actuar;
   const P=[];
   P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="mut" style="margin-top:10px">Haz ahora, con tus palabras, un acto de fe, esperanza y caridad. Puede ser así de sencillo:</p><p class="prayer">Creo, Jesús, espero en ti y te amo.</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
-  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(H.fuente||link)+'" target="_blank" rel="noopener noreferrer">Abrir el texto bíblico</a></div>'+
+  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+
     (X.frase?'<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>':'')+
     '<div class="lbl">¿Qué palabra o frase te tocó a ti?</div>'+ta('palabra','Escríbela aquí…',N.palabra,70)});
   P.push({ic:'flame',t:'Las luces',b:'<p class="mut">Ideas para meditar. Quédate con la que más te hable.</p><ul class="tight">'+(X.luces||[E.significado]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Tu luz: lo que sientes que Dios te dice</div>'+ta('luz','En dos o tres frases…',N.luz)});
@@ -1546,7 +1546,7 @@ function pasosHoy(H,N){
 }
 function viewEncPaso(){
   const t=new Date(),k=ymd(t),H=encData(),N=encNotes(k);
-  if(!H)return '<div class="card"><p style="margin-top:0">El paso a paso de hoy se prepara cada día pasada la medianoche junto con el Evangelio. Si aún no aparece, vuelve a abrir la página en un momento.</p><div class="row"><a class="btn" href="https://www.ewtn.com/es/catolicismo/lecturas/'+k+'" target="_blank" rel="noopener noreferrer">Leer el Evangelio de hoy</a><button class="btn ghost" data-act="sub" data-v="guia">Cómo es un Encuentro</button></div></div>';
+  if(!H)return '<div class="card"><p style="margin-top:0">El paso a paso de hoy se prepara cada día pasada la medianoche junto con el Evangelio. Si aún no aparece, vuelve a abrir la página en un momento.</p><div class="row"><a class="btn" href="'+misaURL(k)+'" target="_blank" rel="noopener noreferrer">Leer el Evangelio de hoy</a><button class="btn ghost" data-act="sub" data-v="guia">Cómo es un Encuentro</button></div></div>';
   const E=H.evangelio,X=H.encuentro||{};
   const hist=store.get('hist',{});if(!hist[k]||hist[k].cita!==E.cita){hist[k]={cita:E.cita,frase:(X.frase&&X.frase.texto)||''};store.set('hist',hist)}
   const P=pasosHoy(H,N),tot=P.length;
@@ -1630,9 +1630,11 @@ function misaHoy(){
     homilia:M.homilia||(ok&&H.evangelio?H.evangelio.pregunta:''),
     fieles:M.fieles||'Te rogamos, óyenos.',
     aviso:M.aviso||'',
-    link:(ok&&H.fuente)||('https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(t))
+    link:misaURL(t)
   };
 }
+/* Lecturas como se proclaman en la Misa: Leccionario de la Conferencia del Episcopado Mexicano (el mismo del Misal de Venezuela), publicado con permiso por los obispos de EE. UU. */
+function misaURL(d){const s=typeof d==='string'?d:ymd(d||new Date());return 'https://bible.usccb.org/es/bible/lecturas/'+s.slice(5,7)+s.slice(8,10)+s.slice(2,4)+'.cfm'}
 function evSegun(c){const m=(c||'').match(/^(Mateo|Marcos|Lucas|Juan)/i);return m?'san '+cap(m[1].toLowerCase()):'san…'}
 function guiaPasos(){
   const D=misaHoy(),L=[{intro:true,s:'Antes de empezar',p:{n:'La Misa de hoy'}}];
@@ -1745,8 +1747,10 @@ function textoLectura(cita){
 function abrirLectura(d){if(!d.open||d.dataset.ok)return;const t=d.querySelector('.lectxt');d.dataset.ok=1;
   textoLectura(d.dataset.cita).then(h=>{t.innerHTML=h}).catch(()=>{delete d.dataset.ok;t.innerHTML='<p class="small mut">No pude cargar el texto. Revisa tu conexión o usa el enlace oficial.</p>'})}
 document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target);else if(e.target.open&&e.target.querySelector&&e.target.querySelector('.mistxt'))misLlenar(e.target)},true);
-function lecCompleta(l,lnk){if(!citaPartes(l.cita))return lnk;
-  return '<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer la lectura completa</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Texto de la Biblia católica de Mons. Juan Straubinger (dominio público). En Misa se proclama la traducción oficial del Leccionario: las palabras pueden variar un poco. '+lnk+'</p></details>'}
+function lecCompleta(l,lnk){
+  const of='<a class="btn ghost" style="min-height:40px;margin-top:8px" href="'+esc(misaURL())+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy ↗</a>';
+  if(!citaPartes(l.cita))return of;
+  return of+'<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer aquí (Biblia Straubinger)</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Biblia católica de Mons. Juan Straubinger (dominio público), con el español actualizado por la app («ustedes» en lugar de «vosotros»). El botón de arriba abre el texto oficial del Leccionario, el que se proclama en la Misa en Venezuela; los días de santos propios de EE. UU. puede mostrar otras lecturas.</p></details>'}
 function lecBox(p,D){
   const k={'Primera lectura':[D.l1,'Hoy se lee'],'Salmo responsorial':[D.sal,'Salmo de hoy'],'Segunda lectura':[D.l2,'Hoy se lee'],'Evangelio':[D.ev,'Evangelio de hoy']}[p.n];
   if(!k)return '';const l=k[0],lnk='<a class="small" style="display:inline-block;margin-top:4px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer el texto completo ↗</a>';
@@ -1768,7 +1772,7 @@ function viewChuleta(){
     '<ul class="hoyl">'+yes(D.gloria,'Gloria')+yes(D.segunda,'2.ª lectura')+yes(D.credo,'Credo')+'</ul>';
   if(D.aviso)h+='<div class="nota"><b>Nota importante</b>'+esc(D.aviso)+'</div>';
   if(D.ev)h+='<div class="hoyb"><b>Evangelio de hoy</b><div class="cita">'+esc(D.ev.cita)+'</div><p>'+esc(D.ev.resumen)+'</p></div>';
-  else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Todavía no ha cargado el de hoy. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button> o <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">verlo en EWTN</a></p></div>';
+  else h+='<div class="hoyb"><b>Evangelio de hoy</b><p class="small">Todavía no ha cargado el de hoy. <button class="btn ghost" style="min-height:40px;margin-top:6px" onclick="location.reload()">Volver a cargar</button> o <a href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">verlo como en la Misa</a></p></div>';
   if(D.relato)h+='<div class="hoyb par"><b>'+esc(D.relato.tipo||'El relato')+': '+esc(D.relato.titulo||'')+'</b><p>'+esc(D.relato.resumen||'')+'</p>'+(D.relato.ensenanza?'<p><b style="color:var(--ink)">Lo que enseña:</b> '+esc(D.relato.ensenanza)+'</p>':'')+'</div>';
   if(D.homilia)h+='<div class="hoyb"><b>En la homilía, escucha</b><p>'+esc(D.homilia)+'</p></div>';
   h+='</div><div class="row"><button class="btn big" data-act="gto" data-v="0">Seguir la Misa paso a paso</button></div>';
@@ -1935,7 +1939,7 @@ function viewApo(){
   }
   /* Meditación de hoy */
   let h=segHtml('apo');
-  if(!H)return h+'<div class="card"><p style="margin-top:0">La meditación de hoy se prepara cada día pasada la medianoche con el Evangelio.</p><a class="btn ghost" href="https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(new Date())+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
+  if(!H)return h+'<div class="card"><p style="margin-top:0">La meditación de hoy se prepara cada día pasada la medianoche con el Evangelio.</p><a class="btn ghost" href="'+misaURL()+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
   const E=H.evangelio,X=H.encuentro||{};
   h+='<div class="card imp"><div class="lbl" style="margin-top:0">Evangelio · '+esc(E.cita)+'</div>'+(X.frase?'<p class="prayer" style="font-family:var(--fd);font-size:1.3rem;line-height:1.4;margin:4px 0">«'+esc(X.frase.texto)+'»</p>':'')+'</div>';
   if(X.luces)h+='<h2 class="sec">Puntos para meditar o predicar</h2><div class="card"><ol class="tight" style="margin:0">'+X.luces.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
@@ -1945,7 +1949,7 @@ function viewApo(){
   const qs=[].concat(X.ver||[],X.juzgar||[]);
   if(qs.length)h+='<details><summary>Preguntas para acompañar a otros hoy</summary><div class="in"><ul class="qa">'+qs.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div></details>';
   h+='<h2 class="sec">Lectio divina en 4 tiempos</h2><div class="card"><p><b>Leer:</b> ¿qué dice el texto?</p><p><b>Meditar:</b> ¿qué me dice a mí?</p><p><b>Orar:</b> ¿qué le respondo a Dios?</p><p style="margin-bottom:0"><b>Contemplar:</b> quedarme en silencio con Él.</p></div>';
-  h+='<div class="row"><a class="btn ghost" href="'+esc(H.fuente||'https://www.ewtn.com/es/catolicismo/lecturas/'+ymd(new Date()))+'" target="_blank" rel="noopener noreferrer">Texto bíblico completo</a></div>';
+  h+='<div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>';
   return h;
 }
 
