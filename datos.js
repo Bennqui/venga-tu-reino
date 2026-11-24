@@ -277,7 +277,7 @@ const TABS=[
 const NAV=[{id:'hoy'},{id:'enc',g:['enc','apo']},{id:'misa'},{id:'orar',g:['orar','dia']},{id:'apr'}];
 const GN={enc:'Encuentro',apo:'Apóstol',orar:'Orar',dia:'Mi día'};
 const SUBS={
-  enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
+  enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['otros','Otros días'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['ado','Adoración'],['mas','Más']],
