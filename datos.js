@@ -256,7 +256,7 @@ const SUBS={
   enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
-  orar:[['ora','Oraciones'],['ros','Rosario'],['fie','Novenas y fiestas'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO']],
+  orar:[['ora','Oraciones'],['ros','Rosario'],['ado','Adoración'],['fie','Novenas y fiestas'],['int','Intenciones'],['hor','Liturgia de las Horas'],['seo','Libro SEO']],
   apr:[['con','Personas y hechos'],['cat','Catecismo'],['anio','Año litúrgico'],['euc','Eucaristía y Misa'],['glos','Glosario'],['ens','Ensayos RC']],
   dia:[['rutina','Rutina'],['exa','Noche'],['conf','Confesión'],['cua','Cuaderno']]
 };

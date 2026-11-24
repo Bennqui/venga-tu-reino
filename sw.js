@@ -1,11 +1,11 @@
 /* Venga tu Reino: funciona sin conexión. La app y sus textos se guardan en el teléfono.
    hoy.js (el Evangelio del día) se busca primero en internet y, si no hay, se usa el último guardado.
    dias/AAAA-MM-DD.js (los días preparados por adelantado) y dias/linea.json (línea del tiempo) también se guardan, para que la app cambie de día sin internet. */
-const V='vtr-v33';
+const V='vtr-v34';
 /* Las pinturas en versión para teléfono se guardan en segundo plano, para que después abran al instante. */
 const IMGS=['basilica','cena','corazon','getsemani','inmaculada','pieta','plaza','resurreccion','virgen'].map(k=>'assets/img/'+k+'-m.webp');
-/* Los Evangelios, los Hechos y los Salmos se guardan al instalar, para «Leer aquí» sin internet. */
-const BIB=['MAT','MRK','LUK','JHN','ACT','PSA'].map(k=>'biblia/'+k+'.json');
+/* (nov 2026) La Biblia ya no se guarda: las lecturas se abren en Vatican News. */
+const BIB=[];
 const BASE=['./','index.html','hoy.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','assets/fuentes.css','assets/fonts/Marcellus-400-normal-latin.woff2','assets/fonts/Literata-400-normal-latin.woff2','assets/fonts/Literata-600-normal-latin.woff2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(BASE).then(()=>{c.addAll(IMGS).catch(()=>{});c.addAll(BIB).catch(()=>{})})).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});

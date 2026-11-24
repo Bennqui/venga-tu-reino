@@ -653,7 +653,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=43952f9a"></script>
+<script src="datos.js?v=04c136fc"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -930,7 +930,7 @@ function viewHoy(){
   /* 3. El Evangelio */
   if(ok){
     const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
-    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+citasHoy(H)+
+    h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>'+citasHoy(H)+
     '<div class="reading">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
     '<details><summary>Para ubicarnos</summary><div class="in"><p>'+esc(E.contexto)+'</p></div></details>'+
     '<details><summary>Qué quiere decir hoy</summary><div class="in"><p>'+esc(E.significado)+'</p></div></details>'+
@@ -1331,8 +1331,41 @@ function viewOrar(){
   if(state.sub.orar==='hor')return viewHoras();
   if(state.sub.orar==='seo')return viewSEO();
   if(state.sub.orar==='ros')return segHtml('orar')+viewRosario();
+  if(state.sub.orar==='ado')return segHtml('orar')+viewAdoracion();
   return segHtml('orar')+tiempoHtml()+'<p class="note" style="margin-top:0">Textos tradicionales de uso común. Pueden variar levemente según el país. Las oraciones marcadas como «escrita por la app» son propias, en el espíritu del Regnum Christi.</p>'+ORACIONES.map(o=>
     '<details><summary>'+esc(o.n)+'</summary><div class="in"><p class="prayer">'+esc(o.t)+'</p><div class="row">'+sayBtn('o_'+o.id,o.t.replace(/\n/g,' '))+'</div><div class="lbl">Qué significa</div><p>'+esc(o.m)+'</p></div></details>').join('');
+}
+/* ===== ADORACIÓN EUCARÍSTICA / HORA SANTA (nov 2026) =====
+   La app da el orden y lo que haces; los textos largos se abren en fuentes católicas (ACI Prensa, Vatican News). */
+const ADO_L={
+  letanias:'https://www.aciprensa.com/Oracion/santisimoaltar.htm',
+  bendito:'https://www.aciprensa.com/recurso/482/bendito-sea-dios',
+  adoro:'https://www.aciprensa.com/Oracion/tomas3.htm',
+  himnos:'https://www.aciprensa.com/Oracion/himnoseuca.htm',
+  visita:'https://www.aciprensa.com/Oracion/ligorio.htm',
+  jp2:'https://www.aciprensa.com/Oracion/jpadoracion.htm',
+  rito:'https://www.aciprensa.com/fiestas/sagradocorazon/horasanta.htm'
+};
+function viewAdoracion(){
+  const ln=(u,t)=>'<a class="btn ghost" style="min-height:40px" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(t)+' ↗</a>';
+  const pr=id=>'<div class="say"><b>Reza</b><span class="prayer">'+esc(oraT(id))+'</span></div>';
+  let h='<div class="lhh"><div class="kk">Jesús presente en la Eucaristía</div><h2>Adoración y Hora Santa</h2><p>En el Sagrario, y en la custodia cuando está expuesto, Jesús está real y verdaderamente presente. Adorarlo es estar con Él como con un amigo: hablarle, escucharlo y, sobre todo, quedarse en silencio.</p></div>';
+  h+='<div class="card tint"><b>¿Cuánto tiempo?</b><p class="small" style="margin:4px 0 0">Una Hora Santa dura una hora, pero una visita de 15 minutos ya es oración verdadera. Usa los pasos que te sirvan; no hace falta rezarlo todo.</p></div>';
+  h+='<h2 class="sec">Paso a paso</h2>';
+  const P=[
+    ['Al llegar','<p>Haz una genuflexión: la rodilla derecha hasta el suelo, mirando al Sagrario o a la custodia. Arrodíllate o siéntate en silencio.</p><div class="say"><b>Puedes decir</b><span class="prayer">Bendito y alabado sea Jesús en el Santísimo Sacramento del altar.</span></div>'],
+    ['Silencio','<p>Unos minutos sin decir nada. Mira a Jesús y déjate mirar por Él. Si te distraes, vuelve con calma.</p>'],
+    ['Escucha su Palabra','<p>Lee despacio el Evangelio de hoy y quédate con una frase.</p><div class="row">'+ln(misaURL(),'Evangelio de hoy en Vatican News')+'</div>'],
+    ['Habla con Él','<p>Con tus palabras, en cuatro momentos:</p><ul class="tight"><li><b>Adoración:</b> dile quién es Él para ti.</li><li><b>Perdón:</b> pídele perdón por tus faltas.</li><li><b>Gracias:</b> por lo concreto de tu día.</li><li><b>Súplica:</b> por tu familia, tu equipo del Regnum Christi, Venezuela y quien te lo pidió.</li></ul><details class="mini"><summary>Si quieres, el Acto de contrición</summary><div class="in"><p class="prayer">'+esc(oraT('contri'))+'</p></div></details>'],
+    ['Letanías al Santísimo','<p>Invocaciones a Jesús Eucaristía; a cada una se responde «ten misericordia de nosotros» o «te rogamos, óyenos».</p><div class="row">'+ln(ADO_L.letanias,'Letanías al Santísimo Sacramento')+'</div>'],
+    ['Otras oraciones (elige)','<div class="row">'+ln(ADO_L.adoro,'Adoro te devote (santo Tomás)')+ln(ADO_L.visita,'Visita al Santísimo (san Alfonso)')+ln(ADO_L.jp2,'Adoración de san Juan Pablo II')+'</div><details class="mini"><summary>Alma de Cristo</summary><div class="in"><p class="prayer">'+esc(oraT('anima'))+'</p></div></details><p class="small mut" style="margin:6px 0 0">También puedes rezar el Rosario delante del Santísimo.</p><button class="btn ghost" data-act="go" data-v="orar" data-s="ros">Ir al Rosario</button>'],
+    ['Comunión espiritual','<p>Si no has comulgado hoy, pídele que venga a tu corazón.</p>'+pr('comesp')],
+    ['Al despedirte','<p>Un propósito pequeño para hoy. Luego otra genuflexión antes de salir.</p><div class="row">'+ln(ADO_L.bendito,'«Bendito sea Dios» (alabanzas)')+'</div>']
+  ];
+  h+=P.map((x,i)=>step(i+1,x[0],x[1],i===0)).join('');
+  h+='<h2 class="sec">Si hay exposición y bendición</h2><div class="card"><p style="margin-top:0">Cuando el sacerdote o el diácono expone el Santísimo en la custodia, la celebración suele seguir este orden:</p><ol class="tight"><li><b>Exposición:</b> se coloca la custodia en el altar; se canta y se inciensa.</li><li><b>Adoración:</b> lecturas, oración y silencio.</li><li><b>Himno y oración:</b> por ejemplo «Adoremos postrados» (Tantum ergo).</li><li><b>Bendición:</b> el sacerdote bendice con la custodia; todos de rodillas.</li><li><b>Alabanzas:</b> «Bendito sea Dios…», y se guarda el Santísimo en el Sagrario.</li></ol><p class="small mut" style="margin-bottom:0">Sigue a la comunidad y lo que indique el sacerdote: cada parroquia tiene sus cantos.</p><div class="row" style="margin-bottom:0">'+ln(ADO_L.rito,'Rito de exposición y bendición')+ln(ADO_L.himnos,'Himnos eucarísticos')+'</div></div>';
+  h+='<p class="note">Los textos largos se abren en ACI Prensa y Vatican News, fuentes católicas. Necesitan internet.</p>';
+  return h;
 }
 /* --- Aprender --- */
 
@@ -1550,7 +1583,7 @@ function pasosHoy(H,N){
   const ver=X.ver||ENC_GEN.ver,juz=X.juzgar||ENC_GEN.juzgar,act=X.actuar||ENC_GEN.actuar;
   const P=[];
   P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="mut" style="margin-top:10px">Haz ahora, con tus palabras, un acto de fe, esperanza y caridad. Puede ser así de sencillo:</p><p class="prayer">Creo, Jesús, espero en ti y te amo.</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
-  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>'+
+  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>'+
     (X.frase?'<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>':'')+
     '<div class="lbl">¿Qué palabra o frase te tocó a ti?</div>'+ta('palabra','Escríbela aquí…',N.palabra,70)});
   P.push({ic:'flame',t:'Las luces',b:'<p class="mut">Ideas para meditar. Quédate con la que más te hable.</p><ul class="tight">'+(X.luces||[E.significado]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Tu luz: lo que sientes que Dios te dice</div>'+ta('luz','En dos o tres frases…',N.luz)});
@@ -1653,13 +1686,14 @@ function misaHoy(){
     link:misaURL(t)
   };
 }
-/* Lecturas como se proclaman en la Misa: Leccionario de la Conferencia del Episcopado Mexicano (el mismo del Misal de Venezuela), publicado con permiso por los obispos de EE. UU. */
+/* Lecturas y Evangelio del día: se abren en Vatican News, el portal oficial de noticias de la Santa Sede (nov 2026).
+   La app ya no muestra el texto bíblico dentro: solo la cita, un resumen y el enlace a la fuente oficial. */
 function misaURL(d){const s=typeof d==='string'?d:ymd(d||new Date());const H=window.HOY;
   if(H&&H.fecha===s&&H.lecturasURL)return H.lecturasURL;   /* el día preparado puede indicar otra página si allá se celebra otra fiesta */
-  return 'https://bible.usccb.org/es/bible/lecturas/'+s.slice(5,7)+s.slice(8,10)+s.slice(2,4)+'.cfm'}
+  return 'https://www.vaticannews.va/es/evangelio-de-hoy/'+s.slice(0,4)+'/'+s.slice(5,7)+'/'+s.slice(8,10)+'.html'}
 /* Las citas de hoy en Venezuela, para comprobar que la página oficial muestra las mismas */
 function citasHoy(H){if(!H||!H.lecturas)return '';
-  return '<p class="small mut" style="margin:6px 2px 0">Lecturas de hoy en Venezuela: '+H.lecturas.map(l=>esc(l.cita)).join(' · ')+'. Si la página oficial muestra otras, es porque en EE. UU. hoy se celebra otra fiesta.</p>'}
+  return '<p class="small mut" style="margin:6px 2px 0">Lecturas de hoy en Venezuela: '+H.lecturas.map(l=>esc(l.cita)).join(' · ')+'. Si Vatican News muestra otras, es porque hoy en Venezuela se celebra una fiesta propia: sigue las de tu parroquia.</p>'}
 function evSegun(c){const m=(c||'').match(/^(Mateo|Marcos|Lucas|Juan)/i);return m?'san '+cap(m[1].toLowerCase()):'san…'}
 function guiaPasos(){
   const D=misaHoy(),L=[{intro:true,s:'Antes de empezar',p:{n:'La Misa de hoy'}}];
@@ -1774,9 +1808,10 @@ function abrirLectura(d){if(!d.open||d.dataset.ok)return;const t=d.querySelector
 document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('mashoy'))store.set('mashoy',e.target.open?1:0)},true);
 document.addEventListener('toggle',e=>{if(e.target.classList&&e.target.classList.contains('lecc'))abrirLectura(e.target);else if(e.target.open&&e.target.querySelector&&e.target.querySelector('.mistxt'))misLlenar(e.target)},true);
 function lecCompleta(l,lnk){
-  const of='<a class="btn ghost" style="min-height:40px;margin-top:8px" href="'+esc(misaURL())+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy ↗</a>';
-  if(!citaPartes(l.cita))return of;
-  return of+'<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer aquí (Biblia Straubinger)</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Biblia católica de Mons. Juan Straubinger (dominio público), con el español actualizado por la app («ustedes» en lugar de «vosotros»). El botón de arriba abre el texto oficial del Leccionario, el que se proclama en la Misa en Venezuela; los días de santos propios de EE. UU. puede mostrar otras lecturas.</p></details>'}
+  return '<a class="btn ghost" style="min-height:40px;margin-top:8px" href="'+esc(misaURL())+'" target="_blank" rel="noopener noreferrer">Leer completa en Vatican News ↗</a>';
+}
+function lecCompletaVieja(l){ /* Biblia Straubinger dentro de la app: retirada en nov 2026; se deja por si se quiere volver atrás */
+  return '<details class="lecc" data-cita="'+esc(l.cita)+'"><summary>Leer aquí (Biblia Straubinger)</summary><div class="lectxt"><p class="small mut">Cargando…</p></div><p class="small mut" style="margin:8px 0 0">Biblia católica de Mons. Juan Straubinger (dominio público), con el español actualizado por la app («ustedes» en lugar de «vosotros»). El botón de arriba abre el texto oficial del Leccionario, el que se proclama en la Misa en Venezuela; los días de santos propios de EE. UU. puede mostrar otras lecturas.</p></details>'}
 function lecBox(p,D){
   const k={'Primera lectura':[D.l1,'Hoy se lee'],'Salmo responsorial':[D.sal,'Salmo de hoy'],'Segunda lectura':[D.l2,'Hoy se lee'],'Evangelio':[D.ev,'Evangelio de hoy']}[p.n];
   if(!k)return '';const l=k[0],lnk='<a class="small" style="display:inline-block;margin-top:4px" href="'+esc(D.link)+'" target="_blank" rel="noopener noreferrer">Leer el texto completo ↗</a>';
@@ -1832,11 +1867,14 @@ function rosMap(active){
   const xc=st('X');s+='<path class="cx'+xc+'" d="M100 234V258M92 242H108"/>';if(active==='X')ring='<circle class="ring" cx="100" cy="245" r="15"/>';
   return s+ring+'</svg>';
 }
-/* Texto completo de un misterio: la Palabra de Dios entera, la meditación y el fruto */
+/* Cada misterio: la cita bíblica con enlace a la página oficial del Rosario de la Santa Sede, la meditación y el fruto */
+const ROS_VAT={gozosos:'https://www.vatican.va/special/rosary/documents/misteri_gaudiosi_sp.html',dolorosos:'https://www.vatican.va/special/rosary/documents/misteri_dolorosi_sp.html',
+  luminosos:'https://www.vatican.va/special/rosary/documents/misteri_luminosi_sp.html',gloriosos:'https://www.vatican.va/special/rosary/documents/misteri_gloriosi_sp.html'};
 function misHtml(k,i){
   const T=(typeof MIS_TXT!=='undefined'&&MIS_TXT[k]||[])[i],md=MED[k][i];
   if(!T)return '<p>'+esc(md[0])+'</p><p class="small"><b>Pídele a Dios:</b> '+esc(md[1])+'.</p>';
-  return '<div class="misw">'+T.c.map(c=>'<div class="lbl" style="margin-top:12px">Palabra de Dios · '+esc(c)+'</div><div class="mistxt lectxt" data-cita="'+esc(c)+'"><p class="small mut">Cargando el texto…</p></div>').join('')+
+  return '<div class="misw"><div class="lbl" style="margin-top:12px">Palabra de Dios</div><p style="margin:2px 0 6px"><b>'+T.c.map(esc).join(' · ')+'</b></p>'+
+    '<a class="btn ghost" style="min-height:40px" href="'+esc(ROS_VAT[k])+'" target="_blank" rel="noopener noreferrer">Leer el pasaje en vatican.va ↗</a>'+
     '<div class="lbl" style="margin-top:12px">Para meditar</div>'+T.m.map(x=>'<p>'+esc(x)+'</p>').join('')+
     '<p class="small"><b>Fruto del misterio:</b> '+esc(md[1])+'.</p></div>';
 }
@@ -1923,6 +1961,7 @@ function viewRosario(){
   const t=new Date(),L=liturgia(t),m=misDia(t,L);
   h+='<div class="card tint"><div class="lbl">Misterios de hoy</div><h3 style="margin-top:0">'+esc(m.n)+'</h3><ol class="tight">'+m.list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div>';
   h+='<h2 class="sec">Qué día se reza cada uno</h2>'+Object.keys(MISTERIOS).map(k=>{const x=MISTERIOS[k];return '<details><summary>'+esc(x.n)+' · <span class="mut" style="font-weight:400">'+esc(x.dias)+'</span></summary><div class="in">'+x.list.map((y,i)=>'<details class="mini"><summary>'+(i+1)+'. '+esc(y)+'</summary><div class="in">'+misHtml(k,i)+'</div></details>').join('')+'</div></details>'}).join('');
+  h+='<div class="row"><a class="btn ghost" href="'+esc(ROS_VAT[Object.keys(MISTERIOS).find(x=>MISTERIOS[x]===m)||'gozosos'])+'" target="_blank" rel="noopener noreferrer">Misterios de hoy en vatican.va ↗</a></div>';
   h+='<h2 class="sec">El Rosario en resumen</h2><div class="card"><ol class="tight" style="margin:0">'+ROSARIO_PASOS.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol></div><p class="note">Los domingos de Adviento y Navidad se suelen rezar los gozosos, y los de Cuaresma los dolorosos.</p>';
   return h;
 }
@@ -1975,7 +2014,7 @@ function viewApo(){
   const qs=[].concat(X.ver||[],X.juzgar||[]);
   if(qs.length)h+='<details><summary>Preguntas para acompañar a otros hoy</summary><div class="in"><ul class="qa">'+qs.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ul></div></details>';
   h+='<h2 class="sec">Lectio divina en 4 tiempos</h2><div class="card"><p><b>Leer:</b> ¿qué dice el texto?</p><p><b>Meditar:</b> ¿qué me dice a mí?</p><p><b>Orar:</b> ¿qué le respondo a Dios?</p><p style="margin-bottom:0"><b>Contemplar:</b> quedarme en silencio con Él.</p></div>';
-  h+='<div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer como en la Misa de hoy</a></div>';
+  h+='<div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>';
   return h;
 }
 
@@ -2327,7 +2366,6 @@ async function guardarDias(){
   for(let i=1;i<=7;i++){const u='dias/'+ymd(addDays(t,i))+'.js';
     try{let r=await caches.match(u);if(!r){r=await fetch(u);if(!r.ok)break}
       const tx=await r.clone().text();citas(JSON.parse(tx.replace(/^\s*window\.HOY\s*=\s*/,'').replace(/;\s*$/,'')))}catch(e){break}}
-  for(const c of libros){const u='biblia/'+c+'.json';try{if(!(await caches.match(u)))await fetch(u)}catch(e){}}
   for(const k in FE){const u=feSm(FE[k][0]);try{if(!(await caches.match(u)))await fetch(u,{mode:'no-cors'})}catch(e){}}
 }
 async function nuevoDia(){state.day=ymd(new Date());state.year=new Date().getFullYear();state.nov=null;render();if(hoyViejo()){await cargarHoy();if(!hoyViejo())render(true)}diasT=0;guardarDias()}
@@ -2453,6 +2491,7 @@ const sinT=x=>String(x).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 D3.indice=()=>{if(D3.idx)return D3.idx;const I=[];const TN={};TABS.forEach(t=>{TN[t.id]=t.n;I.push({t:t.n,d:'Sección',go:{tab:t.id}})});
   Object.keys(SUBS).forEach(tab=>SUBS[tab].forEach(([id,n])=>I.push({t:n,d:TN[tab]||tab,go:{tab,sub:id}})));
   ORACIONES.forEach(o=>I.push({t:o.n,d:'Oración',go:{tab:'orar',sub:'ora',find:o.n}}));
+  I.push({t:'Adoración eucarística y Hora Santa',d:'Orar',go:{tab:'orar',sub:'ado'}},{t:'Letanías al Santísimo Sacramento',d:'Adoración',go:{tab:'orar',sub:'ado'}});
   MISA.forEach(g=>(g.partes||[]).forEach(x=>I.push({t:x.n,d:'Misa · '+g.n,go:{tab:'misa',sub:'partes',find:x.n}})));
   GLOS.forEach(g=>I.push({t:g.t,d:'Glosario',go:{tab:'apr',sub:'glos',gq:g.t}}));
   Object.keys(MISTERIOS).forEach(k=>I.push({t:'Misterios '+MISTERIOS[k].n.toLowerCase(),d:'Rosario · '+MISTERIOS[k].dias,go:{tab:'orar',sub:'ros'}}));
