@@ -653,7 +653,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=04c136fc"></script>
+<script src="datos.js?v=a71c630c"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -905,6 +905,25 @@ function misDia(t,L){
   if(t.getDay()===0){if(L.tiempo==='Adviento'||L.tiempo==='Navidad')k='gozosos';else if(L.tiempo==='Cuaresma')k='dolorosos'}
   return MISTERIOS[k];
 }
+/* ===== ¿QUÉ REZO AHORA? (nov 2026) — según la hora del teléfono y el tiempo litúrgico ===== */
+function rezoAhora(t,L){
+  const h=t.getHours(),pas=L&&L.tiempo==='Pascua',mar=t.getDay()===2;
+  let r;
+  if(h<4||h>=23)r={k:'Antes de dormir',id:'visita',d:'La oración final de Completas: que Dios guarde tu casa esta noche.'};
+  else if(h<11)r={k:'Al empezar el día',id:'ofrec',d:'Ofrece a Dios tu jornada antes de que empiece la prisa.'};
+  else if(h<14)r=pas?{k:'Mediodía · tiempo de Pascua',id:'regina',d:'En Pascua, el Regina Coeli sustituye al Ángelus.'}:{k:'Mediodía',id:'angelus',d:'La Iglesia saluda a María y recuerda la Encarnación a mediodía.'};
+  else if(h===15)r={k:'Las 3 de la tarde',id:'miseric',d:'Hora de la muerte de Jesús: la Hora de la Misericordia.'};
+  else if(h>=14&&h<19)r={k:'La tarde',go:['orar','ros'],n:'El Rosario o una decena',d:'Un rato con María. Si estás cerca de una iglesia, haz una visita al Santísimo.',go2:['orar','ado','Visita al Santísimo']};
+  else r={k:'La noche',go:['dia','exa'],n:'Oración de la noche',d:'Revisa tu día con Dios: gracias, perdón y propósito para mañana.'};
+  let b='<div class="card tint" style="margin-top:12px"><div class="lbl">¿Qué rezo ahora? · '+esc(r.k)+'</div>';
+  if(r.id){const o=ORACIONES.find(x=>x.id===r.id)||{};
+    b+='<h3 style="margin:2px 0 4px">'+esc(o.n||'')+'</h3><p class="small" style="margin:0 0 8px">'+esc(r.d)+'</p><details class="mini"><summary>Rezar aquí</summary><div class="in"><p class="prayer">'+esc(o.t||'')+'</p></div></details>';
+  }else{
+    b+='<h3 style="margin:2px 0 4px">'+esc(r.n)+'</h3><p class="small" style="margin:0 0 8px">'+esc(r.d)+'</p><div class="row" style="margin:0"><button class="btn ghost" data-act="go" data-v="'+r.go[0]+'" data-s="'+r.go[1]+'">Empezar</button>'+(r.go2?'<button class="btn ghost" data-act="go" data-v="'+r.go2[0]+'" data-s="'+r.go2[1]+'">'+esc(r.go2[2])+'</button>':'')+'</div>';
+  }
+  if(mar&&h>=12)b+='<div class="row" style="margin:10px 0 0"><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Hoy es martes: preparar el Encuentro</button></div>';
+  return b+'</div>';
+}
 function viewHoy(){
   const t=new Date(),L=liturgia(t),H=window.HOY,ok=!!(H&&H.evangelio),viejo=ok&&H.fecha!==ymd(t);
   const link=misaURL(t);
@@ -917,6 +936,7 @@ function viewHoy(){
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
   h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button><button class="btn ghost ico" data-act="share" aria-label="Compartir el Evangelio de hoy como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share-2"/></svg></button></div>';
+  h+=rezoAhora(t,L);
   state.shareCard={k:dk,frase:frase,cita:cita,dia:cap(fmt(t))};
   const nh=novenaHoy(t),fr=fraseDia(t);
   /* 1. Lo que se reza hoy: novena en curso y Adviento */
@@ -931,12 +951,13 @@ function viewHoy(){
   if(ok){
     const say=['Evangelio de hoy, '+E.cita+'.'].concat(E.resumen,[E.contexto,'Qué quiere decir hoy. '+E.significado],(E.hoy||[]),['Pregunta para el día. '+E.pregunta,'Oración. '+E.oracion]).join(' ');
     h+='<h2 class="sec">El Evangelio de hoy</h2><p class="mut" style="margin-top:0">'+esc(E.cita)+'</p><div class="row">'+sayBtn('hoy',say)+'<a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>'+citasHoy(H)+
+    '<p class="small mut" style="margin:8px 2px 0"><b>Resumen y reflexión de la app</b>, con nuestras palabras, para ayudarte a orar. No sustituyen el texto oficial ni las palabras del Papa: esos están en Vatican News.</p>'+
     '<div class="reading">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
     '<details><summary>Para ubicarnos</summary><div class="in"><p>'+esc(E.contexto)+'</p></div></details>'+
     '<details><summary>Qué quiere decir hoy</summary><div class="in"><p>'+esc(E.significado)+'</p></div></details>'+
     '<h3>Para vivirlo hoy</h3><ul class="tight">'+(E.hoy||[]).map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>'+
     '<div class="say"><b>Pregunta para el día</b>'+esc(E.pregunta)+'</div>'+
-    '<h3>Oración</h3><p class="prayer">'+esc(E.oracion)+'</p>';
+    '<h3>Oración para hoy <span class="mut small" style="font-weight:400">(de la app)</span></h3><p class="prayer">'+esc(E.oracion)+'</p>';
     if(H.lecturas&&H.lecturas.length)m2+='<h2 class="sec">Las otras lecturas</h2>'+H.lecturas.filter(l=>l.tipo!=='Evangelio').map(l=>'<details><summary>'+esc(l.tipo)+' <span class="mut" style="font-weight:400">'+esc(l.cita)+'</span></summary><div class="in"><p>'+esc(l.resumen)+'</p></div></details>').join('');
   }else{
     h+='<div class="card"><p style="margin-top:0">El comentario de hoy se publica cada día pasada la medianoche. Si aún no aparece, vuelve a abrir la página en un momento.</p><a class="btn ghost" href="'+link+'" target="_blank" rel="noopener noreferrer">Leer las lecturas de hoy</a></div>';
@@ -1875,7 +1896,7 @@ function misHtml(k,i){
   if(!T)return '<p>'+esc(md[0])+'</p><p class="small"><b>Pídele a Dios:</b> '+esc(md[1])+'.</p>';
   return '<div class="misw"><div class="lbl" style="margin-top:12px">Palabra de Dios</div><p style="margin:2px 0 6px"><b>'+T.c.map(esc).join(' · ')+'</b></p>'+
     '<a class="btn ghost" style="min-height:40px" href="'+esc(ROS_VAT[k])+'" target="_blank" rel="noopener noreferrer">Leer el pasaje en vatican.va ↗</a>'+
-    '<div class="lbl" style="margin-top:12px">Para meditar</div>'+T.m.map(x=>'<p>'+esc(x)+'</p>').join('')+
+    '<div class="lbl" style="margin-top:12px">Para meditar · reflexión de la app</div>'+T.m.map(x=>'<p>'+esc(x)+'</p>').join('')+
     '<p class="small"><b>Fruto del misterio:</b> '+esc(md[1])+'.</p></div>';
 }
 function misLlenar(r){(r||document).querySelectorAll('.mistxt:not([data-ok])').forEach(t=>{t.dataset.ok=1;
