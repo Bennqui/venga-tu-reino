@@ -31,7 +31,7 @@
 /* Diseño «Crepúsculo de Barquisimeto»: lo único llamativo es el cielo de la portada, que cambia con la hora
    y lleva el color litúrgico del día. Todo lo demás es tranquilo: fondo de cal fría, tinta índigo, oro discreto.
    Marcellus (letra de inscripción romana) para títulos; Literata (hecha para leer en pantalla) para el texto. */
-:root{--bg:#FFFFFF;--card:#FFFFFF;--ink:#2A2316;--mut:#7A6D55;--line:#EFE7D6;--soft:#FAF6EC;--gold:#9C700A;--gold-bg:#FDF4D6;--wine:#E1AE1E;--on-wine:#2A2316;--ok:#2E7A4F;--bad:#B3302F;--lit:#C9960F;--litc:#C9960F;--tint:#FBF5E6;--vy:#E1AE1E;--vw:#FFFFFF;--red:#B0182A;--red-bg:#FBEDEE;--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
+:root{--bg:#FFFFFF;--card:#FFFFFF;--ink:#2A2316;--mut:#7A6D55;--line:#EFE7D6;--soft:#FAF6EC;--gold:#8C6508;--gold-bg:#FDF4D6;--wine:#E1AE1E;--on-wine:#2A2316;--ok:#2E7A4F;--bad:#B3302F;--lit:#C9960F;--litc:#C9960F;--tint:#FBF5E6;--vy:#E1AE1E;--vw:#FFFFFF;--red:#B0182A;--red-bg:#FBEDEE;--fd:'Marcellus','Trajan Pro',Georgia,serif;--fb:'Literata',Georgia,'Times New Roman',serif;--r:20px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.6;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:12px;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 #app{max-width:620px;margin:0 auto}
@@ -653,7 +653,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=7bda8b20"></script>
+<script src="datos.js?v=70e9a828"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -861,7 +861,9 @@ if(!store.get('misaV3',false)){state.sub.misa='chu';store.set('sub',state.sub);s
 {const r=store.get('ros',null);if(r&&r.d===ymd(new Date())){state.rs=r.rs||0;state.rc=r.rc||0;state.rk=r.rk||'';state.rcs=r.rcs||{}}}
 /* La barra de abajo muestra 5 botones; Encuentro incluye Apóstol y Orar incluye Mi día. */
 const navDe=t=>(NAV.find(n=>n.id===t||(n.g&&n.g.includes(t)))||NAV[0]);
-const segHtml=tab=>{const g=navDe(tab).g,otra=g&&g.find(x=>x!==tab);return '<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id)+'">'+esc(n)+'</button>').join('')+(otra?'<button class="sib" data-act="tab2" data-v="'+otra+'">'+esc(GN[otra])+' <span aria-hidden="true">›</span></button>':'')+'</div>'};
+const enMas=tab=>tab==='orar'&&SUBS.orarMas&&SUBS.orarMas.some(x=>x[0]===state.sub.orar);
+const masVolver=tab=>enMas(tab)?'<button class="btn ghost" style="min-height:36px;margin:10px 0 0" data-act="sub" data-v="mas">‹ Más</button>':'';
+const segHtml=tab=>{const g=navDe(tab).g,otra=g&&g.find(x=>x!==tab);return '<div class="seg" role="group" aria-label="Secciones">'+SUBS[tab].map(([id,n])=>'<button data-act="sub" data-v="'+id+'" aria-pressed="'+(state.sub[tab]===id||(id==='mas'&&enMas(tab)))+'">'+esc(n)+'</button>').join('')+(otra?'<button class="sib" data-act="tab2" data-v="'+otra+'">'+esc(GN[otra])+' <span aria-hidden="true">›</span></button>':'')+'</div>'+masVolver(tab)};
 const sayBtn=(id,text)=>{if(!TTS)return '';state.say[id]=text;return '<button class="btn ghost" data-act="speak" data-v="'+id+'">Escuchar</button>'};
 
 /* ===== ILUSTRACIONES ===== */
@@ -895,6 +897,7 @@ function semanaHtml(){
 function viewHd(){
   const t=new Date(),L=liturgia(t);
   const MH=misaHoy();document.documentElement.style.setProperty('--litc',litColor(MH.color));
+  {const c=(MH.color||'').toLowerCase(),k=['morado','rojo','verde','rosa'].find(x=>c.includes(x));document.documentElement.style.setProperty('--lit',k?litColor(k):'#C9960F')}
   if(state.tab==='hoy')return '';
   const hh=FE_HERO[state.tab]||['basilica',''];
   const n=navDe(state.tab);
@@ -1347,6 +1350,7 @@ function tiempoHtml(){
   return '<div class="card tint"><div class="lbl">Para este tiempo</div><b>'+esc(cr?'Semana de Cristo Rey':x[0])+'</b><ul class="tight">'+(cr?['Reza cada día la novena de Cristo Rey (Orar › Fiestas).','Prepara la renovación de tus compromisos del Regnum Christi.','Participa el domingo en la Misa y la celebración de tu sección.']:x[1]).map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul><div class="row" style="margin-bottom:0"><a class="btn ghost" href="'+SEO_PDF+'#page='+(cr?68:x[2])+'" target="_blank" rel="noopener noreferrer">Ver en «Señor, enséñanos a orar»</a></div></div>';
 }
 function viewOrar(){
+  if(state.sub.orar==='mas')return segHtml('orar')+'<h2 class="sec" style="margin-top:14px">Más para orar</h2>'+SUBS.orarMas.map(([id,n,dd])=>'<button class="card" style="display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit" data-act="sub" data-v="'+id+'"><b>'+esc(n)+' ›</b><p class="small mut" style="margin:4px 0 0">'+esc(dd)+'</p></button>').join('');
   if(state.sub.orar==='int')return segHtml('orar')+viewIntenciones();
   if(state.sub.orar==='fie')return viewFiestas();
   if(state.sub.orar==='hor')return viewHoras();
@@ -1483,6 +1487,8 @@ function viewAjustes(){
   let h='<div class="card"><h3>Tamaño de letra</h3><div class="fzrow"><button class="btn ghost" data-act="fz" data-v="-1" aria-label="Letra más pequeña"'+(i<=0?' disabled':'')+'>A−</button><span class="v">'+(fz===1?'Normal':Math.round(fz*100)+' %')+'</span><button class="btn ghost" data-act="fz" data-v="1" aria-label="Letra más grande"'+(i>=FZ.length-1?' disabled':'')+'>A+</button></div><p class="prayer" style="margin:0">Es necesario orar siempre sin desanimarse.</p></div>';
   h+='<div class="card"><h3>Apariencia</h3><div class="opts3" role="group" aria-label="Tema">'+[['light','Claro'],['dark','Oscuro'],['auto','Como el iPhone']].map(([v,n])=>'<button data-act="tema" data-v="'+v+'" aria-pressed="'+(tm===v)+'">'+n+'</button>').join('')+'</div><p class="note" style="margin:4px 0 0">También puedes cambiarlo en cualquier momento con el botón de la luna o el sol, arriba. «Como el iPhone» sigue el modo claro u oscuro del teléfono.</p></div>';
   const dd=bk?diff(new Date(),new Date(bk)):null;
+  h+='<div class="card"><h3>Fuentes de la app</h3><ul class="tight" style="margin:0"><li><b>Lecturas y Evangelio:</b> Vatican News, portal de la Santa Sede.</li><li><b>Rosario:</b> páginas de los misterios en vatican.va.</li><li><b>Oraciones del Regnum Christi:</b> «Señor, enséñanos a orar» (SEO, 2022), con su página.</li><li><b>Misa:</b> Misal Romano (Ordinario de la Misa).</li><li><b>Resúmenes, reflexiones y meditaciones:</b> escritos por la app para ayudar a orar; van marcados como tales.</li></ul></div>';
+  h+='<div class="card"><h3>Recordatorios en tu iPhone</h3><p style="margin-top:0">Agrega a tu Calendario cuatro avisos: <b>Ángelus</b> cada día a mediodía, <b>Encuentro</b> los martes en la mañana, <b>hora eucarística</b> los jueves a las 7 p. m. y <b>Misa</b> los domingos. Toca el botón y luego «Agregar todo».</p><div class="row" style="margin-bottom:0"><a class="btn" href="recordatorios.ics">Agregar los recordatorios</a></div><p class="small mut" style="margin-bottom:0">Después puedes cambiar la hora o borrar cualquiera desde la app Calendario.</p></div>';
   h+='<div class="card"><h3>Copia de seguridad</h3><p style="margin-top:0">Tu cuaderno, tus Encuentros, tus intenciones, tu examen y tu avance se guardan <b>solo en este teléfono</b>. Guarda una copia de vez en cuando (por ejemplo en Archivos o en iCloud Drive) para no perderlos si cambias de teléfono o se borran los datos.</p><p class="small '+(dd===null||dd>30?'':'mut')+'" style="margin:6px 0">'+(dd===null?'Aún no has guardado ninguna copia.':'Tu última copia: '+(dd<=0?'hoy':dd===1?'ayer':'hace '+dd+' días')+'.')+'</p><div class="row"><button class="btn" data-act="bk">Guardar copia</button><label class="btn ghost" for="bkfile">Recuperar una copia</label><input type="file" id="bkfile" accept=".json,application/json" hidden></div><p class="note" id="bkmsg" style="margin:4px 0 0"></p></div>';
   h+=estadoHtml();setTimeout(estadoCarga,0);
   return h;
@@ -2524,7 +2530,7 @@ D3.io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach
 /* --- Buscador --- */
 const sinT=x=>String(x).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 D3.indice=()=>{if(D3.idx)return D3.idx;const I=[];const TN={};TABS.forEach(t=>{TN[t.id]=t.n;I.push({t:t.n,d:'Sección',go:{tab:t.id}})});
-  Object.keys(SUBS).forEach(tab=>SUBS[tab].forEach(([id,n])=>I.push({t:n,d:TN[tab]||tab,go:{tab,sub:id}})));
+  Object.keys(SUBS).forEach(k=>{const tab=k==='orarMas'?'orar':k;SUBS[k].forEach(([id,n])=>{if(id!=='mas')I.push({t:n,d:TN[tab]||tab,go:{tab,sub:id}})})});
   ORACIONES.forEach(o=>I.push({t:o.n,d:'Oración',go:{tab:'orar',sub:'ora',find:o.n}}));
   I.push({t:'Adoración eucarística y Hora Santa',d:'Orar',go:{tab:'orar',sub:'ado'}},{t:'Letanías al Santísimo Sacramento',d:'Adoración',go:{tab:'orar',sub:'ado'}});
   MISA.forEach(g=>(g.partes||[]).forEach(x=>I.push({t:x.n,d:'Misa · '+g.n,go:{tab:'misa',sub:'partes',find:x.n}})));

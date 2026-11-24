@@ -1,0 +1,18 @@
+name: Revisión de los enlaces oficiales
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '30 5 * * *'   # 1:30 a. m. en Venezuela, después de la actualización de medianoche
+jobs:
+  enlaces:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TZ: America/Caracas
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Revisar enlaces
+        run: node tareas/revisar-enlaces.js

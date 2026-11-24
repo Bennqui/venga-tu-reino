@@ -1,0 +1,77 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Venga tu Reino//Recordatorios//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Venga tu Reino
+X-WR-TIMEZONE:America/Caracas
+BEGIN:VTIMEZONE
+TZID:America/Caracas
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0400
+TZNAME:-04
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:vtr-angelus@bennqui.github.io
+DTSTAMP:20261124T000000Z
+DTSTART;TZID=America/Caracas:20261125T120000
+DURATION:PT5M
+RRULE:FREQ=DAILY
+SUMMARY:Ángelus
+DESCRIPTION:Una pausa con María. En Pascua\, el Regina Coeli. Ábrelo en Venga tu Reino › Hoy.
+URL:https://bennqui.github.io/venga-tu-reino/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Ángelus
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vtr-encuentro@bennqui.github.io
+DTSTAMP:20261124T000000Z
+DTSTART;TZID=America/Caracas:20261201T080000
+DURATION:PT10M
+RRULE:FREQ=WEEKLY;BYDAY=TU
+SUMMARY:Hoy hay Encuentro con Cristo
+DESCRIPTION:Prepara el Encuentro: Venga tu Reino › Encuentro › Martes.
+URL:https://bennqui.github.io/venga-tu-reino/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hoy hay Encuentro con Cristo
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vtr-hora-eucaristica@bennqui.github.io
+DTSTAMP:20261124T000000Z
+DTSTART;TZID=America/Caracas:20261126T190000
+DURATION:PT1H
+RRULE:FREQ=WEEKLY;BYDAY=TH
+SUMMARY:Hora eucarística
+DESCRIPTION:Tradición del Regnum Christi: un rato con Jesús sacramentado. Guía en Venga tu Reino › Orar › Adoración.
+URL:https://bennqui.github.io/venga-tu-reino/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Hora eucarística
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:vtr-misa-domingo@bennqui.github.io
+DTSTAMP:20261124T000000Z
+DTSTART;TZID=America/Caracas:20261129T080000
+DURATION:PT10M
+RRULE:FREQ=WEEKLY;BYDAY=SU
+SUMMARY:Domingo: Misa
+DESCRIPTION:Lee antes el Evangelio del domingo en Venga tu Reino › Misa.
+URL:https://bennqui.github.io/venga-tu-reino/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Domingo: Misa
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
