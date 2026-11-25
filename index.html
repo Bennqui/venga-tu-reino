@@ -653,7 +653,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=70e9a828"></script>
+<script src="datos.js?v=213bd25e"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -924,7 +924,7 @@ function rezoAhora(t,L){
   }else{
     b+='<h3 style="margin:2px 0 4px">'+esc(r.n)+'</h3><p class="small" style="margin:0 0 8px">'+esc(r.d)+'</p><div class="row" style="margin:0"><button class="btn ghost" data-act="go" data-v="'+r.go[0]+'" data-s="'+r.go[1]+'">Empezar</button>'+(r.go2?'<button class="btn ghost" data-act="go" data-v="'+r.go2[0]+'" data-s="'+r.go2[1]+'">'+esc(r.go2[2])+'</button>':'')+'</div>';
   }
-  if(mar&&h>=12)b+='<div class="row" style="margin:10px 0 0"><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Hoy es martes: preparar el Encuentro</button></div>';
+  if(mar&&h>=12)b+='<div class="row" style="margin:10px 0 0"><button class="btn ghost" data-act="go" data-v="enc" data-s="vivo">Hoy es martes: el Encuentro paso a paso</button></div>';
   return b+'</div>';
 }
 function viewHoy(){
@@ -1617,6 +1617,7 @@ function viewEnc(){
   if(s==='martes')return segHtml('enc')+viewEncMartes();
   if(s==='diario')return segHtml('enc')+viewEncDiario();
   if(s==='otros')return segHtml('enc')+viewEncOtros();
+  if(s==='vivo')return segHtml('enc')+viewEncVivo();
   return segHtml('enc')+viewEncPaso();
 }
 function step(n,title,body,open){return '<details'+(open?' open':'')+'><summary><span class="num">'+n+'</span>'+esc(title)+'</summary><div class="in">'+body+'</div></details>'}
@@ -1695,12 +1696,89 @@ function viewEncOtros(){
   setTimeout(()=>{const b=$('#encsel');if(b&&b.scrollIntoView)try{b.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}},0);
   return h;
 }
+/* ===== El Encuentro en vivo: la reunión del martes paso a paso, como la propone el Regnum Christi =====
+   Se elige el Evangelio (por defecto el del domingo anterior), se reza, se comparten luces, se proponen títulos de testimonio,
+   se vota, el ganador relata, y se hace ver, juzgar y actuar. Todo se guarda en el teléfono por fecha del Encuentro. */
+function vivoFecha(){const t=new Date();return ymd(t.getDay()===2?t:nextTue(t))}
+function vivoGet(k){return (store.get('encv',{})[k])||{}}
+function vivoSet(k,o){const A=store.get('encv',{});A[k]=o;store.set('encv',A)}
+function vivoEvDef(k){const d=new Date(k+'T12:00:00');return ymd(addDays(d,-((d.getDay()+7)%7||7)))} /* domingo anterior al Encuentro */
+function vta(f,ph,val,min){return '<textarea data-viv="'+f+'" placeholder="'+esc(ph)+'" style="min-height:'+(min||70)+'px">'+esc(val||'')+'</textarea>'}
+function porque(t){return '<div class="say"><b>Por qué</b>'+t.replace(/<(\/?)b>/g,'<$1strong>')+'</div>'}
+function vivoGanador(T){let g=-1,m=0;(T||[]).forEach((x,i)=>{if((x.v||0)>m){m=x.v;g=i}});return g}
+function viewEncVivo(){
+  const k=vivoFecha(),V=vivoGet(k),dk=new Date(k+'T12:00:00'),hoyEs=k===ymd(new Date());
+  const evDef=vivoEvDef(k),ev=V.ev||evDef,dev=new Date(ev+'T12:00:00');
+  if(!diaCargado(ev))diaCarga(ev).then(()=>{if(state.tab==='enc'&&state.sub.enc==='vivo')render(true)});
+  const H=diaCargado(ev)?DIAH[ev]:undefined,E=H&&H.evangelio,X=(H&&H.encuentro)||{};
+  const cita=E?E.cita:'';
+  const P=[];
+  /* 1. Evangelio */
+  const op=[[evDef,'Domingo anterior'],[ymd(addDays(dk,5)),'Domingo siguiente'],[k,'El del día']];
+  let b='<p class="mut" style="margin-top:0">El Regnum Christi sugiere el Evangelio del <b>domingo anterior o posterior</b> a la reunión, o el que elija tu equipo. Toca el que van a usar:</p>';
+  b+='<div class="seg" role="group" aria-label="Evangelio">'+op.map(([f,n])=>'<button data-act="vev" data-v="'+f+'" aria-pressed="'+(f===ev)+'">'+n+' · '+fmtCorto(new Date(f+'T12:00:00'))+'</button>').join('')+'</div>';
+  b+='<label class="small mut" style="display:flex;align-items:center;gap:6px;margin:6px 0">Otra fecha <input type="date" id="vevfecha" value="'+ev+'" min="2026-11-14" style="min-height:36px;border:1px solid var(--line);border-radius:10px;padding:4px 8px;background:var(--bg);color:var(--ink);font:inherit"></label>';
+  if(H===undefined)b+='<p class="mut">Cargando el Evangelio…</p>';
+  else if(!E)b+='<p>Ese día no está guardado en la app. Lean el Evangelio en Vatican News.</p><div class="row"><a class="btn ghost" href="'+esc(misaURL(ev))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>';
+  else{b+='<h3 style="margin:10px 0 2px">'+esc(cap(fmt(dev)))+'</h3><p style="margin:0">Evangelio: <b>'+esc(cita)+'</b>'+(H.titulo?' · <span class="mut">'+esc(H.titulo)+'</span>':'')+'</p><div class="row"><a class="btn ghost" href="'+esc(H.lecturasURL||misaURL(ev))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>';
+    if(X.frase)b+='<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>'}
+  P.push({t:'Elige el Evangelio',b});
+  /* 2. Oración inicial */
+  P.push({t:'Oración inicial',b:porque('Nos reunimos creyendo que Jesús está en medio de nosotros: «Donde dos o tres están reunidos en mi nombre, allí estoy yo» (Mateo 18, 20). Por eso se empieza pidiendo al Espíritu Santo que <b>ilumine la mente, mueva la voluntad y encienda el corazón</b>, para que lo que sigue no sea una charla sino un encuentro con Cristo.')+
+    '<p class="mut">Normalmente la dirige quien modera. Reza con todos:</p><p class="prayer">'+esc(oraT('vensp'))+'</p><details class="mini"><summary>Ave María y Gloria</summary><div class="in"><p class="prayer">'+esc(oraT('ave'))+'</p><p class="prayer" style="margin-top:10px">'+esc(oraT('gloria'))+'</p></div></details><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p><p class="small mut">Después, quien modera hace una breve introducción para situar la reunión.</p>'});
+  /* 3. Lectura orante */
+  let lb=porque('Escuchar primero a Dios antes de mirar la vida. El silencio deja que el Espíritu Santo haga «ver» algo a cada uno: eso es una <b>luz</b>.')+'<p>Alguien lee <b>'+esc(cita||'el Evangelio')+'</b> en voz alta. Luego unos minutos de silencio y cada uno comparte su luz con sencillez (dos o tres frases). El secretario la resume.</p>';
+  if(E&&E.resumen)lb+='<details class="mini"><summary>Qué dice (resumen de la app)</summary><div class="in">'+E.resumen.map(p=>'<p>'+esc(p)+'</p>').join('')+(E.significado?'<p><b>Qué quiere decir:</b> '+esc(E.significado)+'</p>':'')+'</div></details>';
+  if(X.luces&&X.luces.length)lb+='<details class="mini"><summary>Ideas de luces</summary><div class="in"><ul class="tight">'+X.luces.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></details>';
+  lb+='<div class="lbl">Mi luz</div>'+vta('luz','La palabra que me tocó y por qué…',V.luz)+'<div class="lbl">Luces de otros que me llamaron la atención</div>'+vta('luces','Breve, sin nombres si prefieres…',V.luces,60);
+  P.push({t:'Lectura orante y luces',b:lb});
+  /* 4. Oración espontánea */
+  P.push({t:'Oración espontánea',b:porque('Lo que escuchamos se vuelve diálogo con Dios: le damos gracias por lo que nos mostró y le pedimos fuerza para vivirlo. Cierra la parte del Evangelio antes de pasar a la vida.')+'<p>Uno o varios rezan en voz alta, con sus palabras.</p><div class="say"><b>Si te animas</b>«Señor, gracias por mostrarnos… Ayúdanos a…»</div><p class="small mut">Si no, une tu intención en silencio.</p>'});
+  /* 5. Testimonio: títulos, votación y relato */
+  const T=V.titulos||[],g=vivoGanador(T),caso=store.get('caso_'+k,{});
+  let tb=porque('El Regnum Christi llama a esta parte <b>elección del caso</b>: se parte de un hecho real de la vida para descubrir qué espera Cristo de nosotros. Ocupa la mayor parte del tiempo (cerca de tres cuartas partes).')+
+    '<p>Cada uno propone un <b>título</b> breve de una experiencia que vivió. Se vota y quien propuso el título más votado <b>da su testimonio</b>.</p>';
+  if(caso.hecho&&!T.some(x=>x.mio))tb+='<div class="say"><b>Tu caso preparado</b>'+esc(caso.hecho)+'</div>';
+  tb+='<div class="lbl">Títulos propuestos</div><div style="display:flex;gap:6px"><input id="vtnew" type="text" placeholder="Ej.: «Cuando perdí la paciencia en el trabajo»" style="flex:1;min-height:44px;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--bg);color:var(--ink);font:inherit"><button class="btn" data-act="vtadd">Agregar</button></div>';
+  if(caso.hecho)tb+='<label class="small mut" style="display:flex;gap:6px;align-items:center;margin:6px 0 0"><input type="checkbox" id="vtmio"> Es mi título</label>';
+  tb+='<p class="note" id="vtmsg" style="margin:4px 0 0"></p>';
+  if(T.length)tb+='<div style="margin-top:6px">'+T.map((x,i)=>'<div class="card" style="display:flex;align-items:center;gap:8px;padding:10px 12px;margin:6px 0'+(i===g?';border-color:var(--gold);background:var(--gold-bg)':'')+'"><div style="flex:1">'+(i===g?'<b style="color:var(--gold)">★ Elegido</b><br>':'')+esc(x.t)+(x.mio?' <span class="chip">mío</span>':'')+'</div><button class="btn ghost" data-act="vtv" data-i="'+i+'" data-v="-1" aria-label="Quitar un voto" style="min-width:40px;padding:4px 10px">−</button><b style="min-width:22px;text-align:center">'+(x.v||0)+'</b><button class="btn ghost" data-act="vtv" data-i="'+i+'" data-v="1" aria-label="Sumar un voto" style="min-width:40px;padding:4px 10px">+</button><button class="lk" data-act="vtdel" data-i="'+i+'" aria-label="Quitar título">✕</button></div>').join('')+'</div><p class="small mut">Toca + por cada voto. El más votado queda marcado.</p>';
+  tb+='<div class="lbl">Notas del relato</div>'+vta('relato','Qué pasó, cómo lo vivió… sin nombres ni detalles que expongan a nadie',V.relato,90);
+  P.push({t:'El testimonio',b:tb});
+  /* 6. Ver */
+  P.push({t:'Ver',b:porque('Mirar el hecho <b>como lo mira Dios</b>, con la razón y con la fe, antes de opinar. Aquí se dice lo que vimos en el relato y se contrasta con el Evangelio'+(cita?' de '+esc(cita):'')+'.')+
+    '<ul class="tight"><li>¿Qué pasó? ¿Por qué sucedió y qué consecuencias tuvo?</li><li>¿Qué estaba haciendo Dios en las personas?</li><li>¿Qué signos de bien y de mal se ven?</li><li>¿En qué se parece o se opone a lo que pasa en el Evangelio?</li><li>¿Estoy yo implicado en algo parecido?</li></ul><div class="lbl">Lo que vimos</div>'+vta('ver','Lo que se dijo en el ver…',V.ver)});
+  /* 7. Juzgar */
+  const hist=store.get('hist',{}),prev=Object.keys(hist).filter(f=>f<k&&f!==ev&&hist[f].frase).sort().reverse().slice(0,5);
+  let jb=porque('Ahora el Evangelio ilumina el caso. Se juzga <b>uno mismo</b>, no a las personas del relato: ¿qué nos pide Jesús a nosotros?')+
+    '<ul class="tight"><li>¿Qué valores y antivalores aparecen? ¿Qué virtud está en juego?</li><li>¿Qué pasaje del Evangelio (de hoy o de otro día) recuerda este hecho?</li><li>¿Cómo actuaría Jesús en nuestro lugar? ¿Qué espera de nosotros?</li></ul><div class="lbl">Frases que puedes citar</div>';
+  const C=[];
+  if(X.frase)C.push('<b>'+esc(X.frase.cita||cita)+':</b> «'+esc(X.frase.texto)+'»');
+  if(X.conexion)C.push('<b>'+esc(X.conexion.cita)+':</b> '+esc(X.conexion.idea));
+  if(X.voz)C.push('<b>'+esc(X.voz.autor)+':</b> «'+esc(X.voz.texto)+'»');
+  prev.forEach(f=>C.push('<b>'+esc(hist[f].cita)+'</b> <span class="mut small">('+esc(fmtCorto(new Date(f+'T12:00:00')))+')</span>: «'+esc(hist[f].frase)+'»'));
+  jb+=C.length?'<div class="card" style="margin:6px 0">'+C.map(x=>'<p style="margin:6px 0">'+x+'</p>').join('')+'</div>':'<p class="note">Cuando uses «Paso a paso de hoy» durante la semana, aquí aparecerán las frases de los Evangelios anteriores.</p>';
+  jb+='<div class="lbl">Lo que juzgamos (y la cita que se usó)</div>'+vta('juzgar','Ej.: Jesús nos pide… como dice…',V.juzgar);
+  P.push({t:'Juzgar',b:jb});
+  /* 8. Actuar */
+  const act=X.actuar||ENC_GEN.actuar;
+  P.push({t:'Actuar',b:porque('Lo que vimos y juzgamos tiene que cambiar algo esta semana: en mí (conversión personal) y a mi alrededor (apostolado). Se decide por acuerdo o votando.')+
+    '<ul class="tight"><li>¿Cómo podemos colaborar con Dios para que crezca su Reino en un caso así?</li><li>¿Qué haré yo, concreto y medible, antes del próximo martes?</li></ul><details class="mini"><summary>Ideas</summary><div class="in"><ul class="tight">'+act.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></details><div class="lbl">Propósito del equipo</div>'+vta('prop','Lo que acordamos todos…',V.prop,50)+'<div class="lbl">Mi propósito</div>'+vta('mio','Pequeño, concreto y que pueda cumplir…',V.mio,50)});
+  /* 9. Oración final */
+  P.push({t:'Oración final',b:porque('Terminamos como empezamos, en presencia de Dios: <b>dándole gracias</b> por lo recibido y poniendo en sus manos los propósitos. Las invocaciones recuerdan para qué vivimos: dar gloria a Dios y extender su Reino.')+
+    '<p>Uno o varios hacen una oración de acción de gracias. Se cierra con las dos invocaciones del Regnum Christi: a Cristo Rey y a la Virgen María.</p><p class="prayer">'+esc(INVOC)+'</p><p class="small mut">La invocación a la Virgen la aprenderás escuchándola en tu equipo. Después pueden darse avisos.</p>'});
+  let h='<div class="card tint"><div class="lbl">Encuentro con Cristo</div><h2 style="margin:2px 0 4px">'+(hoyEs?'Hoy martes':esc(cap(fmt(dk))))+'</h2><p class="small mut" style="margin:0">Síguelo en la reunión, paso a paso. Lo que escribes se guarda solo en este teléfono.</p></div>';
+  h+='<div class="pasos">'+P.map((p,i)=>'<section class="paso"><div class="pk"><span class="num">'+(i+1)+'</span><span class="small mut">de '+P.length+'</span></div><h2>'+esc(p.t)+'</h2>'+p.b+'</section>').join('')+'</div>';
+  h+='<div class="row"><button class="btn big" data-act="vsave">Guardar en «Mis Encuentros»</button></div><p class="note" id="vmsg" style="margin:4px 0 0"></p>';
+  h+='<p class="note">Orden y sentido de cada parte según <a href="https://www.regnumchristi.com/en/wp-content/uploads/2023/05/Ensayo-Encuentro-con-CRISTO-2022.pdf" target="_blank" rel="noopener noreferrer">«El Encuentro con Cristo en la vida del Regnum Christi»</a> (2022). Cada equipo adapta el orden y los tiempos.</p>';
+  return h;
+}
 function viewEncMartes(){
   const t=new Date(),nt=nextTue(t),hoyEs=t.getDay()===2,pt=prevTue(t),hist=store.get('hist',{}),notes=store.get('encn',{});
   const start=hoyEs?addDays(t,-6):addDays(pt,0);
   let h='<div class="card tint"><div class="lbl">Próximo Encuentro</div><h2 style="margin:2px 0 4px">'+(hoyEs?'¡Hoy martes!':esc(cap(fmt(nt))))+'</h2><p class="small mut" style="margin:0">'+(hoyEs?'Repasa tus luces de la semana y lleva tu caso pensado.':'Faltan '+diff(nt,t)+' '+(diff(nt,t)===1?'día':'días')+'. Aquí se reúne lo que vas escribiendo cada día.')+'</p></div>';
   const dias=[];for(let d=new Date(start);d<=t;d=addDays(d,1)){const k=ymd(d);if(hist[k]||notes[k])dias.push(k)}
-  h+='<div class="row" style="margin:8px 0 0"><button class="btn ghost" data-act="sub" data-v="otros">Ver el Evangelio de otro día (p. ej., el domingo)</button></div>';h+='<h2 class="sec">Mis luces de la semana</h2>';
+  h+='<div class="row" style="margin:8px 0 0"><button class="btn" data-act="sub" data-v="vivo">Abrir el Encuentro en vivo</button></div>';h+='<div class="row" style="margin:8px 0 0"><button class="btn ghost" data-act="sub" data-v="otros">Ver el Evangelio de otro día (p. ej., el domingo)</button></div>';h+='<h2 class="sec">Mis luces de la semana</h2>';
   if(!dias.length)h+='<p class="note">Todavía no hay notas desde el último martes. Usa «Paso a paso de hoy» cada día.</p>';
   dias.reverse().forEach(k=>{const n=notes[k]||{},c=(hist[k]||{}).cita||'';const d=new Date(k+'T12:00:00');
     h+='<details><summary>'+esc(cap(fmt(d)))+(c?' · '+esc(c):'')+'</summary><div class="in">'+(n.palabra?'<p><b>Me tocó:</b> '+esc(n.palabra)+'</p>':'')+(n.luz?'<p><b>Mi luz:</b> '+esc(n.luz)+'</p>':'')+(n.ver?'<p><b>Hecho:</b> '+esc(n.ver)+'</p>':'')+(n.proposito?'<p><b>Propósito:</b> '+esc(n.proposito)+'</p>':'')+(!n.palabra&&!n.luz&&!n.ver&&!n.proposito?'<p class="mut">Leíste el Evangelio, sin notas.</p>':'')+'</div></details>'});
@@ -2352,6 +2430,18 @@ document.addEventListener('click',e=>{
   else if(a==='catnav'){state.catoff=(state.catoff||0)+(+v);render(true)}
   else if(a==='cathoy'){state.catoff=0;render(true)}
   else if(a==='encf'){state.encf=v;render(true)}
+  else if(a==='vev'){const k=vivoFecha(),V=vivoGet(k);V.ev=v;vivoSet(k,V);render(true)}
+  else if(a==='vtadd'){const i=$('#vtnew'),x=(i&&i.value||'').trim();if(!x){$('#vtmsg').textContent='Escribe primero el título.';return}const k=vivoFecha(),V=vivoGet(k);V.titulos=V.titulos||[];V.titulos.push({t:x,v:0,mio:!!(($('#vtmio')||{}).checked)});vivoSet(k,V);render(true)}
+  else if(a==='vtv'){const k=vivoFecha(),V=vivoGet(k),x=(V.titulos||[])[+b.dataset.i];if(x){x.v=Math.max(0,(x.v||0)+(+v));vivoSet(k,V);render(true)}}
+  else if(a==='vtdel'){const k=vivoFecha(),V=vivoGet(k);(V.titulos||[]).splice(+b.dataset.i,1);vivoSet(k,V);render(true)}
+  else if(a==='vsave'){
+    const k=vivoFecha(),V=vivoGet(k),ev=V.ev||vivoEvDef(k),H=DIAH[ev],T=V.titulos||[],g=vivoGanador(T);
+    const caso=[g>=0?T[g].t:'',V.relato||''].filter(Boolean).join(' — ')+(V.ver?'\nVer: '+V.ver:'')+(V.juzgar?'\nJuzgar: '+V.juzgar:'');
+    const e={fecha:k,evang:(H&&H.evangelio&&H.evangelio.cita)||'',luces:[V.luz,V.luces].filter(Boolean).join('\n'),caso:caso.trim(),proposito:(V.prop||'').trim(),mio:(V.mio||'').trim(),res:'',vivo:1};
+    if(!e.luces&&!e.caso&&!e.proposito&&!e.mio){$('#vmsg').textContent='Escribe al menos una luz, el testimonio o un propósito.';return}
+    const D=store.get('diario',[]),j=D.findIndex(x=>x.vivo&&x.fecha===k);if(j>=0){e.res=D[j].res||'';D[j]=e}else D.unshift(e);D.sort((x,y)=>x.fecha<y.fecha?1:-1);store.set('diario',D);
+    $('#vmsg').textContent='Guardado en «Mis Encuentros». El martes que viene podrás anotar cómo te fue.';
+  }
   else if(a==='catok'){const c=store.get('catl',{});if(c[v])delete c[v];else c[v]=ymd(new Date());store.set('catl',c);render(true)}
   else if(a==='sub'){state.sub[state.tab]=v;store.set('sub',state.sub);render()}
   else if(a==='go'){state.tab=v;if(b.dataset.s){state.sub[v]=b.dataset.s;store.set('sub',state.sub)}store.set('tab',v);render()}
@@ -2405,6 +2495,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
   if(e.target.id==='bkfile'){const f=e.target.files&&e.target.files[0];if(f)recuperarCopia(f);e.target.value='';return}
+  if(e.target.id==='vevfecha'){if(/^\d{4}-\d\d-\d\d$/.test(e.target.value)){const k=vivoFecha(),V=vivoGet(k);V.ev=e.target.value;vivoSet(k,V);render(true)}return}
   if(e.target.id==='encfecha'){if(/^\d{4}-\d\d-\d\d$/.test(e.target.value)){state.encf=e.target.value;render(true)}return}
   if(e.target.id==='gsel'){state.gdir=1;state.gi=+e.target.value;state.gskip=false;render();state.gskip=true;return}
   const b=e.target.closest('input[type="checkbox"][data-act]');if(!b)return;
@@ -2427,6 +2518,8 @@ document.addEventListener('input',e=>{
   }else if(t.matches('textarea[data-enc]')){
     const k=ymd(new Date()),all=store.get('encn',{});all[k]=all[k]||{};all[k][t.dataset.enc]=t.value;store.set('encn',all);
     const H=encData(),el=$('#mishare');if(H&&el){const sh=composeShare(H.evangelio.cita,all[k]);el.innerHTML=sh?esc(sh):'<span class="mut">Escribe arriba tu palabra, tu luz o tu propósito y aquí se arma tu intervención.</span>';state.say.share=sh}
+  }else if(t.matches('textarea[data-viv]')){
+    const k=vivoFecha(),V=vivoGet(k);V[t.dataset.viv]=t.value;vivoSet(k,V);
   }else if(t.matches('textarea[data-caso]')){
     const c=store.get(t.dataset.caso,{});c[t.dataset.f]=t.value;store.set(t.dataset.caso,c);
   }else if(t.matches('textarea[data-dres]')){

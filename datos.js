@@ -277,7 +277,7 @@ const TABS=[
 const NAV=[{id:'hoy'},{id:'enc',g:['enc','apo']},{id:'misa'},{id:'orar',g:['orar','dia']},{id:'apr'}];
 const GN={enc:'Encuentro',apo:'Apóstol',orar:'Orar',dia:'Mi día'};
 const SUBS={
-  enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['otros','Otros días'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
+  enc:[['paso','Paso a paso de hoy'],['martes','Preparar el martes'],['vivo','En vivo'],['otros','Otros días'],['diario','Mis Encuentros'],['guia','Cómo es un Encuentro']],
   misa:[['chu','Lo de hoy'],['vivo','Paso a paso'],['partes','Entender'],['prac','Practicar']],
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['ado','Adoración'],['mas','Más']],
@@ -511,16 +511,16 @@ const ENC_GEN={
   actuar:['Un propósito pequeño, concreto y medible para esta semana.','Algo para mi conversión personal y algo para acercar a otros a Cristo (apostolado).']
 };
 const ENC_PARTES=[
- {n:'Oración inicial',q:'El responsable de equipo dirige la oración. Se pide al Espíritu Santo que ilumine la mente, mueva la voluntad y encienda el corazón; se suele añadir un Avemaría o un Gloria y las invocaciones del Regnum Christi.',tu:'Rezar con todos. Responde «¡Venga tu Reino!» cuando digan «¡Cristo, Rey nuestro!».'},
- {n:'Lectura orante del Evangelio',q:'Alguien lee el pasaje en voz alta (en muchos equipos se escucha de pie). Puede ser el Evangelio del domingo, el del día o uno que elija el equipo. Luego hay unos minutos de silencio.',tu:'Escuchar sin prisa y fijarte en una palabra o frase que te toque. No tienes que leer tú la primera vez, salvo que te lo pidan.'},
+ {n:'Oración inicial',q:'Quien modera dirige la oración. Como Jesús prometió estar donde dos o tres se reúnen en su nombre (Mateo 18, 20), se empieza pidiendo al Espíritu Santo que ilumine la mente, mueva la voluntad y encienda el corazón; se suele añadir un Avemaría o un Gloria y las invocaciones del Regnum Christi.',tu:'Rezar con todos. Responde «¡Venga tu Reino!» cuando digan «¡Cristo, Rey nuestro!».'},
+ {n:'Lectura orante del Evangelio',q:'Alguien lee el pasaje en voz alta (en muchos equipos se escucha de pie). El Regnum Christi sugiere el del domingo anterior o posterior a la reunión, o uno que elija el equipo (en «En vivo» puedes escoger cuál). Luego hay unos minutos de silencio.',tu:'Escuchar sin prisa y fijarte en una palabra o frase que te toque. No tienes que leer tú la primera vez, salvo que te lo pidan.'},
  {n:'Compartir luces',q:'Cada uno comparte con sencillez lo que el Espíritu Santo le hizo ver en el texto: una «luz». No es una clase ni un debate. Un secretario puede resumir.',tu:'Dos o tres frases bastan: qué palabra te tocó y por qué, o cómo lo ves en tu vida. Puedes decir «paso» si aún no te sientes listo.'},
  {n:'Oración espontánea',q:'Uno o varios rezan en voz alta, con sus palabras, a partir de lo compartido: dar gracias, pedir luz y fuerza, encomendar intenciones.',tu:'Si te animas, una frase como: «Señor, gracias por… ayúdame a…». Si no, une tu intención en silencio.'},
  {n:'Revisión de compromisos (en algunos equipos)',q:'Algunos equipos repasan brevemente los compromisos de vida espiritual (oración, Misa, etc.) o el propósito de la semana anterior.',tu:'Responder con sencillez y sin justificarte. Nadie está obligado a revelar su conciencia.'},
- {n:'Elección del caso',q:'Es la parte más larga (cerca de tres cuartas partes del tiempo). Los miembros proponen hechos reales de su vida o de su entorno que les cuestionan, y el equipo elige uno.',tu:'Llevar pensado un caso real y breve, sin nombres ni detalles que expongan a nadie. Puede ser algo del trabajo, la familia, la calle o una noticia.'},
- {n:'Ver',q:'Se mira el caso como Dios lo mira: ¿qué pasó?, ¿por qué?, ¿qué consecuencias tuvo?, ¿dónde se ve el bien y el mal?, ¿cómo estoy implicado yo?',tu:'Aportar hechos y preguntas, sin juzgar a las personas.'},
+ {n:'Elección del caso',q:'Es la parte más larga (cerca de tres cuartas partes del tiempo). Cada uno propone el título de un hecho real que vivió o que le cuestiona; se vota, y quien propuso el más votado da su testimonio.',tu:'Llevar pensado un título y un caso real y breve, sin nombres ni detalles que expongan a nadie. Puede ser algo del trabajo, la familia, la calle o una noticia.'},
+ {n:'Ver',q:'Se dice lo que se vio en el relato y se contrasta con el Evangelio, mirando el caso como Dios lo mira: ¿qué pasó?, ¿por qué?, ¿qué consecuencias tuvo?, ¿dónde se ve el bien y el mal?, ¿cómo estoy implicado yo?',tu:'Aportar hechos y preguntas, sin juzgar a las personas.'},
  {n:'Juzgar',q:'A la luz del Evangelio: ¿cómo actuaría Jesús?, ¿qué virtudes o antivalores aparecen?, ¿qué pasaje lo ilumina? El juicio se aplica a uno mismo, no a los demás.',tu:'Puedes citar la frase del Evangelio del día o la de un santo o un Papa: aquí es donde más sirve el «paso a paso» de esta app.'},
  {n:'Actuar y propósito',q:'Se proponen acciones concretas: unas para la conversión personal y otras de apostolado. El equipo elige un propósito común para la semana, concreto y medible.',tu:'Proponer algo pequeño y realista. Anótalo en «Mis Encuentros» para revisarlo el martes siguiente.'},
- {n:'Oración final',q:'Se da gracias y se termina con las dos invocaciones propias del Regnum Christi: a Cristo Rey y a la Virgen María. Después pueden darse avisos.',tu:'Responder a las invocaciones. La invocación a la Virgen la vas a aprender escuchándola en tu equipo.'}
+ {n:'Oración final',q:'Terminamos como empezamos, en presencia de Dios: se da gracias por lo recibido y se termina con las dos invocaciones propias del Regnum Christi: a Cristo Rey y a la Virgen María. Después pueden darse avisos.',tu:'Responder a las invocaciones. La invocación a la Virgen la vas a aprender escuchándola en tu equipo.'}
 ];
 const ENC_TIPS=[
  'Llega unos minutos antes y preséntate con sencillez: «Es mi primera vez, vengo a conocer».',
