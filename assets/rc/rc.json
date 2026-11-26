@@ -1,6 +1,44 @@
 {
  "logo": null,
+ "logo_blanco": "assets/rc/logo-blanco.png",
  "escudo": "assets/rc/escudo.png",
- "noticias": [],
+ "noticias": [
+  {
+   "titulo": "Claudia Festa: «Vivir la propia fe sin divisiones» desde la vocación matrimonial y familiar",
+   "link": "https://regnumchristi.org/es/claudia-festa-fe-matrimonio-familia/",
+   "fecha": "25 de noviembre de 2026",
+   "img": "assets/rc/n1.webp"
+  },
+  {
+   "titulo": "«Una misma misión»: la Red Internacional de Colegios aborda en Madrid sus desafíos educativos y elige nueva presidencia",
+   "link": "https://regnumchristi.org/es/red-colegios-regnum-christi-asamblea-madrid/",
+   "fecha": "25 de noviembre de 2026",
+   "img": "assets/rc/n2.webp"
+  },
+  {
+   "titulo": "«Detrás de cada acta hay personas y una misión»: Los secretarios territoriales se reúnen en Roma para fortalecer su servicio a la misión",
+   "link": "https://regnumchristi.org/es/encuentro-secretarios-territoriales-roma/",
+   "fecha": "25 de noviembre de 2026",
+   "img": "assets/rc/n3.webp"
+  },
+  {
+   "titulo": "Cristo Rey: ¿quién ocupa el trono de tu corazón?",
+   "link": "https://regnumchristi.org/es/cristo-rey-quien-ocupa-el-trono-de-tu-corazon/",
+   "fecha": "24 de noviembre de 2026",
+   "img": "assets/rc/n4.webp"
+  },
+  {
+   "titulo": "Gerardo González Estrada, laico consagrado: «Mi más grande ilusión: ser siempre fiel a Jesucristo»",
+   "link": "https://regnumchristi.org/es/gerardo-gonzalez-estrada-37-anos-vida-consagrada/",
+   "fecha": "22 de noviembre de 2026",
+   "img": "assets/rc/n5.webp"
+  },
+  {
+   "titulo": "«¿Cómo quieres reinar en mi vida?»: mensaje del Colegio Directivo General a los miembros del Regnum Christi para Cristo Rey 2026",
+   "link": "https://regnumchristi.org/es/mensaje-del-colegio-directivo-general-para-cristo-rey-2026/",
+   "fecha": "20 de noviembre de 2026",
+   "img": "assets/rc/n6.webp"
+  }
+ ],
  "fuente": "regnumchristi.org (con permiso del Regnum Christi)"
 }
