@@ -1,7 +1,7 @@
 /* Venga tu Reino: funciona sin conexión. La app y sus textos se guardan en el teléfono.
    hoy.js (el Evangelio del día) se busca primero en internet y, si no hay, se usa el último guardado.
    dias/AAAA-MM-DD.js (los días preparados por adelantado) y dias/linea.json (línea del tiempo) también se guardan, para que la app cambie de día sin internet. */
-const V='vtr-v39';
+const V='vtr-v40';
 /* Las pinturas en versión para teléfono se guardan en segundo plano, para que después abran al instante. */
 const IMGS=['basilica','cena','corazon','getsemani','inmaculada','pieta','plaza','resurreccion','virgen'].map(k=>'assets/img/'+k+'-m.webp');
 /* (nov 2026) La Biblia ya no se guarda: las lecturas se abren en Vatican News. */

@@ -83,6 +83,15 @@ details[open]>summary::after{transform:rotate(-135deg)}
 details .in{padding:0 16px 16px}
 .num{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:.85rem;font-family:var(--fd)}
 .sec{font-family:var(--fd);font-weight:400;font-size:1.35rem;margin:30px 2px 6px;color:var(--ink)}
+.sil{text-align:center;padding:18px 14px}
+.sil .ring{width:150px;height:150px;margin:6px auto 10px;position:relative}
+.sil .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.sil .ring circle{fill:none;stroke-width:5}
+.sil .ring .bg{stroke:var(--line)}
+.sil .ring .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.sil .ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:2rem;font-weight:400;color:var(--ink)}
+.sil .seg{justify-content:center;background:transparent}
+.sil .row{justify-content:center}
 .say{border-left:3px solid var(--gold);background:var(--gold-bg);padding:10px 14px;border-radius:0 14px 14px 0;margin:10px 0}
 .say b{font-size:.84rem;color:var(--gold);display:block;font-weight:600}
 .lbl{font-size:.88rem;font-weight:600;color:var(--gold);margin:14px 0 2px}
@@ -653,7 +662,7 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 <div id="app"><div id="hd"></div><main id="main"></main></div>
 <nav class="tabs" id="tabs" aria-label="Secciones principales"></nav>
 <script src="hoy.js"></script>
-<script src="datos.js?v=213bd25e"></script>
+<script src="datos.js?v=ed72f7b2"></script>
 <script>/* Días preparados por adelantado: si hoy.js no es de hoy, se usa dias/AAAA-MM-DD.js. Así la app cambia de día sola a medianoche. */
 (function(){try{var t=new Date(),p=function(n){return(n<10?'0':'')+n},d=t.getFullYear()+'-'+p(t.getMonth()+1)+'-'+p(t.getDate());if(!(window.HOY&&window.HOY.fecha===d))document.write('<script src="dias/'+d+'.js"><\/script>')}catch(e){}})();</script>
 <script>
@@ -1352,6 +1361,7 @@ function tiempoHtml(){
 function viewOrar(){
   if(state.sub.orar==='mas')return segHtml('orar')+'<h2 class="sec" style="margin-top:14px">Más para orar</h2>'+SUBS.orarMas.map(([id,n,dd])=>'<button class="card" style="display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit" data-act="sub" data-v="'+id+'"><b>'+esc(n)+' ›</b><p class="small mut" style="margin:4px 0 0">'+esc(dd)+'</p></button>').join('');
   if(state.sub.orar==='int')return segHtml('orar')+viewIntenciones();
+  if(state.sub.orar==='sil')return segHtml('orar')+viewSilencio();
   if(state.sub.orar==='fie')return viewFiestas();
   if(state.sub.orar==='hor')return viewHoras();
   if(state.sub.orar==='seo')return viewSEO();
@@ -1390,6 +1400,7 @@ function viewAdoracion(){
   const pr=id=>'<div class="say"><b>Reza</b><span class="prayer">'+esc(oraT(id))+'</span></div>';
   let h='<div class="lhh"><div class="kk">Jesús presente en la Eucaristía</div><h2>Adoración y Hora Santa</h2><p>En el Sagrario, y en la custodia cuando está expuesto, Jesús está real y verdaderamente presente. Adorarlo es estar con Él como con un amigo: hablarle, escucharlo y, sobre todo, quedarse en silencio.</p></div>';
   h+='<div class="card tint"><b>En el Regnum Christi</b><p class="small" style="margin:4px 0 0">Es tradición tener una hora eucarística cada semana, la noche de los jueves: un «cara a cara» con Jesús sacramentado, en silencio y escucha, sin prisas y sin agenda. Si no tienes una hora, una visita de 15 minutos ya es oración verdadera. Usa los pasos que te sirvan.</p></div>';
+  h+=silBox('ado',15,'Para tu rato ante el Sagrario: pon el tiempo y quédate con Él sin mirar el reloj.');
   h+='<h2 class="sec">Paso a paso</h2>';
   const P=[
     ['Al llegar','<p>Haz una genuflexión: la rodilla derecha hasta el suelo, mirando al Sagrario o a la custodia. Arrodíllate o siéntate en silencio.</p><div class="say"><b>Puedes decir</b><span class="prayer">Bendito y alabado sea Jesús en el Santísimo Sacramento del altar.</span></div>'],
@@ -1626,7 +1637,7 @@ function pasosHoy(H,N){
   const ver=X.ver||ENC_GEN.ver,juz=X.juzgar||ENC_GEN.juzgar,act=X.actuar||ENC_GEN.actuar;
   const P=[];
   P.push({ic:'dove',t:'Ponte en presencia de Dios',b:'<p class="mut">Respira hondo. Estás ante Dios, que te mira con cariño.</p><p class="prayer">'+esc(oraT('vensp'))+'</p><p class="mut" style="margin-top:10px">Haz ahora, con tus palabras, un acto de fe, esperanza y caridad. Puede ser así de sencillo:</p><p class="prayer">Creo, Jesús, espero en ti y te amo.</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
-  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio un par de minutos.</p><div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>'+
+  P.push({ic:'book',t:'Escucha el Evangelio',b:'<p>Lee <b>'+esc(E.cita)+'</b> despacio, dos veces. Luego quédate en silencio con Él.</p>'+silBox('ev',2,'')+'<div class="row"><a class="btn ghost" href="'+esc(misaURL(H.fecha))+'" target="_blank" rel="noopener noreferrer">Leer en Vatican News</a></div>'+
     (X.frase?'<div class="say"><b>Frase clave · '+esc(X.frase.cita||'')+'</b><span class="prayer">«'+esc(X.frase.texto)+'»</span></div>':'')+
     '<div class="lbl">¿Qué palabra o frase te tocó a ti?</div>'+ta('palabra','Escríbela aquí…',N.palabra,70)});
   P.push({ic:'flame',t:'Las luces',b:'<p class="mut">Ideas para meditar. Quédate con la que más te hable.</p><ul class="tight">'+(X.luces||[E.significado]).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="lbl">Tu luz: lo que sientes que Dios te dice</div>'+ta('luz','En dos o tres frases…',N.luz)});
@@ -1638,6 +1649,7 @@ function pasosHoy(H,N){
   const sh=composeShare(E.cita,N);
   P.push({ic:'chat',t:'Lo que dirías en el Encuentro',b:(X.compartir?'<p class="mut small">Un ejemplo:</p><p class="prayer" style="margin-top:0">'+esc(X.compartir)+'</p>':'')+'<div class="lbl">Tu intervención, armada con lo que escribiste</div><p class="prayer" id="mishare">'+(sh?esc(sh):'<span class="mut">Cuando escribas tu palabra, tu luz o tu propósito, aquí aparecerá tu intervención.</span>')+'</p><div class="row">'+(sh?sayBtn('share',sh)+'<a class="btn ghost" href="https://wa.me/?text='+encodeURIComponent(sh)+'" target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a>':'')+'</div>'});
   P.push({ic:'cross',t:'Oración final',b:'<p class="prayer">'+esc(E.oracion)+'</p><p class="prayer" style="margin-top:10px">'+esc(INVOC)+'</p>'});
+  if(store.get('olen','completa')==='breve')return P.filter(p=>['dove','book','path','cross'].includes(p.ic));
   return P;
 }
 function viewEncPaso(){
@@ -1649,6 +1661,7 @@ function viewEncPaso(){
   /* Todos los pasos en una sola lectura continua: sin «Siguiente», solo bajar. */
   const done=!!oreDays()[k];
   let h=state.zen?'<div class="zenbar"><span class="small mut">Modo oración</span><button class="btn ghost" data-act="zen" data-v="0">Salir</button></div>':'<div class="row" style="justify-content:flex-end;margin:2px 0 0"><button class="lk" data-act="zen" data-v="1">Modo oración ›</button></div>';
+  {const L=store.get('olen','completa');h+='<div class="seg" role="group" aria-label="¿Cuánto tiempo tienes?" style="justify-content:center">'+[['breve','Breve · 5 min'],['completa','Completa · 15 min']].map(([k,n])=>'<button data-act="olen" data-v="'+k+'" aria-pressed="'+(L===k)+'">'+n+'</button>').join('')+'</div>'+(L==='breve'?'<p class="small mut" style="text-align:center;margin:0 0 6px">Lo esencial: presencia de Dios, Evangelio, propósito y oración final.</p>':'')}
   h+='<div class="pasos">'+P.map((p,i)=>'<section class="paso"><div class="pk"><span class="num">'+(i+1)+'</span><span class="small mut">de '+tot+'</span></div><h2>'+esc(p.t)+'</h2>'+p.b+'</section>').join('')+'</div>';
   if(done){const n=rachaN();h+='<div class="fin">'+ic('check')+'<h2>Que venga su Reino a tu día</h2><p>Terminaste tu oración con el Evangelio de hoy.</p><p class="mut">'+(n===1?'Primer día de tu racha.':n+' días seguidos orando.')+'</p>'+semanaHtml().replace('class="week"','class="week" style="justify-content:center;margin:12px 0"')+'<div class="row" style="justify-content:center"><button class="btn" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div></div>'}
   else h+='<div class="row"><button class="btn big" data-act="oredone">Amén. Terminé mi oración</button></div>';
@@ -2403,11 +2416,61 @@ function speak(id,btn){
   speechSynthesis.speak(u);
 }
 
+/* ===== SILENCIO CON DIOS (nov 2026, idea tomada de Hallow): temporizador de oración en silencio con campana suave.
+   La campana se genera en el teléfono (sin archivos ni internet). Los minutos se guardan solo en este dispositivo. ===== */
+const SIL={id:null,fin:0,tot:0,t:null,ac:null,wl:null};
+function campana(){
+  try{const C=SIL.ac||(SIL.ac=new (window.AudioContext||window.webkitAudioContext)());if(C.state==='suspended')C.resume();
+    const t=C.currentTime;[[528,.32],[1056,.12],[1584,.06],[792,.08]].forEach(([f,g])=>{const o=C.createOscillator(),v=C.createGain();o.type='sine';o.frequency.value=f;v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+.02);v.gain.exponentialRampToValueAtTime(.0001,t+5);o.connect(v).connect(C.destination);o.start(t);o.stop(t+5.1)});
+  }catch(e){}
+}
+function silMes(){const M=store.get('silmin',{}),p=ymd(new Date()).slice(0,7);let n=0;for(const k in M)if(k.indexOf(p)===0)n+=M[k];return n}
+function silSuma(min){if(min<1)return;const M=store.get('silmin',{}),k=ymd(new Date());M[k]=(M[k]||0)+min;store.set('silmin',M)}
+function silFmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function silHtml(id,def,txt){
+  const on=SIL.id===id&&SIL.fin>Date.now(),m=store.get('silm_'+id,def),C=2*Math.PI*70;
+  const rest=on?(SIL.fin-Date.now())/1000:m*60,frac=on?rest/SIL.tot:1,mes=silMes();
+  let h='<div class="card sil" data-sil="'+id+'">'+(id==='orar'?'':'<div class="lbl" style="margin:0">Silencio con Dios</div>')+(txt?'<p class="small mut" style="margin:6px 0 0">'+esc(txt)+'</p>':'');
+  h+='<div class="ring"><svg viewBox="0 0 160 160" aria-hidden="true"><circle class="bg" cx="80" cy="80" r="70"/><circle class="fg" cx="80" cy="80" r="70" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-frac)).toFixed(1)+'"/></svg><b role="timer" aria-live="off">'+silFmt(rest)+'</b></div>';
+  if(!on)h+='<div class="seg" role="group" aria-label="Minutos de silencio">'+[2,5,10,15,30].map(x=>'<button data-act="silm" data-v="'+x+'" data-i="'+id+'" aria-pressed="'+(x===m)+'">'+x+' min</button>').join('')+'</div>';
+  h+='<div class="row" style="margin:6px 0 0">'+(on?'<button class="btn ghost" data-act="silx" data-v="'+id+'">Terminar</button>':'<button class="btn" data-act="sil" data-v="'+id+'">Empezar en silencio</button>')+'</div>';
+  h+='<p class="small mut" style="margin:8px 0 0">'+(on?'Una campana suave marcará el final. Deja la pantalla encendida.':(mes?'Este mes: '+mes+' min en silencio con Dios.':'Una campana al empezar y otra al terminar.'))+'</p></div>';
+  return h;
+}
+function silPinta(){const el=document.querySelector('[data-sil="'+SIL.id+'"]');if(!el)return;const rest=(SIL.fin-Date.now())/1000,C=2*Math.PI*70;
+  const b=el.querySelector('.ring b'),c=el.querySelector('.fg');if(b)b.textContent=silFmt(rest);if(c)c.setAttribute('stroke-dashoffset',(C*(1-Math.max(0,rest)/SIL.tot)).toFixed(1))}
+function silRedibuja(id){const el=document.querySelector('[data-sil="'+id+'"]');if(!el)return;const x=document.createElement('div');x.innerHTML=silHtml(id,+(el.dataset.def||5),el.dataset.txt||'');const n=x.firstChild;n.dataset.def=el.dataset.def||'';n.dataset.txt=el.dataset.txt||'';el.replaceWith(n)}
+function silParar(fin){
+  const id=SIL.id;if(!id)return;clearInterval(SIL.t);
+  const hechos=fin?SIL.tot/60:Math.floor((SIL.tot-(SIL.fin-Date.now())/1000)/60);silSuma(Math.round(hechos));
+  if(fin){campana();try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}
+  try{SIL.wl&&SIL.wl.release()}catch(e){}SIL.wl=null;SIL.id=null;SIL.fin=0;silRedibuja(id);
+}
+function silEmpezar(id){
+  if(SIL.id)silParar(false);
+  const m=store.get('silm_'+id,+((document.querySelector('[data-sil="'+id+'"]')||{dataset:{}}).dataset.def||5));
+  SIL.id=id;SIL.tot=m*60;SIL.fin=Date.now()+SIL.tot*1000;campana();
+  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>{SIL.wl=w}).catch(()=>{})}catch(e){}
+  silRedibuja(id);
+  SIL.t=setInterval(()=>{if(Date.now()>=SIL.fin)silParar(true);else silPinta()},1000);
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&SIL.id){if(Date.now()>=SIL.fin)silParar(true);else{silPinta();try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>{SIL.wl=w}).catch(()=>{})}catch(e){}}}});
+/* silBox: el temporizador dentro de cualquier vista (recuerda su duración inicial y su texto al redibujarse) */
+function silBox(id,def,txt){return silHtml(id,def,txt).replace('data-sil="'+id+'"','data-sil="'+id+'" data-def="'+def+'" data-txt="'+esc(txt||'')+'"')}
+function viewSilencio(){
+  let h='<div class="lhh"><div class="kk">Oración contemplativa</div><h2>Silencio con Dios</h2><p>Estar con Él sin decir mucho. Como dos amigos que no necesitan hablar: tú lo miras y Él te mira.</p></div>';
+  h+=silBox('orar',10,'');
+  h+='<h2 class="sec">Cómo hacerlo</h2><div class="card"><p><b>1. Empieza.</b> Haz la señal de la cruz y di despacio: «Jesús, aquí estoy contigo».</p><p><b>2. Quédate.</b> Si te distraes, no te preocupes: vuelve con calma repitiendo el nombre de Jesús o una frase del Evangelio de hoy.</p><p><b>3. Escucha.</b> No hace falta sentir nada. Basta con estar; Dios trabaja en el silencio.</p><p style="margin-bottom:0"><b>4. Termina.</b> Al sonar la campana, da gracias y reza un Padre Nuestro.</p></div>';
+  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="orar" data-s="ado">Adoración y Hora Santa</button><button class="btn ghost" data-act="pray">Orar con el Evangelio</button></div>';
+  h+='<p class="note">La guía es de la app, con nuestras palabras. Los minutos se guardan solo en este dispositivo.</p>';
+  return h;
+}
+
 /* ===== EVENTOS ===== */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act,v=b.dataset.v;
-  if(a!=='ps'&&a!=='oredone'&&a!=='pray'&&a!=='speak'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
+  if(a!=='ps'&&a!=='oredone'&&a!=='pray'&&a!=='speak'&&a!=='sil'&&a!=='silx'&&a!=='silm'&&a!=='olen'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
   if(a==='zen'){state.zen=v==='1';if(state.zen){state.tab='enc';state.sub.enc='paso';state.plist=false}render(true)}
   else if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
@@ -2456,6 +2519,10 @@ document.addEventListener('click',e=>{
   else if(a==='next'){nextCard();$('#quiz').innerHTML=quizHtml()}
   else if(a==='resetbox'){store.set('box',{});state.q=null;render(true)}
   else if(a==='speak')speak(v,b);
+  else if(a==='sil')silEmpezar(v);
+  else if(a==='silx')silParar(false);
+  else if(a==='silm'){store.set('silm_'+b.dataset.i,+v);silRedibuja(b.dataset.i)}
+  else if(a==='olen'){store.set('olen',v);render(true)}
   else if(a==='yr'){state.year+=+v;render(true)}
   else if(a==='exadone'){celebrar();
     const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];['examen','noche'].forEach(x=>{if(!r[k].includes(x))r[k].push(x)});store.set('rut',r);

@@ -282,7 +282,7 @@ const SUBS={
   apo:[['med','Para hoy'],['dir','Dirección'],['apo','Apostolado'],['fichas','Acompañados']],
   orar:[['ora','Oraciones'],['ros','Rosario'],['ado','Adoración'],['mas','Más']],
   /* Dentro de «Más» (nov 2026: Orar pasa de 7 a 4 botones) */
-  orarMas:[['fie','Novenas y fiestas','Las novenas del día y las fiestas del año, también las de Venezuela y del Regnum Christi.'],['hor','Liturgia de las Horas','La oración oficial de la Iglesia a lo largo del día.'],['int','Mis intenciones','Las personas y causas por las que rezas.'],['seo','Libro del Regnum Christi','«Señor, enséñanos a orar»: el libro de oración del laico.']],
+  orarMas:[['sil','Silencio con Dios','Un rato de oración en silencio, con temporizador y campana suave.'],['fie','Novenas y fiestas','Las novenas del día y las fiestas del año, también las de Venezuela y del Regnum Christi.'],['hor','Liturgia de las Horas','La oración oficial de la Iglesia a lo largo del día.'],['int','Mis intenciones','Las personas y causas por las que rezas.'],['seo','Libro del Regnum Christi','«Señor, enséñanos a orar»: el libro de oración del laico.']],
   apr:[['con','Personas y hechos'],['cat','Catecismo'],['anio','Año litúrgico'],['euc','Eucaristía y Misa'],['glos','Glosario'],['ens','Ensayos RC']],
   dia:[['rutina','Rutina'],['exa','Noche'],['conf','Confesión'],['cua','Cuaderno']]
 };
