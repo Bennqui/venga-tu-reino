@@ -728,6 +728,20 @@ html[data-theme=dark]{--soft:#1F2023;--tint:#1F2023}
 .fd.ci{border-top-color:var(--sac-l);color:var(--sac)}
 .nvd.on,.hora.on{border-color:var(--sac-l);box-shadow:0 0 0 2px color-mix(in srgb,var(--sac-l) 40%,transparent)}
 .nvd.done .num{background:var(--sac-l);border-color:var(--sac-l);color:#fff}
+.oini .lema{font-family:var(--fd);font-size:1.05rem;letter-spacing:.04em;text-align:center;margin:0 0 12px;color:#fff;opacity:.95}
+/* Mi equipo (Encuentro) */
+.equipo{border:1px solid var(--line);border-radius:18px;margin:14px 0 6px;background:var(--card)}
+.equipo>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.equipo>summary::-webkit-details-marker{display:none}
+.equipo .eqi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--red-bg);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.15rem}
+.equipo .eqt{flex:1;min-width:0}
+.equipo .eqt b{display:block;font-family:var(--fd);font-weight:400;font-size:1.12rem;line-height:1.2}
+.equipo .eqt span{display:block;font-size:.86rem;color:var(--mut)}
+.equipo .eqf{padding:0 16px 14px}
+.equipo label{display:block;font-size:.8rem;color:var(--mut);margin:10px 0 4px}
+.equipo input,.equipo select,.equipo textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:16px/1.4 var(--fb);padding:9px 12px}
+.equipo .g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.equipo .apo{margin:0 16px 12px;padding:8px 12px;border-left:3px solid var(--red);background:var(--soft);border-radius:0 12px 12px 0;font-size:.92rem}
 /* Regnum Christi: noticias con foto real y logotipo */
 .rcnot{display:block;border-radius:20px;overflow:hidden;background:var(--card);border:1px solid var(--line);margin:22px 0 10px;color:var(--ink);text-decoration:none;box-shadow:0 6px 20px -12px rgba(71,75,80,.35)}
 .rcnot img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
@@ -1716,15 +1730,38 @@ fetch('assets/rc/rc.json').then(r=>r.ok?r.json():null).then(j=>{if(j){RCJ=j;if(s
 function rcNoticia(i){const N=(RCJ&&RCJ.noticias)||[];if(!N.length)return '';const n=N[i%N.length];if(!n||!n.img||!/^(assets\/rc\/|https:\/\/)/.test(n.img))return '';
   return '<a class="rcnot" href="'+esc(/^https:\/\//.test(n.link)?n.link:'https://regnumchristi.org/es/')+'" target="_blank" rel="noopener"><img src="'+esc(n.img)+'" alt="" loading="lazy" onerror="this.parentNode.remove()"><span><span class="kk">Del Regnum Christi</span><b>'+esc(n.titulo)+'</b><span class="small mut">'+esc(n.fecha||'')+' · regnumchristi.org</span></span></a>';}
 function rcPie(){const ok=x=>x&&/^assets\/rc\//.test(x)?x:'',L=ok(RCJ&&RCJ.logo),W=ok(RCJ&&RCJ.logo_blanco);return '<div class="rcpie">'+(L?'<img src="'+esc(L)+'" alt="Regnum Christi" onerror="this.remove()">':W?'<span class="rctab"><img src="'+esc(W)+'" alt="Regnum Christi" onerror="this.parentNode.remove()"></span>':'')+'<p class="small mut" style="margin:0">Con el Regnum Christi · <a href="https://regnumchristi.org/es/" target="_blank" rel="noopener">regnumchristi.org</a></p></div>'}
-function viewEnc(){const s=state.sub.enc;return viewEnc0()+((!s||s==='paso'||s==='guia')?rcNoticia(0):'')+rcPie()}
+/* ===== Mi equipo: el equipo de Encuentro de Cesar (se guarda en el teléfono) ===== */
+const DIAS_SEM=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+function proximoEncuentro(eq){
+  const d=DIAS_SEM.indexOf(eq.dia||'martes'),hoy=new Date(),[hh,mm]=(eq.hora||'19:00').split(':').map(Number);
+  const x=new Date(hoy.getFullYear(),hoy.getMonth(),hoy.getDate(),hh||0,mm||0);let n=(d-x.getDay()+7)%7;if(n===0&&x<hoy-3*36e5)n=7;x.setDate(x.getDate()+n);return {f:x,n};
+}
+function horaBonita(h){if(!h)return '';const [a,b]=h.split(':').map(Number);return ((a+11)%12+1)+':'+String(b||0).padStart(2,'0')+(a<12?' a. m.':' p. m.')}
+function equipoHtml(){
+  if(state.zen)return '';
+  const eq=store.get('equipo',{}),p=proximoEncuentro(eq);
+  const cuando=p.n===0?'hoy':p.n===1?'mañana':DIAS_SEM[p.f.getDay()]+' '+p.f.getDate()+' de '+['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][p.f.getMonth()];
+  const ini=(eq.nombre||'Mi equipo').trim().charAt(0).toUpperCase();
+  let h='<details class="equipo"'+(eq.nombre?'':' open')+'><summary><span class="eqi">'+esc(ini)+'</span><span class="eqt"><b>'+esc(eq.nombre||'Mi equipo')+'</b><span>Próximo Encuentro: '+esc(cuando)+' · '+esc(horaBonita(eq.hora||'19:00'))+(eq.lugar?' · '+esc(eq.lugar):'')+'</span>'+(eq.resp?'<span>Responsable: '+esc(eq.resp)+'</span>':'')+'</span></summary>';
+  if(eq.apo)h+='<div class="apo"><b>Apostolado del mes:</b> '+esc(eq.apo)+'</div>';
+  h+='<div class="eqf"><label for="eq-n">Nombre del equipo</label><input id="eq-n" data-eq="nombre" value="'+esc(eq.nombre||'')+'" placeholder="Ej.: Equipo San Pablo">'+
+    '<div class="g2"><div><label for="eq-d">Día</label><select id="eq-d" data-eq="dia">'+DIAS_SEM.map(d=>'<option'+((eq.dia||'martes')===d?' selected':'')+'>'+d+'</option>').join('')+'</select></div><div><label for="eq-h">Hora</label><input id="eq-h" type="time" data-eq="hora" value="'+esc(eq.hora||'19:00')+'"></div></div>'+
+    '<label for="eq-l">Lugar</label><input id="eq-l" data-eq="lugar" value="'+esc(eq.lugar||'')+'" placeholder="Ej.: casa de Andrés, Barquisimeto">'+
+    '<label for="eq-r">Responsable</label><input id="eq-r" data-eq="resp" value="'+esc(eq.resp||'')+'">'+
+    '<label for="eq-a">Apostolado del mes</label><input id="eq-a" data-eq="apo" value="'+esc(eq.apo||'')+'" placeholder="Ej.: visita al ancianato el sábado 13">'+
+    '<label for="eq-i">Integrantes</label><textarea id="eq-i" data-eq="miembros" rows="3" placeholder="Un nombre por línea">'+esc(eq.miembros||'')+'</textarea>'+
+    '<p class="small mut" style="margin:8px 0 0">Se guarda solo, en este teléfono.</p></div></details>';
+  return h;
+}
+function viewEnc(){const s=state.sub.enc;if(state.zen)return viewEnc0();return viewEnc0()+((!s||s==='paso'||s==='guia')?rcNoticia(0):'')+rcPie()}
 function viewEnc0(){
   const s=state.sub.enc;
   if(s==='guia')return segHtml('enc')+viewEncGuia();
-  if(s==='martes')return segHtml('enc')+viewEncMartes();
+  if(s==='martes')return segHtml('enc')+equipoHtml()+viewEncMartes();
   if(s==='diario')return segHtml('enc')+viewEncDiario();
   if(s==='otros')return segHtml('enc')+viewEncOtros();
   if(s==='vivo')return segHtml('enc')+viewEncVivo();
-  return segHtml('enc')+viewEncPaso();
+  return segHtml('enc')+equipoHtml()+viewEncPaso();
 }
 function step(n,title,body,open){return '<details'+(open?' open':'')+'><summary><span class="num">'+n+'</span>'+esc(title)+'</summary><div class="in">'+body+'</div></details>'}
 function pasosHoy(H,N){
@@ -1756,7 +1793,7 @@ function viewEncPaso(){
     const L=store.get('olen','completa'),f=FE[feDia('enc')];
     return '<div class="zenbar"><span class="small mut">Modo oración</span><button class="btn ghost" data-act="zen" data-v="0">Salir</button></div><section class="oini">'+feImg(f)+'<div class="oc"><div class="kk">Tu oración de hoy · '+esc(cap(fmt(t)))+'</div><h2>'+esc(E.cita)+'</h2>'+(X.frase?'<blockquote>«'+esc(X.frase.texto)+'»</blockquote>':'')+
       '<div class="seg" role="group" aria-label="¿Cuánto tiempo tienes?">'+[['breve','Breve · 5 min'],['completa','Completa · 15 min']].map(([q,n])=>'<button data-act="olen" data-v="'+q+'" aria-pressed="'+(L===q)+'">'+n+'</button>').join('')+'</div>'+
-      '<button class="btn" data-act="pstart">Empezar</button><p class="small" style="text-align:center;margin:10px 0 0">Busca un lugar tranquilo. Dios ya te está esperando.</p></div></section>';
+      '<p class="lema">¡Cristo, Rey nuestro! ¡Venga tu Reino!</p><button class="btn" data-act="pstart">Empezar</button><p class="small" style="text-align:center;margin:10px 0 0">Busca un lugar tranquilo. Dios ya te está esperando.</p></div></section>';
   }
   const P=pasosHoy(H,N),tot=P.length;
   /* Todos los pasos en una sola lectura continua: sin «Siguiente», solo bajar. */
@@ -2696,6 +2733,7 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('input',e=>{
   const t=e.target;
+  if(t.dataset&&t.dataset.eq){const eq=store.get('equipo',{});eq[t.dataset.eq]=t.value;store.set('equipo',eq);const sm=t.closest('.equipo');if(sm&&t.dataset.eq!=='miembros'){const tmp=document.createElement('div');tmp.innerHTML=equipoHtml();const ns=tmp.querySelector('summary'),na=tmp.querySelector('.apo'),os=sm.querySelector('summary'),oa=sm.querySelector('.apo');if(ns&&os)os.replaceWith(ns);if(oa)oa.remove();if(na)sm.querySelector('summary').after(na)}return}
   if(t.matches('textarea[data-k]')){
     if(t.dataset.k==='notes'||t.dataset.k==='apo3'){store.set(t.dataset.k,t.value)}
     else{const x=store.get('exa',{}),k=ymd(new Date());x[k]=x[k]||{};x[k][t.dataset.k]=t.value;store.set('exa',x)}
