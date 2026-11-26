@@ -92,6 +92,49 @@ details .in{padding:0 16px 16px}
 .sil .ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:2rem;font-weight:400;color:var(--ink)}
 .sil .seg{justify-content:center;background:transparent}
 .sil .row{justify-content:center}
+/* ===== Inspirado en Hallow (nov 2026): tarjetas con pinturas, reproductor, inicio de oración, números grandes ===== */
+.art{position:relative;display:block;width:100%;border:0;padding:0;margin:12px 0;border-radius:22px;overflow:hidden;min-height:150px;background:#2A2316;color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(42,35,22,.14);transition:transform .15s ease}
+.art:active{transform:scale(.98)}
+.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,6,0) 25%,rgba(20,14,6,.78) 100%)}
+.art .at{position:absolute;left:16px;right:16px;bottom:14px;z-index:1}
+.art .at .kk{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#F3D57A;margin:0 0 2px}
+.art .at b{display:block;font-family:var(--fd);font-weight:400;font-size:1.45rem;line-height:1.15}
+.art .at span{display:block;font-size:.86rem;opacity:.88;margin-top:3px;line-height:1.35}
+.carr{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:10px -16px;padding:2px 16px 10px;scrollbar-width:none}
+.carr::-webkit-scrollbar{display:none}
+.carr .art{flex:none;width:62%;max-width:250px;min-height:190px;margin:0;scroll-snap-align:start}
+.carr .art .at b{font-size:1.2rem}
+.rn{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
+.rn b{font-family:var(--fd);font-weight:400;font-size:1.9rem;line-height:1;color:var(--gold)}
+.oini{position:relative;border-radius:26px;overflow:hidden;min-height:68vh;min-height:68svh;margin:8px 0 12px;background:#1d160b;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 10px 30px rgba(42,35,22,.18)}
+.oini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.oini::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,6,.05) 20%,rgba(20,14,6,.85) 72%)}
+.oini .oc{position:relative;z-index:1;padding:22px 20px 20px}
+.oini .kk{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#F3D57A}
+.oini h2{font-family:var(--fd);font-weight:400;font-size:2rem;line-height:1.1;margin:6px 0 8px;color:#fff}
+.oini blockquote{margin:0 0 14px;font-size:1.05rem;line-height:1.5;opacity:.95}
+.oini .seg{background:rgba(255,255,255,.14);justify-content:center;margin:0 0 12px}
+.oini .seg button{color:rgba(255,255,255,.85)}
+.oini .seg button[aria-pressed="true"]{background:#fff;color:#2A2316}
+.oini .btn{width:100%;min-height:56px;font-size:1.05rem}
+.oini .small{color:rgba(255,255,255,.8)}
+#player{position:fixed;inset:0;z-index:90;background:#140e06;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;animation:plIn .35s ease}
+#player[hidden]{display:none}
+@keyframes plIn{from{opacity:0}to{opacity:1}}
+#player img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+#player::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,6,.25) 0%,rgba(20,14,6,.15) 35%,rgba(20,14,6,.92) 75%)}
+#player .pc{position:relative;z-index:1;padding:24px 24px calc(30px + env(safe-area-inset-bottom,0px))}
+#player .kk{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#F3D57A}
+#player h2{font-family:var(--fd);font-weight:400;font-size:1.8rem;line-height:1.15;margin:6px 0 18px;color:#fff}
+#player .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden}
+#player .bar i{display:block;height:100%;width:0;background:#F3D57A;border-radius:4px;transition:width .5s linear}
+#player .tm{display:flex;justify-content:space-between;font-size:.8rem;opacity:.75;margin:6px 0 18px}
+#player .ctl{display:flex;align-items:center;justify-content:center;gap:28px}
+#player .pp{width:76px;height:76px;border-radius:50%;border:0;background:#fff;color:#2A2316;display:flex;align-items:center;justify-content:center}
+#player .pp svg{width:30px;height:30px;fill:currentColor}
+#player .cl{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font-size:1.4rem;line-height:1}
+#player .sm{background:transparent;border:0;color:#fff;opacity:.85;font:inherit;font-size:.9rem;min-height:44px}
 .say{border-left:3px solid var(--gold);background:var(--gold-bg);padding:10px 14px;border-radius:0 14px 14px 0;margin:10px 0}
 .say b{font-size:.84rem;color:var(--gold);display:block;font-weight:600}
 .lbl{font-size:.88rem;font-weight:600;color:var(--gold);margin:14px 0 2px}
@@ -902,6 +945,9 @@ function semanaHtml(){
   return s+'</div>';
 }
 
+/* Tarjeta con pintura (como las portadas de Hallow). attrs: data-act/data-v/data-s */
+function artCard(k,kick,title,sub,attrs){const f=FE[k]||FE.basilica;return '<button class="art" '+attrs+' aria-label="'+esc(title)+'">'+feImg(f,true)+'<span class="at">'+(kick?'<span class="kk">'+esc(kick)+'</span>':'')+'<b>'+esc(title)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</span></button>'}
+const MAS_ART={sil:'getsemani',fie:'inmaculada',hor:'basilica',int:'corazon',seo:'plaza'};
 /* ===== VISTAS ===== */
 function viewHd(){
   const t=new Date(),L=liturgia(t);
@@ -946,7 +992,7 @@ function viewHoy(){
   let m2='';
   let h=phHtml(dk,'<i class="dot"></i>'+esc(misaHoy().titulo)+' · '+esc(cap(fmt(t))),(X.frase||viejo||!E?'«'+esc(frase)+'»':esc(frase)),cita?esc(cita):'',true);
   const n=rachaN(),hoyOre=!!oreDays()[ymd(t)];
-  h+='<div class="streak">'+semanaHtml()+'<span class="small mut">'+(n?n+(n===1?' día seguido':' días seguidos'):'Empieza hoy')+'</span></div>';
+  h+='<div class="streak">'+semanaHtml()+(n?'<span class="rn"><b>'+n+'</b><span class="small mut">'+(n===1?'día seguido':'días seguidos')+'</span></span>':'<span class="small mut">Empieza hoy</span>')+'</div>';
   h+='<div class="row"><button class="btn big" data-act="pray">'+(hoyOre?'Volver a orar con el Evangelio':'Orar con el Evangelio de hoy')+'</button><button class="btn ghost ico" data-act="share" aria-label="Compartir el Evangelio de hoy como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share-2"/></svg></button></div>';
   h+=rezoAhora(t,L);
   state.shareCard={k:dk,frase:frase,cita:cita,dia:cap(fmt(t))};
@@ -984,12 +1030,15 @@ function viewHoy(){
    if(nx.length)m2+='<div class="nextf">'+nx.map(f=>'<button data-act="go" data-v="orar" data-s="fie"><span class="fd"><b>'+f.d.getDate()+'</b><i>'+esc(MESES[f.d.getMonth()].slice(0,3))+'</i></span><span><b>'+esc(f.n)+'</b><br><span class="small mut">'+esc(enDias(diff(f.d,t)))+(f.nov?' · con novena':'')+'</span></span></button>').join('')+'</div>';
   /* 6. Para tu día */
   const m=misDia(t,L),ob=OBRAS[(Math.floor((t-new Date(t.getFullYear(),0,0))/864e5))%OBRAS.length];
-  h+='<h2 class="sec">Para tu día</h2><div class="tiles">'+
-   '<button class="tile" data-act="go" data-v="orar" data-s="ros">'+ic('rosary','sm')+'<b>Rosario</b><span class="mut">Misterios '+esc(m.n.toLowerCase())+'</span></button>'+
-   '<button class="tile" data-act="go" data-v="orar" data-s="ora">'+ic('bell','sm')+'<b>Ángelus</b><span class="mut">A las 12:00</span></button>'+
-   '<button class="tile" data-act="go" data-v="dia" data-s="rutina">'+ic('heart','sm')+'<b>Obra del día</b><span class="mut">'+esc(ob[1])+'</span></button></div>';
+  h+='<h2 class="sec">Para tu día</h2><div class="carr">'+
+   artCard('virgen','Rosario','Misterios '+m.n.toLowerCase(),'Con María, paso a paso','data-act="go" data-v="orar" data-s="ros"')+
+   artCard('getsemani','Contemplación','Silencio con Dios','Con temporizador y campana','data-act="go" data-v="orar" data-s="sil"')+
+   artCard('cena','Eucaristía','Adoración','Visita o Hora Santa','data-act="go" data-v="orar" data-s="ado"')+
+   artCard('inmaculada','A las 12:00','Ángelus','Saludamos a María','data-act="go" data-v="orar" data-s="ora"')+
+   artCard('corazon','Obra del día',ob[1],'','data-act="go" data-v="dia" data-s="rutina"')+
+   artCard('pieta','Antes de dormir','Oración de la noche','Gracias, perdón y propósito','data-act="go" data-v="dia" data-s="exa"')+'</div>';
   if(m2){const ab=!!store.get('mashoy',0);h+='<details class="mashoy"'+(ab?' open':'')+'><summary><b>Más de hoy</b><span class="small mut">Lecturas, persona y hecho, Catecismo, Papa, frase y fiestas</span></summary><div class="in">'+m2+'</div></details>'}
-  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="dia" data-s="exa">Oración de la noche</button><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
+  h+='<div class="row"><button class="btn ghost" data-act="go" data-v="enc" data-s="martes">Preparar el martes</button></div>';
   h+='<p class="note">El comentario es una paráfrasis para ayudarte a comprender y orar; no reemplaza el texto bíblico.</p>';
   h+=estadoHtml();
   return h;
@@ -1359,7 +1408,7 @@ function tiempoHtml(){
   return '<div class="card tint"><div class="lbl">Para este tiempo</div><b>'+esc(cr?'Semana de Cristo Rey':x[0])+'</b><ul class="tight">'+(cr?['Reza cada día la novena de Cristo Rey (Orar › Fiestas).','Prepara la renovación de tus compromisos del Regnum Christi.','Participa el domingo en la Misa y la celebración de tu sección.']:x[1]).map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul><div class="row" style="margin-bottom:0"><a class="btn ghost" href="'+SEO_PDF+'#page='+(cr?68:x[2])+'" target="_blank" rel="noopener noreferrer">Ver en «Señor, enséñanos a orar»</a></div></div>';
 }
 function viewOrar(){
-  if(state.sub.orar==='mas')return segHtml('orar')+'<h2 class="sec" style="margin-top:14px">Más para orar</h2>'+SUBS.orarMas.map(([id,n,dd])=>'<button class="card" style="display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit" data-act="sub" data-v="'+id+'"><b>'+esc(n)+' ›</b><p class="small mut" style="margin:4px 0 0">'+esc(dd)+'</p></button>').join('');
+  if(state.sub.orar==='mas')return segHtml('orar')+'<h2 class="sec" style="margin-top:14px">Más para orar</h2>'+SUBS.orarMas.map(([id,n,dd])=>artCard(MAS_ART[id]||'basilica','',n,dd,'data-act="sub" data-v="'+id+'"')).join('');
   if(state.sub.orar==='int')return segHtml('orar')+viewIntenciones();
   if(state.sub.orar==='sil')return segHtml('orar')+viewSilencio();
   if(state.sub.orar==='fie')return viewFiestas();
@@ -1657,6 +1706,12 @@ function viewEncPaso(){
   if(!H)return '<div class="card"><p style="margin-top:0">El paso a paso de hoy se prepara cada día pasada la medianoche junto con el Evangelio. Si aún no aparece, vuelve a abrir la página en un momento.</p><div class="row"><a class="btn" href="'+misaURL(k)+'" target="_blank" rel="noopener noreferrer">Leer el Evangelio de hoy</a><button class="btn ghost" data-act="sub" data-v="guia">Cómo es un Encuentro</button></div></div>';
   const E=H.evangelio,X=H.encuentro||{};
   const hist=store.get('hist',{});if(!hist[k]||hist[k].cita!==E.cita){hist[k]={cita:E.cita,frase:(X.frase&&X.frase.texto)||''};store.set('hist',hist)}
+  if(state.zen&&!state.pstart&&!oreDays()[k]){
+    const L=store.get('olen','completa'),f=FE[feDia('enc')];
+    return '<div class="zenbar"><span class="small mut">Modo oración</span><button class="btn ghost" data-act="zen" data-v="0">Salir</button></div><section class="oini">'+feImg(f)+'<div class="oc"><div class="kk">Tu oración de hoy · '+esc(cap(fmt(t)))+'</div><h2>'+esc(E.cita)+'</h2>'+(X.frase?'<blockquote>«'+esc(X.frase.texto)+'»</blockquote>':'')+
+      '<div class="seg" role="group" aria-label="¿Cuánto tiempo tienes?">'+[['breve','Breve · 5 min'],['completa','Completa · 15 min']].map(([q,n])=>'<button data-act="olen" data-v="'+q+'" aria-pressed="'+(L===q)+'">'+n+'</button>').join('')+'</div>'+
+      '<button class="btn" data-act="pstart">Empezar</button><p class="small" style="text-align:center;margin:10px 0 0">Busca un lugar tranquilo. Dios ya te está esperando.</p></div></section>';
+  }
   const P=pasosHoy(H,N),tot=P.length;
   /* Todos los pasos en una sola lectura continua: sin «Siguiente», solo bajar. */
   const done=!!oreDays()[k];
@@ -2399,22 +2454,34 @@ addEventListener('scroll',()=>{
 },{passive:true});
 
 /* ===== VOZ ===== */
-function stopSpeak(){
-  if(TTS)try{speechSynthesis.cancel()}catch(e){}
-  state.speaking=null;
-  document.querySelectorAll('[data-act="speak"]').forEach(b=>b.textContent='Escuchar');
+/* Escuchar: reproductor a pantalla completa con la pintura del día (idea de Hallow). */
+const PLY={id:null,txt:'',t0:0,pausa:0,p0:0,est:1,bnd:false,iv:null,btn:null};
+function plTitulo(id,txt){if(id.indexOf('o_')===0){const o=ORACIONES.find(x=>'o_'+x.id===id);if(o)return o.n}
+  if(id==='hoy')return 'El Evangelio de hoy';const f=(txt.split(/[.:]/)[0]||'').trim();return f.length>60?f.slice(0,57)+'…':f||'Escuchar'}
+function plUI(){
+  let e=$('#player');if(!e){e=document.createElement('div');e.id='player';e.setAttribute('role','dialog');e.setAttribute('aria-label','Escuchando');document.body.appendChild(e)}
+  const k=PLY.id&&PLY.id.indexOf('o_')===0?'virgen':feDia(state.tab||'enc');
+  e.innerHTML=feImg(FE[k]||FE.basilica)+'<button class="cl" data-act="plx" aria-label="Cerrar">×</button><div class="pc"><div class="kk">Escuchando</div><h2>'+esc(plTitulo(PLY.id,PLY.txt))+'</h2><div class="bar"><i></i></div><div class="tm"><span id="plt">0:00</span><span id="pld">'+silFmt(PLY.est)+'</span></div><div class="ctl"><button class="pp" data-act="plpp" aria-label="Pausa"></button></div><div class="row" style="justify-content:center;margin:10px 0 0"><button class="sm" data-act="plx">Detener</button></div></div>';
+  e.hidden=false;plIcono();
 }
+function plIcono(){const b=document.querySelector('#player .pp');if(!b)return;const p=!!PLY.pausa;b.setAttribute('aria-label',p?'Continuar':'Pausa');b.innerHTML=p?'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'}
+function plPaso(){if(!PLY.id||PLY.pausa)return;const el=(Date.now()-PLY.t0)/1000,fr=PLY.bnd?PLY.p0:Math.min(.99,el/PLY.est);const i=document.querySelector('#player .bar i');if(i)i.style.width=(fr*100).toFixed(1)+'%';const t=$('#plt');if(t)t.textContent=silFmt(el)}
+function stopSpeak(){if(TTS)try{speechSynthesis.cancel()}catch(e){}clearInterval(PLY.iv);document.querySelectorAll('[data-act="speak"]').forEach(b=>b.textContent='Escuchar');state.speaking=null;PLY.id=null;PLY.pausa=0;const e=$('#player');if(e)e.hidden=true}
 function speak(id,btn){
   if(!TTS)return;
   if(state.speaking===id){stopSpeak();return}
   stopSpeak();
-  const u=new SpeechSynthesisUtterance(state.say[id]||'');
+  const txt=state.say[id]||'',u=new SpeechSynthesisUtterance(txt);
   u.lang='es-419';u.rate=.95;
   try{const v=speechSynthesis.getVoices().find(x=>/^es/i.test(x.lang));if(v)u.voice=v}catch(e){}
-  u.onend=u.onerror=()=>{if(state.speaking===id){state.speaking=null;btn.textContent='Escuchar'}};
+  Object.assign(PLY,{id,txt,t0:Date.now(),pausa:0,p0:0,bnd:false,btn,est:Math.max(5,txt.length/14)});
+  u.onboundary=ev=>{if(ev.charIndex>0){PLY.bnd=true;PLY.p0=ev.charIndex/Math.max(1,txt.length)}};
+  u.onend=u.onerror=()=>{if(state.speaking===id){const i=document.querySelector('#player .bar i');if(i)i.style.width='100%';setTimeout(()=>{if(state.speaking===id)stopSpeak()},700)}};
   state.speaking=id;btn.textContent='Detener';
+  plUI();PLY.iv=setInterval(plPaso,500);
   speechSynthesis.speak(u);
 }
+function plPausa(){if(!PLY.id)return;try{if(PLY.pausa){speechSynthesis.resume();PLY.t0+=Date.now()-PLY.pausa;PLY.pausa=0}else{speechSynthesis.pause();PLY.pausa=Date.now()}}catch(e){}plIcono()}
 
 /* ===== SILENCIO CON DIOS (nov 2026, idea tomada de Hallow): temporizador de oración en silencio con campana suave.
    La campana se genera en el teléfono (sin archivos ni internet). Los minutos se guardan solo en este dispositivo. ===== */
@@ -2470,8 +2537,8 @@ function viewSilencio(){
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act,v=b.dataset.v;
-  if(a!=='ps'&&a!=='oredone'&&a!=='pray'&&a!=='speak'&&a!=='sil'&&a!=='silx'&&a!=='silm'&&a!=='olen'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
-  if(a==='zen'){state.zen=v==='1';if(state.zen){state.tab='enc';state.sub.enc='paso';state.plist=false}render(true)}
+  if(a!=='ps'&&a!=='oredone'&&a!=='pray'&&a!=='speak'&&a!=='sil'&&a!=='silx'&&a!=='silm'&&a!=='olen'&&a!=='pstart'&&a!=='plpp'&&a!=='plx'&&a!=='zen'&&a!=='aa'&&a!=='shx'&&a!=='tmq'&&a!=='fz'&&a!=='tema')state.zen=false;
+  if(a==='zen'){state.zen=v==='1';state.pstart=false;if(state.zen){state.tab='enc';state.sub.enc='paso';state.plist=false}render(true)}
   else if(a==='tab'){const n=navDe(v);const w=(n.g&&n.id===v)?(state.tab&&n.g.includes(state.tab)?n.id:store.get('g_'+n.id,n.id)):v;state.tab=n.g&&n.g.includes(w)?w:v;store.set('tab',state.tab);render()}
   else if(a==='tab2'){state.tab=v;store.set('tab',v);store.set('g_'+navDe(v).id,v);render()}
   else if(a==='cr'){const h=b.closest('.ph');if(h)h.classList.toggle('cr')}
@@ -2519,17 +2586,20 @@ document.addEventListener('click',e=>{
   else if(a==='next'){nextCard();$('#quiz').innerHTML=quizHtml()}
   else if(a==='resetbox'){store.set('box',{});state.q=null;render(true)}
   else if(a==='speak')speak(v,b);
+  else if(a==='plpp')plPausa();
+  else if(a==='plx')stopSpeak();
   else if(a==='sil')silEmpezar(v);
   else if(a==='silx')silParar(false);
   else if(a==='silm'){store.set('silm_'+b.dataset.i,+v);silRedibuja(b.dataset.i)}
   else if(a==='olen'){store.set('olen',v);render(true)}
+  else if(a==='pstart'){state.pstart=true;render();try{scrollTo(0,0)}catch(e){}}
   else if(a==='yr'){state.year+=+v;render(true)}
   else if(a==='exadone'){celebrar();
     const r=store.get('rut',{}),k=ymd(new Date());r[k]=r[k]||[];['examen','noche'].forEach(x=>{if(!r[k].includes(x))r[k].push(x)});store.set('rut',r);
     $('#examsg').textContent='Marcado en tu rutina de hoy. Que Dios te dé buen descanso.';
   }
   else if(a==='nov'){state.nov=v||null;if(state.tab!=='orar'||state.sub.orar!=='fie'){state.tab='orar';state.sub.orar='fie';store.set('tab','orar');store.set('sub',state.sub)}render()}
-  else if(a==='pray'){state.zen=true;state.tab='enc';state.sub.enc='paso';state.ps=0;state.plist=false;store.set('tab','enc');store.set('sub',state.sub);render()}
+  else if(a==='pray'){state.pstart=false;state.zen=true;state.tab='enc';state.sub.enc='paso';state.ps=0;state.plist=false;store.set('tab','enc');store.set('sub',state.sub);render()}
   else if(a==='oredone'){const o=oreDays(),k=ymd(new Date());if(!o[k]){o[k]=true;store.set('ore',o)}celebrar();render(true)}
   else if(a==='ps'){state.ps=Math.max(0,+v);render()}
   else if(a==='plist'){state.plist=v==='1';render()}
