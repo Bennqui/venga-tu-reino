@@ -753,6 +753,16 @@ html[data-theme=dark]{--soft:#1F2023;--tint:#1F2023}
 .rcpie img{height:72px;width:auto;max-width:70%;display:block;margin:0 auto 8px;object-fit:contain}
 html[data-theme=dark] .rcpie img{filter:brightness(0) invert(1)}
 @media (prefers-color-scheme:dark){html[data-theme=auto] .rcpie img{filter:brightness(0) invert(1)}}
+
+/* ===== Cuadre (nov 2026): márgenes y alineaciones ===== */
+.card.tint{padding:14px 16px;background:var(--card)}
+details.mini{box-shadow:none;border:0;border-radius:0}
+details.mini>summary{padding:6px 2px 6px 0}
+.carr{scroll-padding-inline:16px}
+.sil .seg,.oini .seg{flex-wrap:wrap;overflow:visible;row-gap:6px}
+.ph .kick{align-items:flex-start}.ph .kick .dot{margin-top:.3em;flex:none}
+.resp .pos{max-width:42%}
+.sil .seg{gap:2px;padding:4px 0}.sil .seg button{padding:6px 9px;font-size:.88rem}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -2155,7 +2165,7 @@ function viewChuleta(){
     const r=lecBox(g.p,D)+respHtml(g.p,D);if(!r)return;
     if(g.s!==sec){sec=g.s;h+='<div class="lbl" style="margin-top:20px">'+esc(sec)+'</div>'}
     n++;
-    h+='<div class="resp"><div class="rh"><span class="num">'+n+'</span><b>'+esc(g.p.n.replace(/ \(.*\)/,''))+'</b><span class="pos">'+esc(g.p.pos.split(/[,(]/)[0])+'</span></div>'+r+'</div>';
+    h+='<div class="resp"><div class="rh"><span class="num">'+n+'</span><b>'+esc(g.p.n.replace(/ \(.*\)/,''))+'</b><span class="pos">'+esc(g.p.pos.split(/[,(.]/)[0])+'</span></div>'+r+'</div>';
   });
   h+='<p class="note">Los textos siguen el Misal en español usado en Venezuela; pueden variar un poco según la parroquia. Si dudas, sigue a la comunidad.</p>';
   return h;
