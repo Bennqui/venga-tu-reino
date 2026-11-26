@@ -4,7 +4,6 @@
 - assets/rc/escudo.png    escudo (ícono del sitio) para el ícono de la app
 - assets/rc/n1..n6.webp   fotos de las noticias, en versión para teléfono
 - assets/rc/rc.json       títulos, fechas y enlaces de las noticias
-- icon-180/192/512.png    ícono de la app hecho con el escudo, sobre blanco
 
 Lo ejecuta el workflow «Regnum Christi» (cada semana y cuando cambia este archivo).
 Si algo no se encuentra, deja lo que había y lo dice en el registro.
@@ -151,17 +150,7 @@ if blancas:
     resumen['logo_blanco'] = DIR + '/logo-blanco.png'
     print('Logotipo blanco:', u, im.size)
 
-# 3) Ícono de la app: el escudo centrado sobre blanco (el manual pide fondo blanco y no deformarlo)
-if escudo:
-    base = recortar_blanco(escudo, 0)
-    for n in (180, 192, 512):
-        lienzo = Image.new('RGB', (n, n), (255, 255, 255))
-        lado = round(n * 0.78)
-        k = lado / max(base.size)
-        e = base.resize((max(1, round(base.size[0] * k)), max(1, round(base.size[1] * k))), Image.LANCZOS)
-        lienzo.paste(e, ((n - e.size[0]) // 2, (n - e.size[1]) // 2))
-        lienzo.save('icon-%d.png' % n, optimize=True)
-    print('Íconos de la app hechos con el escudo')
+# 3) El ícono de la app usa el escudo a color (assets/rc/escudo-color.png), que no se toca aquí.
 
 # 4) Últimas noticias con foto: el canal RSS del sitio y la foto principal (og:image) de cada noticia
 noticias = []
