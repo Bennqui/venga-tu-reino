@@ -1,0 +1,23 @@
+name: Regnum Christi
+# Baja del sitio oficial (con permiso del RC) el logotipo, el escudo para el ícono y las fotos de las últimas noticias.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '23 9 * * 1'
+  push:
+    branches: [main]
+    paths: ['.github/workflows/rc.yml', 'tareas/rc.py']
+permissions:
+  contents: write
+concurrency: rc
+jobs:
+  rc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install --quiet pillow
+      - run: python3 tareas/rc.py
+      - run: |
+          git config user.name "Regnum Christi"; git config user.email "actions@users.noreply.github.com"
+          git add -A assets/rc icon-180.png icon-192.png icon-512.png && (git diff --cached --quiet || (git commit -m "Regnum Christi: logotipo, escudo y noticias" && git pull --rebase && git push))

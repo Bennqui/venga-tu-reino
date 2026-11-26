@@ -700,6 +700,44 @@ html.noche:not([data-theme=dark]) .velad,html.noche:not([data-theme=dark]) .ange
 @supports (font:-apple-system-body){body{font:-apple-system-body;font-family:var(--fb);line-height:1.6}#app{font-size:calc(1em*var(--fz,1))}}
 @media (prefers-contrast:more){:root{--mut:#5A4E38;--line:#CDBF9F}.ph::after{background:linear-gradient(180deg,rgba(20,12,4,.5) 0%,rgba(20,12,4,.2) 40%,rgba(20,12,4,.9) 100%)}}
 @media (prefers-reduced-motion:reduce){.cierre .ca *,#bienv .ca *{stroke-dashoffset:0!important;animation:none!important;transition:none!important}.cierre .ct,.cierre .cc,.cierre .cg{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* ===== Identidad Regnum Christi (nov 2026): «Respira en blanco, matiza en gris y señala en rojo».
+   Rojo Pantone 187 C (#A6192E) para señalar, Cool Gray 11 (#474B50) para textos, blanco de fondo.
+   Dorado solo en lo sagrado: custodia «Contempla», solemnidades, fiestas y novenas, Adoración.
+   Letra: Helvetica Neue (la del Regnum Christi) en la app; Literata con serifa en oraciones y Evangelio. ===== */
+:root{--ink:#474B50;--mut:#6E7277;--line:#E6E7E9;--soft:#F5F5F6;--tint:#F5F5F6;--gold:#A6192E;--gold-bg:#F5F5F6;--wine:#A6192E;--on-wine:#FFFFFF;--vy:#A6192E;--red:#A6192E;--red-bg:#FBEEF0;--sac:#946A0A;--sac-l:#D4A22B;--sac-bg:#FBF5E6;--fb:'Helvetica Neue',Helvetica,Arial,sans-serif;--fp:'Literata',Georgia,'Times New Roman',serif}
+:root[data-theme="dark"]{--bg:#121314;--card:#1B1C1E;--ink:#E4E5E7;--mut:#A2A6AB;--line:#2C2E31;--soft:#1F2023;--tint:#1F2023;--gold:#E8707F;--gold-bg:#1F2023;--wine:#B52238;--vy:#E8707F;--red:#E8707F;--red-bg:#2A1A1D;--sac:#E3B852;--sac-l:#E3B852;--sac-bg:#2A2416}
+@media (prefers-color-scheme:dark){:root[data-theme="auto"]{--bg:#121314;--card:#1B1C1E;--ink:#E4E5E7;--mut:#A2A6AB;--line:#2C2E31;--soft:#1F2023;--tint:#1F2023;--gold:#E8707F;--gold-bg:#1F2023;--wine:#B52238;--vy:#E8707F;--red:#E8707F;--red-bg:#2A1A1D;--sac:#E3B852;--sac-l:#E3B852;--sac-bg:#2A2416}}
+html[data-theme=dark]{--soft:#1F2023;--tint:#1F2023}
+@media (prefers-color-scheme:dark){html[data-theme=auto]{--soft:#1F2023;--tint:#1F2023}}
+.prayer,.reading,.reading p,.lectxt{font-family:var(--fp)}
+.seg button[aria-pressed="true"]{background:var(--red);color:#fff}
+.btn.ghost{border-color:var(--line);color:var(--red)}
+.grp button[aria-pressed="true"],.opts3 button[aria-pressed="true"]{border-color:var(--red);background:var(--red-bg)}
+.sec::before,.vk,#prog{background:var(--red)}
+.tli::before{background:var(--red)}
+.quote .qm{color:var(--red)}
+.chip.gV,.chip.gB{background:var(--soft);color:var(--ink)}
+.pg{color:var(--red);background:var(--red-bg)}
+.say{border-left-color:var(--red);background:var(--soft)}
+.nota{border-color:var(--line);background:var(--soft)}
+.fd{border-top-color:var(--red)}
+/* Dorado solo en lo sagrado */
+.story .pips i.on{background:var(--sac-l);box-shadow:none}
+.novnow{border-color:var(--sac-l);background:linear-gradient(135deg,var(--sac-bg),var(--card))}
+.fd.ci{border-top-color:var(--sac-l);color:var(--sac)}
+.nvd.on,.hora.on{border-color:var(--sac-l);box-shadow:0 0 0 2px color-mix(in srgb,var(--sac-l) 40%,transparent)}
+.nvd.done .num{background:var(--sac-l);border-color:var(--sac-l);color:#fff}
+/* Regnum Christi: noticias con foto real y logotipo */
+.rcnot{display:block;border-radius:20px;overflow:hidden;background:var(--card);border:1px solid var(--line);margin:22px 0 10px;color:var(--ink);text-decoration:none;box-shadow:0 6px 20px -12px rgba(71,75,80,.35)}
+.rcnot img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.rcnot>span{display:block;padding:12px 16px 14px}
+.rcnot .kk{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.rcnot b{display:block;font-family:var(--fd);font-weight:400;font-size:1.18rem;line-height:1.25;margin:4px 0 6px}
+.rcpie{text-align:center;margin:30px 0 6px}
+.rcpie img{height:72px;width:auto;max-width:70%;display:block;margin:0 auto 8px;object-fit:contain}
+html[data-theme=dark] .rcpie img{filter:brightness(0) invert(1)}
+@media (prefers-color-scheme:dark){html[data-theme=auto] .rcpie img{filter:brightness(0) invert(1)}}
 </style>
 <div id="prog" aria-hidden="true"></div>
 <div id="app"><div id="hd"></div><main id="main"></main></div>
@@ -1671,7 +1709,14 @@ function composeShare(cita,n){
   if(n.proposito)p.push('Mi propósito: '+n.proposito.trim());
   return p.join('\n');
 }
-function viewEnc(){
+/* ===== Regnum Christi: noticias con foto y logotipo oficial (los baja cada semana la tarea «Regnum Christi» de GitHub, con permiso del RC) ===== */
+let RCJ=null;
+fetch('assets/rc/rc.json').then(r=>r.ok?r.json():null).then(j=>{if(j){RCJ=j;if(state.tab==='enc'||state.tab==='apo')render(true)}}).catch(()=>{});
+function rcNoticia(i){const N=(RCJ&&RCJ.noticias)||[];if(!N.length)return '';const n=N[i%N.length];if(!n||!n.img||!/^(assets\/rc\/|https:\/\/)/.test(n.img))return '';
+  return '<a class="rcnot" href="'+esc(/^https:\/\//.test(n.link)?n.link:'https://regnumchristi.org/es/')+'" target="_blank" rel="noopener"><img src="'+esc(n.img)+'" alt="" loading="lazy" onerror="this.parentNode.remove()"><span><span class="kk">Del Regnum Christi</span><b>'+esc(n.titulo)+'</b><span class="small mut">'+esc(n.fecha||'')+' · regnumchristi.org</span></span></a>';}
+function rcPie(){const L=RCJ&&RCJ.logo&&/^assets\/rc\//.test(RCJ.logo)?RCJ.logo:'';return '<div class="rcpie">'+(L?'<img src="'+esc(L)+'" alt="Regnum Christi" onerror="this.remove()">':'')+'<p class="small mut" style="margin:0">Con el Regnum Christi · <a href="https://regnumchristi.org/es/" target="_blank" rel="noopener">regnumchristi.org</a></p></div>'}
+function viewEnc(){const s=state.sub.enc;return viewEnc0()+((!s||s==='paso'||s==='guia')?rcNoticia(0):'')+rcPie()}
+function viewEnc0(){
   const s=state.sub.enc;
   if(s==='guia')return segHtml('enc')+viewEncGuia();
   if(s==='martes')return segHtml('enc')+viewEncMartes();
@@ -2196,7 +2241,8 @@ function viewRosario(){
 }
 
 /* ===== APÓSTOL: para quien acompaña, hace apostolado y dirección espiritual ===== */
-function viewApo(){
+function viewApo(){return viewApo0()+rcNoticia(1)+rcPie()}
+function viewApo0(){
   const s=state.sub.apo,H=encData();
   if(s==='dir'){
     let h=segHtml('apo')+'<h2 class="sec" style="margin-top:14px">Cómo llevar una conversación</h2>'+DIR_PASOS.map((p,i)=>step(i+1,p[0],'<p>'+esc(p[1])+'</p>',false)).join('');
