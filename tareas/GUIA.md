@@ -1,6 +1,6 @@
 # Guía para preparar un día de «Venga tu Reino»
 
-Esta guía la usan las tareas programadas de Claude que mantienen la app al día. Cada día es un archivo `dias/AAAA-MM-DD.js` con todo lo propio de esa fecha: el Evangelio y su comentario, el paso a paso del Encuentro con Cristo, los datos de la Misa (celebración, rango, color, Gloria, Credo, salmo) la sección «Conoce tu Iglesia» (una persona y un hecho) y, desde el 15 de noviembre de 2026, la sección «El Catecismo en un año». La app carga sola el archivo de la fecha del teléfono, así que los días se preparan **por adelantado**, siempre una semana completa.
+Esta guía la usan las tareas programadas de Claude que mantienen la app al día. Cada día es un archivo `dias/AAAA-MM-DD.js` con todo lo propio de esa fecha: el Evangelio y su comentario, el paso a paso del Encuentro con Cristo, los datos de la Misa (celebración, rango, color, Gloria, Credo, salmo) la sección «Conoce tu Iglesia» (una persona y un hecho) y, desde el 15 de noviembre de 2026, la sección «El Catecismo en un año». La app carga sola el archivo de la fecha del teléfono, así que los días se preparan **por adelantado**, siempre un mes completo (30 días).
 
 Lo demás que cambia cada día (tiempo litúrgico, semana, ciclo, novenas, fiestas próximas, misterios del Rosario, semana del salterio, imágenes, frase del día) lo calcula la app con la fecha: no hay que escribirlo.
 

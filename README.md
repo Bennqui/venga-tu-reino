@@ -4,7 +4,7 @@ App católica para seguir la Misa, rezar el Rosario y orar con el Evangelio del 
 
 ## Cómo se actualiza sola
 
-- `dias/AAAA-MM-DD.js`: un archivo por fecha, preparado **por adelantado** (una semana completa), con el Evangelio, la Misa, el Encuentro y «Conoce tu Iglesia» (una persona y un hecho de la historia de la Iglesia). La app carga el de la fecha del teléfono, así que cambia de día sola a medianoche, y guarda los próximos días para usarlos sin internet.
+- `dias/AAAA-MM-DD.js`: un archivo por fecha, preparado **por adelantado** (un mes completo, desde el 26 nov 2026), con el Evangelio, la Misa, el Encuentro y «Conoce tu Iglesia» (una persona y un hecho de la historia de la Iglesia). La app carga el de la fecha del teléfono, así que cambia de día sola a medianoche, y guarda los próximos días para usarlos sin internet.
 - `hoy.js`: copia del día de hoy (respaldo).
 - `dias/linea.json`: índice que se rehace solo con cada día nuevo; alimenta la línea del tiempo de «Personas y hechos» y la línea de estado de la app.
 - Una tarea programada de Claude corre cada medianoche **en la nube** (no necesita ninguna computadora encendida): prepara los días que falten y los sube aquí. Otra tarea, el «Vigilante», revisa de madrugada y avisa si algo falló.
