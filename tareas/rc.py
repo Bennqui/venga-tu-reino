@@ -71,60 +71,85 @@ try:
 except Exception as e:
     print('No se pudo abrir la portada:', e)
 
-# 1) Escudo: el ícono oficial del sitio (el más grande que haya)
-escudo = None
+# 1 y 2) Escudo y logotipo: se buscan todas las versiones del sitio y se elige la mejor
+def originales(u):
+    """La imagen tal como se subió, sin el recorte de tamaño que agrega WordPress (-300x65, cropped-)."""
+    out = []
+    sin = re.sub(r'-\d+x\d+(?=\.\w+$)', '', u)
+    out.append(sin)
+    if '/cropped-' in sin:
+        out.append(sin.replace('/cropped-', '/'))
+    out.append(u)
+    return list(dict.fromkeys(out))
+
 cands = []
-try:
-    idx = jget(SITIO + '/wp-json/')
-    if idx.get('site_icon_url'):
-        cands.append(idx['site_icon_url'])
-except Exception as e:
-    print('Sin índice REST:', e)
 for rel, href in re.findall(r'<link[^>]+rel="([^"]*icon[^"]*)"[^>]+href="([^"]+)"', inicio):
     cands.append(abs_url(href))
 for href in re.findall(r'<link[^>]+href="([^"]+)"[^>]+rel="[^"]*icon[^"]*"', inicio):
     cands.append(abs_url(href))
-mejor = None
-for u in dict.fromkeys(cands):
-    try:
-        im = imagen(u)
-        if not mejor or im.size[0] > mejor[1].size[0]:
-            mejor = (u, im)
-    except Exception as e:
-        print('  ícono no usable:', u[:120], e)
-if mejor:
-    escudo = sobre_blanco(mejor[1])
+for u in re.findall(r'(?:src|data-src|href|content)="([^"]+\.(?:png|jpe?g|webp))"', inicio, re.I):
+    if re.search(r'logo|escudo|shield|favi|RC_|regnum', u, re.I):
+        cands.append(abs_url(u))
+for srcset in re.findall(r'srcset="([^"]+)"', inicio):
+    for parte in srcset.split(','):
+        u = parte.strip().split(' ')[0]
+        if re.search(r'logo|escudo|shield|RC_', u, re.I):
+            cands.append(abs_url(u))
+todas = []
+for c in dict.fromkeys(cands):
+    for u in originales(c):
+        if any(u == t[0] for t in todas):
+            continue
+        try:
+            im = imagen(u)
+            todas.append((u, im))
+            print('  imagen:', u, im.size, im.mode)
+        except Exception as e:
+            pass
+
+def es_blanca(im):
+    """True si lo visible de la imagen es casi todo blanco (versión para fondos oscuros)."""
+    rgba = im.convert('RGBA').resize((min(200, im.size[0]), max(1, round(im.size[1] * min(200, im.size[0]) / im.size[0]))))
+    px = [p for p in rgba.getdata() if p[3] > 128]
+    if not px:
+        return True
+    return sum((r + g + b) / 3 for r, g, b, a in px) / len(px) > 225
+
+def color(im):
+    rgb = im.convert('RGB').resize((60, 60))
+    return sum(1 for r, g, b in rgb.getdata() if r > 120 and g < 90 and b < 90)
+
+cuadradas = [t for t in todas if 0.75 < t[1].size[0] / t[1].size[1] < 1.33 and not es_blanca(t[1])]
+if cuadradas:
+    u, im = max(cuadradas, key=lambda t: (min(t[1].size) >= 400, color(t[1]) > 20, t[1].size[0]))
+    escudo = sobre_blanco(im)
     escudo.save(DIR + '/escudo.png')
     resumen['escudo'] = DIR + '/escudo.png'
-    print('Escudo:', mejor[0], mejor[1].size)
-
-# 2) Logotipo completo (escudo + letras), del encabezado del sitio
-logo = None
-imgs = re.findall(r'<img[^>]+>', inicio)
-for tag in imgs:
-    if not re.search(r'logo', tag, re.I):
-        continue
-    srcs = re.findall(r'(?:src|data-src)="([^"]+)"', tag)
-    srcset = re.findall(r'srcset="([^"]+)"', tag)
-    if srcset:
-        srcs = [p.strip().split(' ')[0] for p in srcset[0].split(',')][::-1] + srcs
-    for u in srcs:
-        try:
-            im = imagen(abs_url(u))
-            if im.size[0] < 120:
-                continue
-            logo = recortar_blanco(sobre_blanco(im))
-            print('Logotipo:', u, im.size)
-            break
-        except Exception as e:
-            print('  logotipo no usable:', u[:120], e)
-    if logo:
-        break
-if logo:
-    if logo.size[1] > 300:
-        logo = logo.resize((round(logo.size[0] * 300 / logo.size[1]), 300), Image.LANCZOS)
-    logo.save(DIR + '/logo.png', optimize=True)
+    print('Escudo elegido:', u, im.size)
+else:
+    escudo = None
+horizontales = [t for t in todas if t[1].size[0] / t[1].size[1] > 2.2]
+oscuras = [t for t in horizontales if not es_blanca(t[1])]
+blancas = [t for t in horizontales if es_blanca(t[1])]
+if oscuras:
+    u, im = max(oscuras, key=lambda t: t[1].size[0])
+    lg = recortar_blanco(sobre_blanco(im))
+    if lg.size[1] > 300:
+        lg = lg.resize((round(lg.size[0] * 300 / lg.size[1]), 300), Image.LANCZOS)
+    lg.save(DIR + '/logo.png', optimize=True)
     resumen['logo'] = DIR + '/logo.png'
+    print('Logotipo a color:', u, im.size)
+if blancas:
+    u, im = max(blancas, key=lambda t: t[1].size[0])
+    lg = im.convert('RGBA')
+    caja = lg.getchannel('A').getbbox()
+    if caja:
+        lg = lg.crop(caja)
+    if lg.size[1] > 300:
+        lg = lg.resize((round(lg.size[0] * 300 / lg.size[1]), 300), Image.LANCZOS)
+    lg.save(DIR + '/logo-blanco.png', optimize=True)
+    resumen['logo_blanco'] = DIR + '/logo-blanco.png'
+    print('Logotipo blanco:', u, im.size)
 
 # 3) Ícono de la app: el escudo centrado sobre blanco (el manual pide fondo blanco y no deformarlo)
 if escudo:
@@ -138,45 +163,59 @@ if escudo:
         lienzo.save('icon-%d.png' % n, optimize=True)
     print('Íconos de la app hechos con el escudo')
 
-# 4) Últimas noticias con foto
+# 4) Últimas noticias con foto: el canal RSS del sitio y la foto principal (og:image) de cada noticia
 noticias = []
-for base in (SITIO + '/es', SITIO):
+items = []
+for feed in (SITIO + '/es/feed/', SITIO + '/feed/'):
     try:
-        posts = jget(base + '/wp-json/wp/v2/posts?per_page=12&_embed=1')
-        if posts:
+        xml = get(feed).decode('utf-8', 'ignore')
+        items = re.findall(r'<item>(.*?)</item>', xml, re.S)
+        if items:
+            print('Canal:', feed, len(items))
             break
     except Exception as e:
-        print('Sin noticias en', base, e)
-        posts = []
-for p in posts:
+        print('Sin canal en', feed, e)
+if not items and inicio:  # respaldo: enlaces de artículos de la portada
+    for href in dict.fromkeys(re.findall(r'href="(https://regnumchristi\.org/es/[a-z0-9-]{20,}/)"', inicio)):
+        items.append('<link>%s</link>' % href)
+def campo(it, tag):
+    m = re.search(r'<%s>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</%s>' % (tag, tag), it, re.S)
+    return html.unescape(m.group(1).strip()) if m else ''
+for it in items:
     if len(noticias) >= 6:
         break
+    link = campo(it, 'link')
+    if not link.startswith('https://'):
+        continue
     try:
-        media = (p.get('_embedded') or {}).get('wp:featuredmedia') or []
-        if not media:
+        pag = get(link).decode('utf-8', 'ignore')
+        m = re.search(r'<meta[^>]+property="og:image"[^>]+content="([^"]+)"', pag) or re.search(r'<meta[^>]+content="([^"]+)"[^>]+property="og:image"', pag)
+        if not m:
             continue
-        m = media[0]
-        sizes = (m.get('media_details') or {}).get('sizes') or {}
-        url = (sizes.get('large') or sizes.get('medium_large') or sizes.get('full') or {}).get('source_url') or m.get('source_url')
-        if not url:
-            continue
-        im = imagen(url).convert('RGB')
+        titulo = campo(it, 'title') or html.unescape((re.search(r'<meta[^>]+property="og:title"[^>]+content="([^"]+)"', pag) or [None, ''])[1]).replace(' - Regnum Christi', '')
+        im = imagen(abs_url(m.group(1))).convert('RGB')
         if im.size[0] > 1000:
             im = im.resize((1000, round(im.size[1] * 1000 / im.size[0])), Image.LANCZOS)
         n = len(noticias) + 1
         im.save('%s/n%d.webp' % (DIR, n), 'WEBP', quality=78, method=6)
-        titulo = html.unescape(re.sub(r'<[^>]+>', '', p['title']['rendered'])).strip()
-        y, mo, d = p['date'][:10].split('-')
-        noticias.append({'titulo': titulo, 'link': p['link'], 'fecha': '%d de %s de %s' % (int(d), MESES[int(mo) - 1], y), 'img': '%s/n%d.webp' % (DIR, n)})
+        fecha = ''
+        pd = campo(it, 'pubDate')
+        mm = re.search(r'(\d{1,2}) (\w{3}) (\d{4})', pd)
+        if mm:
+            mes = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].index(mm.group(2))
+            fecha = '%d de %s de %s' % (int(mm.group(1)), MESES[mes], mm.group(3))
+        noticias.append({'titulo': re.sub(r'\s+', ' ', titulo).strip(), 'link': link, 'fecha': fecha, 'img': '%s/n%d.webp' % (DIR, n)})
         print('Noticia:', titulo[:80])
+        time.sleep(1)
     except Exception as e:
-        print('  noticia omitida:', e)
+        print('  noticia omitida:', link[:90], e)
 
 viejo = {}
 if os.path.exists(DIR + '/rc.json'):
     viejo = json.load(open(DIR + '/rc.json', encoding='utf-8'))
 salida = {
     'logo': resumen.get('logo') or viejo.get('logo'),
+    'logo_blanco': resumen.get('logo_blanco') or viejo.get('logo_blanco'),
     'escudo': resumen.get('escudo') or viejo.get('escudo'),
     'noticias': noticias or viejo.get('noticias') or [],
     'fuente': 'regnumchristi.org (con permiso del Regnum Christi)',

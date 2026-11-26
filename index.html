@@ -735,6 +735,7 @@ html[data-theme=dark]{--soft:#1F2023;--tint:#1F2023}
 .rcnot .kk{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
 .rcnot b{display:block;font-family:var(--fd);font-weight:400;font-size:1.18rem;line-height:1.25;margin:4px 0 6px}
 .rcpie{text-align:center;margin:30px 0 6px}
+.rctab{display:inline-block;background:var(--red);border-radius:14px;padding:12px 18px;margin-bottom:8px}.rctab img{height:40px!important;margin:0!important;filter:none!important}
 .rcpie img{height:72px;width:auto;max-width:70%;display:block;margin:0 auto 8px;object-fit:contain}
 html[data-theme=dark] .rcpie img{filter:brightness(0) invert(1)}
 @media (prefers-color-scheme:dark){html[data-theme=auto] .rcpie img{filter:brightness(0) invert(1)}}
@@ -1714,7 +1715,7 @@ let RCJ=null;
 fetch('assets/rc/rc.json').then(r=>r.ok?r.json():null).then(j=>{if(j){RCJ=j;if(state.tab==='enc'||state.tab==='apo')render(true)}}).catch(()=>{});
 function rcNoticia(i){const N=(RCJ&&RCJ.noticias)||[];if(!N.length)return '';const n=N[i%N.length];if(!n||!n.img||!/^(assets\/rc\/|https:\/\/)/.test(n.img))return '';
   return '<a class="rcnot" href="'+esc(/^https:\/\//.test(n.link)?n.link:'https://regnumchristi.org/es/')+'" target="_blank" rel="noopener"><img src="'+esc(n.img)+'" alt="" loading="lazy" onerror="this.parentNode.remove()"><span><span class="kk">Del Regnum Christi</span><b>'+esc(n.titulo)+'</b><span class="small mut">'+esc(n.fecha||'')+' · regnumchristi.org</span></span></a>';}
-function rcPie(){const L=RCJ&&RCJ.logo&&/^assets\/rc\//.test(RCJ.logo)?RCJ.logo:'';return '<div class="rcpie">'+(L?'<img src="'+esc(L)+'" alt="Regnum Christi" onerror="this.remove()">':'')+'<p class="small mut" style="margin:0">Con el Regnum Christi · <a href="https://regnumchristi.org/es/" target="_blank" rel="noopener">regnumchristi.org</a></p></div>'}
+function rcPie(){const ok=x=>x&&/^assets\/rc\//.test(x)?x:'',L=ok(RCJ&&RCJ.logo),W=ok(RCJ&&RCJ.logo_blanco);return '<div class="rcpie">'+(L?'<img src="'+esc(L)+'" alt="Regnum Christi" onerror="this.remove()">':W?'<span class="rctab"><img src="'+esc(W)+'" alt="Regnum Christi" onerror="this.parentNode.remove()"></span>':'')+'<p class="small mut" style="margin:0">Con el Regnum Christi · <a href="https://regnumchristi.org/es/" target="_blank" rel="noopener">regnumchristi.org</a></p></div>'}
 function viewEnc(){const s=state.sub.enc;return viewEnc0()+((!s||s==='paso'||s==='guia')?rcNoticia(0):'')+rcPie()}
 function viewEnc0(){
   const s=state.sub.enc;
